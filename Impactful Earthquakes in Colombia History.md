@@ -78,8 +78,8 @@ Subsequent administrative failures in non-seismic structural collapses prompted 
 
 The following table provides a chronological summary of major historical, damaging, and seismically significant earthquakes recorded within or immediately adjacent to Colombian territory1.
 
-| Year | Date | Primary Location / Fault Zone | Epicentral Name | Depth (km) | Magnitude (Mw​/Ms​/ML​) | Max Intensity (MMI) | Fatalities | Injured | Primary Impact / Structural Notes |
-| :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- |
+| Year | Date | Primary Location / Fault Zone | Epicentral Name | Depth (km) | Magnitude (Mw/Ms/ML) | Max Intensity (MMI) | Fatalities | Injured | Primary Impact / Structural Notes |
+| :---- | :--- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- |
 | **1646** | Apr 03 | Muzo / La Palma (Boyacá / Cundinamarca) | 1646 Muzo | Surface | Unquantified | IX | Dozens | Unquantified | Severe destruction of early colonial masonry structures1. |
 | **1743** | Oct 18 | Chingaza Páramo (Cundinamarca) | 1743 Chingaza | 20 | 6.3 ![][image18] | IX | "Several" | Unquantified | Destructive shaking across the Eastern Cordillera1. |
 | **1785** | Jul 12 | La Calera (Cundinamarca) | 1785 New Granada | 20–30 | 6.9 ![][image18] | VIII | 9 | Unquantified | Heavily damaged Santa Fe (Bogotá); prompted early public hazard reporting1. |
