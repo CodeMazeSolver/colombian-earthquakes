@@ -1114,7 +1114,7 @@
         const reportContent = {
             es: {
                 title: "Sismos Históricos de Colombia",
-                subtitle: "Resumen del reporte sobre tectónica, impacto humano e ingeniería sísmica",
+                subtitle: "Explora los principales terremotos históricos y sus cifras clave",
                 depth: "Profundidad focal",
                 intensity: "Intensidad MMI",
                 deaths: "Fallecidos",
@@ -1170,7 +1170,7 @@
             },
             en: {
                 title: "Historical Earthquakes in Colombia",
-                subtitle: "Report-based summary of tectonics, human impact, and seismic engineering",
+                subtitle: "Explore major historical earthquakes and their key figures",
                 depth: "Focal depth",
                 intensity: "MMI intensity",
                 deaths: "Fatalities",
@@ -1226,7 +1226,7 @@
             },
             de: {
                 title: "Historische Erdbeben in Kolumbien",
-                subtitle: "Berichtsbasierte Zusammenfassung zu Tektonik, menschlichen Folgen und Erdbebeningenieurwesen",
+                subtitle: "Erkunden Sie wichtige historische Erdbeben und ihre Kennzahlen",
                 depth: "Herdtiefe",
                 intensity: "MMI-Intensität",
                 deaths: "Todesopfer",
@@ -1299,89 +1299,6 @@
             }).join('');
         }
 
-        function renderOverview(ui) {
-            return `
-                <div class="event-card">
-                    <div class="section-title">
-                        <span class="material-symbols-outlined">article</span>
-                        ${ui.reportHeader}
-                    </div>
-                    <div class="mini-grid">
-                        ${reportContent[currentLang].overview.map(section => `
-                            <div class="mini-card">
-                                <h3>${section.title}</h3>
-                                <p>${section.text}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderChronology(ui) {
-            return `
-                <div class="event-card">
-                    <div class="section-title">
-                        <span class="material-symbols-outlined">history</span>
-                        ${ui.chronologyHeader}
-                    </div>
-                    <div class="description-box">${ui.chronologyIntro}</div>
-                    <table class="timeline-table">
-                        <thead>
-                            <tr>
-                                <th>${ui.chronologyYear}</th>
-                                <th>${ui.chronologyEvent}</th>
-                                <th>${ui.chronologyMagnitude}</th>
-                                <th>${ui.chronologyNote}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${chronologyData.map(item => `
-                                <tr>
-                                    <td>${item.year}</td>
-                                    <td>${item.event[currentLang]}</td>
-                                    <td>${item.magnitude}</td>
-                                    <td>${item.note[currentLang]}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            `;
-        }
-
-        function renderSources(ui) {
-            const orderedIds = Object.keys(sources).map(Number).sort((a, b) => a - b);
-            return `
-                <div class="event-card">
-                    <div class="section-title">
-                        <span class="material-symbols-outlined">link</span>
-                        ${ui.sourceHeader}
-                    </div>
-                    <ol class="source-list">
-                        ${orderedIds.map(id => `
-                            <li><a class="source-link" href="${sources[id].url}" target="_blank" rel="noopener noreferrer">[${id}] ${sources[id].title}</a></li>
-                        `).join('')}
-                    </ol>
-                    <p class="source-note">${ui.sourceNote}</p>
-                </div>
-            `;
-        }
-
-        function renderRoadmap(ui) {
-            return `
-                <div class="event-card">
-                    <div class="section-title">
-                        <span class="material-symbols-outlined">rocket_launch</span>
-                        ${ui.roadmapHeader}
-                    </div>
-                    <ul class="bullet-list">
-                        ${reportContent[currentLang].roadmap.map(item => `<li>${item}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
-        }
-
         function setLanguage(lang) {
             currentLang = lang;
             document.documentElement.lang = lang;
@@ -1438,7 +1355,6 @@
             const ui = reportContent[currentLang];
 
             display.innerHTML = `
-                ${renderOverview(ui)}
                 <div class="event-card">
                     <div class="card-header">
                         <div class="card-header-main">
@@ -1502,11 +1418,6 @@
                         </div>
 
                         <div class="mini-card">
-                            <h3>${ui.significance}</h3>
-                            <p>${eq.significance[currentLang]}</p>
-                        </div>
-
-                        <div class="mini-card">
                             <h3>${ui.eventSources}</h3>
                             <ol class="source-list">${renderSourceLinks(eq.sources)}</ol>
                         </div>
@@ -1518,9 +1429,6 @@
                         <span class="tag">Mw ${eq.magnitude}</span>
                     </div>
                 </div>
-                ${renderChronology(ui)}
-                ${renderSources(ui)}
-                ${renderRoadmap(ui)}
             `;
         }
 
