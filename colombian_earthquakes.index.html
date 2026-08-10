@@ -726,6 +726,24 @@
             color: var(--md-sys-color-on-surface-variant);
         }
 
+        .reference-figure-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.65rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 999px;
+            background: rgba(139, 0, 0, 0.10);
+            color: var(--md-sys-color-primary);
+            font-size: 0.84rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .reference-figure-badge .material-symbols-outlined {
+            font-size: 1rem;
+        }
+
         .reference-media-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2793,6 +2811,9 @@
                             captionByLang: {
                                 es: 'Versión en español generada por IA (Gemini Nano Banana) a partir de la referencia visual del Swiss Seismological Service (SED/ETH Zürich).',
                                 de: 'Adaptiertes Bild des Schweizerischen Erdbebendienstes (SED/ETH Zürich): EMS-98-Intensitätsgrafik.'
+                            },
+                            badgeByLang: {
+                                es: 'Imagen generada por IA'
                             }
                         },
                         useAllSources: true,
@@ -3537,10 +3558,12 @@
             const src = figure.srcByLang?.[currentLang] || figure.src;
             const alt = figure.altByLang?.[currentLang] || figure.alt;
             const caption = figure.captionByLang?.[currentLang] || figure.caption;
+            const badge = figure.badgeByLang?.[currentLang];
             return `
                 <section class="reference-figure-card">
                     <h3>${escapeHtml(figure.title)}</h3>
                     <p>${escapeHtml(figure.intro)}</p>
+                    ${badge ? `<div class="reference-figure-badge"><span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span><span>${escapeHtml(badge)}</span></div>` : ''}
                     <figure class="reference-figure">
                         <img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy">
                         <figcaption>${escapeHtml(caption)}</figcaption>
