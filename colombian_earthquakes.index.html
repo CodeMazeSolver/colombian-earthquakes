@@ -52,6 +52,10 @@
             min-height: 100vh;
         }
 
+        body.reference-lightbox-open {
+            overflow: hidden;
+        }
+
         header {
             background-color: var(--md-sys-color-surface);
             border-bottom: 1px solid var(--md-sys-color-surface-variant);
@@ -719,10 +723,122 @@
             background: #fff;
         }
 
+        .reference-figure-trigger {
+            display: block;
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            cursor: zoom-in;
+            border-radius: calc(var(--radius-m) - 2px);
+        }
+
+        .reference-figure-trigger:focus-visible {
+            outline: 2px solid var(--md-sys-color-primary);
+            outline-offset: 3px;
+        }
+
+        .reference-figure-expand {
+            display: none;
+            align-items: center;
+            gap: 0.35rem;
+            border: none;
+            background: rgba(139, 0, 0, 0.10);
+            color: var(--md-sys-color-primary);
+            border-radius: 999px;
+            padding: 0.42rem 0.72rem;
+            margin-top: 0.7rem;
+            font-size: 0.84rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .reference-figure-expand .material-symbols-outlined {
+            font-size: 1rem;
+        }
+
         .reference-figure figcaption {
             margin-top: 0.75rem;
             font-size: 0.88rem;
             line-height: 1.55;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .reference-lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 1600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .reference-lightbox.hidden {
+            display: none;
+        }
+
+        .reference-lightbox-scrim {
+            position: absolute;
+            inset: 0;
+            border: none;
+            background: rgba(28, 27, 31, 0.72);
+            cursor: pointer;
+        }
+
+        .reference-lightbox-panel {
+            position: relative;
+            z-index: 1;
+            width: min(96vw, 980px);
+            max-height: min(92vh, 980px);
+            overflow: auto;
+            background: var(--md-sys-color-surface);
+            border-radius: 22px;
+            box-shadow: var(--shadow-3);
+            padding: 1rem;
+        }
+
+        .reference-lightbox-header {
+            display: flex;
+            align-items: start;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .reference-lightbox-header h3 {
+            color: var(--md-sys-color-primary);
+            font-size: 1rem;
+        }
+
+        .reference-lightbox-close {
+            border: none;
+            background: transparent;
+            color: var(--md-sys-color-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .reference-lightbox-close:hover {
+            background: rgba(139, 0, 0, 0.10);
+        }
+
+        .reference-lightbox img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 14px;
+            background: #fff;
+            border: 1px solid var(--md-sys-color-surface-variant);
+        }
+
+        .reference-lightbox-caption {
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
             color: var(--md-sys-color-on-surface-variant);
         }
 
@@ -1330,6 +1446,21 @@
             .term-panel {
                 padding: 0.9rem;
             }
+
+            .reference-figure-expand {
+                display: inline-flex;
+            }
+
+            .reference-lightbox {
+                padding: 0.7rem;
+            }
+
+            .reference-lightbox-panel {
+                width: 100%;
+                max-height: 94vh;
+                padding: 0.85rem;
+                border-radius: 18px;
+            }
         }
     </style>
 </head>
@@ -1417,6 +1548,19 @@
                     </div>
                 </div>
             </section>
+            <div class="reference-lightbox hidden" id="referenceLightbox" role="dialog" aria-modal="true" aria-labelledby="referenceLightboxTitle">
+                <button class="reference-lightbox-scrim" id="referenceLightboxScrim" type="button" aria-label="Close enlarged image" onclick="closeReferenceFigureLightbox()"></button>
+                <div class="reference-lightbox-panel">
+                    <div class="reference-lightbox-header">
+                        <h3 id="referenceLightboxTitle"></h3>
+                        <button class="reference-lightbox-close" id="referenceLightboxClose" type="button" aria-label="Close enlarged image" onclick="closeReferenceFigureLightbox()">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    <img id="referenceLightboxImage" src="" alt="">
+                    <p class="reference-lightbox-caption" id="referenceLightboxCaption"></p>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -3471,6 +3615,59 @@
             return `${bundle.ui.fullReferenceList} [1]–[${maxId}]`;
         }
 
+        function getReferenceFigureUiText() {
+            return {
+                es: {
+                    expand: 'Tocar para ampliar',
+                    close: 'Cerrar imagen ampliada'
+                },
+                en: {
+                    expand: 'Tap to enlarge',
+                    close: 'Close enlarged image'
+                },
+                de: {
+                    expand: 'Zum Vergrößern tippen',
+                    close: 'Vergrößerte Grafik schließen'
+                }
+            }[currentLang] || {
+                expand: 'Tocar para ampliar',
+                close: 'Cerrar imagen ampliada'
+            };
+        }
+
+        function openReferenceFigureLightbox(trigger) {
+            if (!trigger) return;
+            const lightbox = document.getElementById('referenceLightbox');
+            const image = document.getElementById('referenceLightboxImage');
+            const title = document.getElementById('referenceLightboxTitle');
+            const caption = document.getElementById('referenceLightboxCaption');
+            const scrim = document.getElementById('referenceLightboxScrim');
+            const closeBtn = document.getElementById('referenceLightboxClose');
+            const uiText = getReferenceFigureUiText();
+            if (!lightbox || !image || !title || !caption || !scrim || !closeBtn) return;
+
+            image.src = trigger.dataset.lightboxSrc || '';
+            image.alt = trigger.dataset.lightboxAlt || '';
+            title.innerText = trigger.dataset.lightboxTitle || '';
+            caption.innerText = trigger.dataset.lightboxCaption || '';
+            scrim.setAttribute('aria-label', uiText.close);
+            closeBtn.setAttribute('aria-label', uiText.close);
+            lightbox.classList.remove('hidden');
+            document.body.classList.add('reference-lightbox-open');
+        }
+
+        function closeReferenceFigureLightbox() {
+            const lightbox = document.getElementById('referenceLightbox');
+            const image = document.getElementById('referenceLightboxImage');
+            if (!lightbox || lightbox.classList.contains('hidden')) return;
+            lightbox.classList.add('hidden');
+            document.body.classList.remove('reference-lightbox-open');
+            if (image) {
+                image.src = '';
+                image.alt = '';
+            }
+        }
+
         function openTermPanel(termKey) {
             const bundle = getReferenceBundle();
             const term = bundle.terms[termKey];
@@ -3559,13 +3756,29 @@
             const alt = figure.altByLang?.[currentLang] || figure.alt;
             const caption = figure.captionByLang?.[currentLang] || figure.caption;
             const badge = figure.badgeByLang?.[currentLang];
+            const uiText = getReferenceFigureUiText();
             return `
                 <section class="reference-figure-card">
                     <h3>${escapeHtml(figure.title)}</h3>
                     <p>${escapeHtml(figure.intro)}</p>
                     ${badge ? `<div class="reference-figure-badge"><span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span><span>${escapeHtml(badge)}</span></div>` : ''}
                     <figure class="reference-figure">
-                        <img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy">
+                        <button
+                            class="reference-figure-trigger"
+                            type="button"
+                            aria-label="${escapeHtml(uiText.expand)}"
+                            onclick="openReferenceFigureLightbox(this)"
+                            data-lightbox-title="${escapeHtml(figure.title)}"
+                            data-lightbox-src="${escapeHtml(src)}"
+                            data-lightbox-alt="${escapeHtml(alt)}"
+                            data-lightbox-caption="${escapeHtml(caption)}"
+                        >
+                            <img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy">
+                        </button>
+                        <button class="reference-figure-expand" type="button" onclick="openReferenceFigureLightbox(this.previousElementSibling)">
+                            <span class="material-symbols-outlined" aria-hidden="true">zoom_in</span>
+                            <span>${escapeHtml(uiText.expand)}</span>
+                        </button>
                         <figcaption>${escapeHtml(caption)}</figcaption>
                     </figure>
                 </section>
@@ -3894,6 +4107,11 @@
 
             window.addEventListener('resize', updateTimelineScrollHint);
             window.addEventListener('resize', updateReferenceTabScrollHint);
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closeReferenceFigureLightbox();
+                }
+            });
         };
     </script>
 </body>
