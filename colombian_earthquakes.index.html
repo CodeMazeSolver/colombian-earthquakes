@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sismos Históricos de Colombia | Timeline</title>
+    <!-- Google Fonts & Material Symbols -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    
+    <style>
+        :root {
+            --md-sys-color-primary: #8b0000;
+            --md-sys-color-on-primary: #ffffff;
+            --md-sys-color-primary-container: #ffdad6;
+            --md-sys-color-on-primary-container: #410002;
+            --md-sys-color-surface: #fdf8f8;
+            --md-sys-color-on-surface: #1c1b1f;
+            --md-sys-color-surface-variant: #f4dddd;
+            --md-sys-color-on-surface-variant: #534343;
+            --md-sys-color-outline: #857373;
+            --md-sys-color-bg: #fffbfb;
+            
+            --severity-extreme: #b71c1c;
+            --severity-high: #e65100;
+            --severity-moderate: #f57f17;
+            --severity-low: #2e7d32;
+
+            --radius-s: 8px;
+            --radius-m: 16px;
+            --radius-l: 28px;
+            --shadow-1: 0px 1px 3px rgba(0,0,0,0.12), 0px 1px 2px rgba(0,0,0,0.24);
+            --shadow-2: 0px 4px 8px rgba(0,0,0,0.12), 0px 2px 4px rgba(0,0,0,0.16);
+            --shadow-3: 0px 8px 16px rgba(0,0,0,0.14);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: var(--md-sys-color-bg);
+            color: var(--md-sys-color-on-surface);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--md-sys-color-surface);
+            border-bottom: 1px solid var(--md-sys-color-surface-variant);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-1);
+        }
+
+        .header-title-box h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-title-box p {
+            font-size: 0.85rem;
+            color: var(--md-sys-color-outline);
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .lang-selector {
+            display: flex;
+            background: var(--md-sys-color-surface-variant);
+            border-radius: 20px;
+            padding: 3px;
+        }
+
+        .lang-btn {
+            border: none;
+            background: transparent;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .lang-btn.active {
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            box-shadow: var(--shadow-1);
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            padding: 8px 12px 8px 36px;
+            border-radius: 20px;
+            border: 1px solid var(--md-sys-color-outline);
+            outline: none;
+            font-size: 0.85rem;
+            background: var(--md-sys-color-surface);
+        }
+
+        .search-box .material-symbols-outlined {
+            position: absolute;
+            left: 10px;
+            font-size: 1.1rem;
+            color: var(--md-sys-color-outline);
+        }
+
+        .app-container {
+            display: flex;
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Timeline Navigation Sidebar */
+        .timeline-sidebar {
+            width: 320px;
+            border-right: 1px solid var(--md-sys-color-surface-variant);
+            padding: 1.5rem 1rem;
+            position: sticky;
+            top: 73px;
+            height: calc(100vh - 73px);
+            overflow-y: auto;
+            background: var(--md-sys-color-surface);
+        }
+
+        .timeline-tree {
+            position: relative;
+            padding-left: 28px;
+        }
+
+        .timeline-tree::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            bottom: 10px;
+            width: 3px;
+            background: var(--md-sys-color-surface-variant);
+            border-radius: 2px;
+        }
+
+        .timeline-node {
+            position: relative;
+            margin-bottom: 1.2rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: var(--radius-m);
+            transition: all 0.2s ease;
+        }
+
+        .timeline-node:hover {
+            background: var(--md-sys-color-primary-container);
+        }
+
+        .timeline-node.active {
+            background: var(--md-sys-color-primary-container);
+            border-left: 4px solid var(--md-sys-color-primary);
+        }
+
+        .timeline-node::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 16px;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--md-sys-color-outline);
+            border: 2px solid var(--md-sys-color-surface);
+            transition: all 0.2s ease;
+        }
+
+        .timeline-node.active::before {
+            background: var(--md-sys-color-primary);
+            transform: scale(1.3);
+        }
+
+        .node-year {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--md-sys-color-primary);
+        }
+
+        .node-title {
+            font-size: 0.85rem;
+            color: var(--md-sys-color-on-surface);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .node-mag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            color: #fff;
+            margin-top: 4px;
+        }
+
+        /* Detail Display Main Area */
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .event-card {
+            background: var(--md-sys-color-surface);
+            border-radius: var(--radius-l);
+            padding: 2rem;
+            box-shadow: var(--shadow-2);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            margin-bottom: 2rem;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--md-sys-color-surface-variant);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header-main h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 0.2rem;
+        }
+
+        .card-header-main .subtitle {
+            font-size: 0.95rem;
+            color: var(--md-sys-color-outline);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .mag-badge {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-m);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: var(--shadow-1);
+        }
+
+        .mag-badge span {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--md-sys-color-bg);
+            border-radius: var(--radius-m);
+            padding: 1rem;
+            border: 1px solid var(--md-sys-color-surface-variant);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-primary);
+            padding: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-info .label {
+            font-size: 0.75rem;
+            color: var(--md-sys-color-outline);
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .stat-info .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .description-box {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--md-sys-color-on-surface);
+            background: var(--md-sys-color-bg);
+            padding: 1.2rem;
+            border-radius: var(--radius-m);
+            border-left: 4px solid var(--md-sys-color-primary);
+        }
+
+        .tag-container {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: var(--md-sys-color-surface-variant);
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .mini-card {
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 1rem;
+        }
+
+        .mini-card h3 {
+            font-size: 1rem;
+            color: var(--md-sys-color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .mini-card p,
+        .mini-card li,
+        .timeline-table td,
+        .timeline-table th,
+        .source-list li {
+            font-size: 0.95rem;
+            line-height: 1.55;
+        }
+
+        .bullet-list {
+            margin: 0.75rem 0 0 1.1rem;
+        }
+
+        .bullet-list li + li {
+            margin-top: 0.45rem;
+        }
+
+        .timeline-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            overflow: hidden;
+            border-radius: var(--radius-m);
+            border: 1px solid var(--md-sys-color-surface-variant);
+        }
+
+        .timeline-table th,
+        .timeline-table td {
+            padding: 0.85rem;
+            text-align: left;
+            vertical-align: top;
+            border-bottom: 1px solid var(--md-sys-color-surface-variant);
+        }
+
+        .timeline-table th {
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            font-weight: 700;
+        }
+
+        .timeline-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .source-list {
+            margin: 0.9rem 0 0 1.2rem;
+        }
+
+        .source-list li + li {
+            margin-top: 0.65rem;
+        }
+
+        a.source-link {
+            color: var(--md-sys-color-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a.source-link:hover {
+            text-decoration: underline;
+        }
+
+        .source-note {
+            margin-top: 0.9rem;
+            color: var(--md-sys-color-outline);
+            font-size: 0.9rem;
+        }
+
+        .section-stack > * + * {
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 900px) {
+            header {
+                padding: 1rem 1.25rem;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.9rem;
+            }
+
+            .header-title-box h1 {
+                font-size: 1.2rem;
+                line-height: 1.3;
+            }
+
+            .header-title-box p {
+                margin-top: 0.2rem;
+            }
+
+            .controls {
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 0.75rem;
+                justify-content: space-between;
+            }
+
+            .search-box {
+                flex: 1 1 260px;
+                min-width: 0;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            .app-container {
+                flex-direction: column;
+            }
+
+            .timeline-sidebar {
+                width: 100%;
+                height: auto;
+                max-height: none;
+                position: relative;
+                top: 0;
+                padding: 1rem 1rem 0.8rem;
+                border-right: none;
+                border-bottom: 1px solid var(--md-sys-color-surface-variant);
+            }
+
+            .timeline-tree {
+                display: flex;
+                gap: 0.85rem;
+                padding-left: 0;
+                overflow-x: auto;
+                padding-bottom: 0.3rem;
+                scroll-snap-type: x proximity;
+            }
+
+            .timeline-tree::before {
+                display: none;
+            }
+
+            .timeline-node {
+                min-width: 170px;
+                margin-bottom: 0;
+                scroll-snap-align: start;
+            }
+
+            .timeline-node::before {
+                display: none;
+            }
+
+            .content-area {
+                padding: 1.25rem;
+            }
+
+            .event-card {
+                padding: 1.5rem;
+                border-radius: 22px;
+            }
+
+            .card-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .card-header-main h2 {
+                font-size: 1.55rem;
+            }
+
+            .mag-badge {
+                align-self: flex-start;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .timeline-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 640px) {
+            header {
+                padding: 0.9rem 0.9rem 1rem;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box,
+            .lang-selector {
+                width: 100%;
+            }
+
+            .lang-selector {
+                justify-content: space-between;
+            }
+
+            .lang-btn {
+                flex: 1 1 0;
+                text-align: center;
+            }
+
+            .timeline-sidebar {
+                padding: 0.9rem 0.9rem 0.7rem;
+            }
+
+            .timeline-node {
+                min-width: 150px;
+                padding: 0.75rem 0.85rem;
+            }
+
+            .content-area {
+                padding: 0.9rem;
+            }
+
+            .event-card {
+                padding: 1rem;
+                border-radius: 18px;
+                margin-bottom: 1rem;
+            }
+
+            .card-header-main h2 {
+                font-size: 1.3rem;
+            }
+
+            .card-header-main .subtitle {
+                font-size: 0.88rem;
+            }
+
+            .stats-grid,
+            .mini-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                padding: 0.9rem;
+                gap: 0.75rem;
+            }
+
+            .stat-info .value {
+                font-size: 1rem;
+            }
+
+            .description-box,
+            .mini-card {
+                padding: 0.95rem;
+            }
+
+            .section-title {
+                font-size: 1rem;
+            }
+
+            .source-list {
+                margin-left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title-box">
+            <h1><span class="material-symbols-outlined">analytics</span> <span id="ui-title">Sismos Históricos de Colombia</span></h1>
+            <p id="ui-subtitle">Plataforma Informativa e Histórica de Amenaza Sísmica</p>
+        </div>
+        <div class="controls">
+            <div class="search-box">
+                <span class="material-symbols-outlined">search</span>
+                <input type="text" id="searchInput" placeholder="Buscar / Search..." onkeyup="filterEvents()">
+            </div>
+            <div class="lang-selector">
+                <button class="lang-btn active" onclick="setLanguage('es')">ES</button>
+                <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+                <button class="lang-btn" onclick="setLanguage('de')">DE</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="timeline-sidebar">
+            <div class="timeline-tree" id="timelineNodes">
+                <!-- Dynamic Nodes Inserted via JS -->
+            </div>
+        </nav>
+
+        <!-- Main Display Content Area -->
+        <main class="content-area">
+            <div id="eventDetailDisplay">
+                <!-- Active Event Card Injected via JS -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const sources = {
+            1: {
+                title: "Wikipedia - List of earthquakes in Colombia",
+                url: "https://en.wikipedia.org/wiki/List_of_earthquakes_in_Colombia"
+            },
+            4: {
+                title: "ResearchGate - A Reexamination of the Bucaramanga, Colombia, Earthquake Nest",
+                url: "https://www.researchgate.net/publication/265039396_A_Reexamination_of_the_Bucaramanga_Colombia_Earthquake_Nest"
+            },
+            5: {
+                title: "UNDRR - The Colombian Earthquake of January 1999: Lessons for Seismic Disaster Prevention and Response",
+                url: "https://www.eird.org/eng/revista/No14_99/desas3.htm"
+            },
+            8: {
+                title: "PubMed - Lithospheric delamination as the driving mechanism of intermediate-depth seismicity in the Bucaramanga Nest, Colombia",
+                url: "https://pubmed.ncbi.nlm.nih.gov/38155214/"
+            },
+            20: {
+                title: "Wikipedia (ES) - Terremoto de Popayán de 1983",
+                url: "https://es.wikipedia.org/wiki/Terremoto_de_Popay%C3%A1n_de_1983"
+            },
+            23: {
+                title: "Normas Colombianas de Diseño y Construcción Sismo Resistente",
+                url: "https://www.eird.org/cd/building-codes/pdf/spa/doc13281/doc13281-1a.pdf"
+            },
+            24: {
+                title: "Sociedad Colombiana de Ingenieros - Normas Sísmicas en Colombia: Evolución y Aplicación",
+                url: "https://sci.org.co/normas-sismicas-en-colombia-evolucion-y-aplicacion/"
+            },
+            25: {
+                title: "SciELO Colombia - Desarrollo de la normativa sismo resistente colombiana",
+                url: "http://www.scielo.org.co/scielo.php?script=sci_arttext&pid=S0121-49932014000200013"
+            },
+            33: {
+                title: "Función Pública - Ley 400 de 1997",
+                url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=336"
+            },
+            39: {
+                title: "USGS - M 6.1, 10 km E of El Calvario, Colombia",
+                url: "https://earthquake.usgs.gov/earthquakes/eventpage/us7000kp2i"
+            }
+        };
+
+        const eqData = [
+            {
+                year: "1875",
+                date: "1875-05-18",
+                magnitude: 7.5,
+                depth: "20 km",
+                mmi: "IX-X",
+                deaths: "1,000-16,000",
+                injured: { es: "> 8,500", en: "> 8,500", de: "> 8.500" },
+                location: {
+                    es: "Cúcuta, Norte de Santander",
+                    en: "Cúcuta, Norte de Santander",
+                    de: "Cúcuta, Norte de Santander"
+                },
+                fault: {
+                    es: "Sistema de fallas Santander-Cúcuta",
+                    en: "Santander-Cúcuta fault system",
+                    de: "Störungssystem Santander-Cúcuta"
+                },
+                title: {
+                    es: "Terremoto de Cúcuta de 1875",
+                    en: "1875 Cúcuta Earthquake",
+                    de: "Erdbeben von Cúcuta 1875"
+                },
+                impact: {
+                    es: "Un sismo cortical somero destruyó casi por completo Cúcuta, Villa del Rosario y zonas vecinas a ambos lados de la frontera colombo-venezolana. El reporte destaca que la violencia local del movimiento, y no solo la magnitud, explica por qué se convirtió en uno de los desastres sísmicos más letales de la región.",
+                    en: "A shallow crustal earthquake almost completely destroyed Cúcuta, Villa del Rosario, and neighboring settlements on both sides of the Colombia-Venezuela border. The report emphasizes that local shaking intensity, not magnitude alone, made it one of the deadliest seismic disasters in the region.",
+                    de: "Ein flaches Krustenbeben zerstörte Cúcuta, Villa del Rosario und benachbarte Orte auf beiden Seiten der kolumbianisch-venezolanischen Grenze fast vollständig. Der Bericht betont, dass vor allem die starke lokale Erschütterung und nicht nur die Magnitude die außergewöhnlich hohen Verluste erklärte."
+                },
+                significance: {
+                    es: "Ejemplo temprano de alto riesgo urbano por fallas superficiales en los Andes nororientales.",
+                    en: "Early example of urban seismic risk from shallow faulting in the northeastern Andes.",
+                    de: "Frühes Beispiel für urbanes Erdbebenrisiko durch flache Verwerfungen in den nordöstlichen Anden."
+                },
+                sources: [1]
+            },
+            {
+                year: "1906",
+                date: "1906-01-31",
+                magnitude: 8.8,
+                depth: "20 km",
+                mmi: "VIII",
+                deaths: "~1,000",
+                injured: { es: "Desconocido", en: "Unknown", de: "Unbekannt" },
+                location: {
+                    es: "Costa pacífica (Tumaco-Esmeraldas)",
+                    en: "Pacific coast (Tumaco-Esmeraldas)",
+                    de: "Pazifikküste (Tumaco-Esmeraldas)"
+                },
+                fault: {
+                    es: "Interfaz de subducción Nazca-Suramérica",
+                    en: "Nazca-South America subduction interface",
+                    de: "Subduktionsgrenze Nazca-Südamerika"
+                },
+                title: {
+                    es: "Megaterremoto de 1906 Colombia-Ecuador",
+                    en: "1906 Colombia-Ecuador Megathrust Event",
+                    de: "Megathrust-Beben Kolumbien-Ecuador 1906"
+                },
+                impact: {
+                    es: "El gran rompimiento de subducción del Pacífico liberó energía a escala continental y levantó el fondo marino, lo que produjo un tsunami con olas de hasta 5 metros. El reporte lo usa para mostrar que Colombia enfrenta tanto amenaza sísmica como amenaza de tsunami en la costa del Pacífico.",
+                    en: "The great Pacific subduction rupture released continental-scale energy and vertically displaced the seafloor, producing a tsunami with waves up to 5 meters. The report uses it to show that Colombia faces both earthquake and tsunami hazard along the Pacific margin.",
+                    de: "Der große Subduktionsbruch am Pazifik setzte Energie im kontinentalen Maßstab frei und hob den Meeresboden an, wodurch ein Tsunami mit bis zu 5 Metern Wellenhöhe entstand. Der Bericht nutzt das Ereignis als Beispiel dafür, dass Kolumbien an der Pazifikküste sowohl Erdbeben- als auch Tsunami-Gefahren ausgesetzt ist."
+                },
+                significance: {
+                    es: "Evento clave para la comprensión del riesgo de megathrust y tsunami en Nariño y Cauca.",
+                    en: "Key event for understanding megathrust and tsunami risk in Nariño and Cauca.",
+                    de: "Schlüsselereignis zum Verständnis des Megathrust- und Tsunami-Risikos in Nariño und Cauca."
+                },
+                sources: [1]
+            },
+            {
+                year: "1979",
+                date: "1979-12-12",
+                magnitude: 8.1,
+                depth: "33 km",
+                mmi: "IX",
+                deaths: "450-600",
+                injured: { es: "> 1,000", en: "> 1,000", de: "> 1.000" },
+                location: {
+                    es: "Tumaco, Nariño",
+                    en: "Tumaco, Nariño",
+                    de: "Tumaco, Nariño"
+                },
+                fault: {
+                    es: "Subducción del Pacífico colombiano",
+                    en: "Colombian Pacific subduction zone",
+                    de: "Subduktionszone des kolumbianischen Pazifiks"
+                },
+                title: {
+                    es: "Terremoto y tsunami de Tumaco de 1979",
+                    en: "1979 Tumaco Earthquake and Tsunami",
+                    de: "Erdbeben und Tsunami von Tumaco 1979"
+                },
+                impact: {
+                    es: "La reruptura de un segmento del margen pacífico destruyó palafitos y asentamientos costeros en El Charco, San Juan y las islas externas de Tumaco. El evento refuerza la lección del reporte: los grandes sismos de subducción en Colombia suelen venir acompañados de efectos costeros secundarios muy destructivos.",
+                    en: "Re-rupture of a Pacific-margin segment destroyed stilt-house settlements and coastal communities in El Charco, San Juan, and the outer Tumaco islands. The event reinforces the report's lesson that Colombia's major subduction earthquakes often bring highly destructive secondary coastal effects.",
+                    de: "Die erneute Ruptur eines Abschnitts des Pazifikrandes zerstörte Pfahlbausiedlungen und Küstengemeinden in El Charco, San Juan und auf den äußeren Inseln von Tumaco. Das Ereignis bestätigt die zentrale Aussage des Berichts, dass große Subduktionsbeben in Kolumbien oft mit sehr zerstörerischen sekundären Küsteneffekten einhergehen."
+                },
+                significance: {
+                    es: "Confirma la necesidad de integrar sismo, tsunami y vulnerabilidad de vivienda costera.",
+                    en: "Confirms the need to integrate earthquake, tsunami, and coastal housing vulnerability.",
+                    de: "Bestätigt die Notwendigkeit, Erdbeben-, Tsunami- und Küstenwohnungsrisiken gemeinsam zu betrachten."
+                },
+                sources: [1]
+            },
+            {
+                year: "1983",
+                date: "1983-03-31",
+                magnitude: 5.5,
+                depth: "12 km",
+                mmi: "VIII",
+                deaths: "267-300",
+                injured: { es: "~2,000", en: "~2,000", de: "~2.000" },
+                location: {
+                    es: "Popayán, Cauca",
+                    en: "Popayán, Cauca",
+                    de: "Popayán, Cauca"
+                },
+                fault: {
+                    es: "Falla cortical somera cerca de Popayán",
+                    en: "Shallow crustal fault near Popayán",
+                    de: "Flache Krustenstörung bei Popayán"
+                },
+                title: {
+                    es: "Terremoto de Popayán de 1983",
+                    en: "1983 Popayán Earthquake",
+                    de: "Erdbeben von Popayán 1983"
+                },
+                impact: {
+                    es: "Aunque fue de magnitud moderada, su foco somero y la vulnerabilidad del adobe y la mampostería histórica provocaron un daño desproporcionado. Según el reporte, este desastre abrió la era moderna de la regulación sismorresistente en Colombia y desembocó en el CCCSR-84.",
+                    en: "Although moderate in magnitude, its shallow focus and the vulnerability of adobe and historic masonry caused disproportionate damage. According to the report, this disaster opened Colombia's modern era of earthquake-resistant regulation and led to CCCSR-84.",
+                    de: "Obwohl das Beben nur eine moderate Magnitude hatte, führten die geringe Herdtiefe und die Anfälligkeit von Adobe- und historischer Mauerwerksbebauung zu unverhältnismäßig hohen Schäden. Laut Bericht markierte das Ereignis den Beginn der modernen erdbebensicheren Regulierung in Kolumbien und führte zum CCCSR-84."
+                },
+                significance: {
+                    es: "Caso emblemático de cómo la vulnerabilidad estructural puede dominar el balance de pérdidas.",
+                    en: "Emblematic case of structural vulnerability dominating the loss profile.",
+                    de: "Paradebeispiel dafür, wie strukturelle Verwundbarkeit das Schadensbild dominiert."
+                },
+                sources: [1, 20, 23]
+            },
+            {
+                year: "1994",
+                date: "1994-06-06",
+                magnitude: 6.8,
+                depth: "12 km",
+                mmi: "VII",
+                deaths: "~1,100",
+                injured: { es: "Centenares", en: "Hundreds", de: "Hunderte" },
+                location: {
+                    es: "Cuenca del río Páez, Cauca-Huila",
+                    en: "Páez River basin, Cauca-Huila",
+                    de: "Páez-Flussbecken, Cauca-Huila"
+                },
+                fault: {
+                    es: "Sistema de fallas de la Cordillera Central",
+                    en: "Central Cordillera fault system",
+                    de: "Störungssystem der Zentralkordillere"
+                },
+                title: {
+                    es: "Terremoto y avalancha del río Páez de 1994",
+                    en: "1994 Páez River Earthquake and Avalanche",
+                    de: "Erdbeben und Schuttlawine am Río Páez 1994"
+                },
+                impact: {
+                    es: "El reporte muestra este evento como el ejemplo más claro de amenaza en cascada: el sismo disparó miles de deslizamientos, represó cauces y produjo lahares y flujos de escombros que arrasaron resguardos indígenas, aldeas e infraestructura vial.",
+                    en: "The report presents this as Colombia's clearest cascading-hazard example: the earthquake triggered thousands of landslides, dammed channels, and produced lahars and debris flows that devastated Indigenous territories, villages, and road infrastructure.",
+                    de: "Der Bericht stellt dieses Ereignis als deutlichstes Beispiel einer Kaskadengefahr in Kolumbien dar: Das Beben löste Tausende Erdrutsche aus, staute Flüsse auf und erzeugte Lahare sowie Schuttströme, die indigene Gebiete, Dörfer und Verkehrswege verwüsteten."
+                },
+                significance: {
+                    es: "Demuestra que la amenaza sísmica en los Andes incluye procesos gravitacionales de gran alcance.",
+                    en: "Shows that Andean seismic hazard includes large gravity-driven cascading processes.",
+                    de: "Zeigt, dass die seismische Gefahr in den Anden auch großräumige gravitative Kaskadenprozesse umfasst."
+                },
+                sources: [1]
+            },
+            {
+                year: "1999",
+                date: "1999-01-25",
+                magnitude: 6.2,
+                depth: "17 km",
+                mmi: "X",
+                deaths: "1,185-1,230",
+                injured: { es: "4,370-5,300", en: "4,370-5,300", de: "4.370-5.300" },
+                location: {
+                    es: "Armenia, Quindío (Eje Cafetero)",
+                    en: "Armenia, Quindío (Coffee Region)",
+                    de: "Armenia, Quindío (Kaffeeregion)"
+                },
+                fault: {
+                    es: "Falla de Córdoba, sistema Romeral",
+                    en: "Córdoba fault, Romeral system",
+                    de: "Córdoba-Verwerfung, Romeral-System"
+                },
+                title: {
+                    es: "Terremoto de Armenia / Eje Cafetero de 1999",
+                    en: "1999 Armenia / Coffee Region Earthquake",
+                    de: "Erdbeben von Armenia / Kaffeeregion 1999"
+                },
+                impact: {
+                    es: "El colapso del 60% del parque construido de Armenia, las pérdidas cercanas al 1.5% del PIB y la falla de columnas cortas y marcos poco dúctiles lo convierten en el estudio de ingeniería más influyente del reporte. También motivó revisiones posteriores que desembocaron en NSR-10.",
+                    en: "Collapse across about 60% of Armenia's building stock, losses near 1.5% of GDP, and failures linked to short columns and weak frame detailing make this the report's most influential engineering case study. It also motivated later revisions that culminated in NSR-10.",
+                    de: "Der Einsturz von rund 60% des Gebäudebestands in Armenia, wirtschaftliche Verluste von etwa 1,5% des BIP und Versagen infolge kurzer Stützen sowie unzureichend duktiler Rahmen machen dieses Ereignis zur wichtigsten ingenieurwissenschaftlichen Fallstudie des Berichts. Es trug außerdem zu späteren Überarbeitungen bei, die schließlich in die NSR-10 mündeten."
+                },
+                significance: {
+                    es: "Punto de inflexión para geotecnia, diseño detallado y preparación de respuesta urbana.",
+                    en: "Turning point for geotechnics, detailing practice, and urban response preparedness.",
+                    de: "Wendepunkt für Geotechnik, konstruktive Durchbildung und urbane Notfallvorsorge."
+                },
+                sources: [1, 5, 25]
+            },
+            {
+                year: "2015",
+                date: "2015-03-10",
+                magnitude: 6.2,
+                depth: "155 km",
+                mmi: "VI",
+                deaths: "0",
+                injured: { es: "0", en: "0", de: "0" },
+                location: {
+                    es: "Los Santos / Aratoca, Santander",
+                    en: "Los Santos / Aratoca, Santander",
+                    de: "Los Santos / Aratoca, Santander"
+                },
+                fault: {
+                    es: "Nido sísmico de Bucaramanga",
+                    en: "Bucaramanga Seismic Nest",
+                    de: "Seismisches Nest von Bucaramanga"
+                },
+                title: {
+                    es: "Sismo profundo del Nido de Bucaramanga de 2015",
+                    en: "2015 Bucaramanga Nest Deep Earthquake",
+                    de: "Tiefes Beben des Bucaramanga-Nests 2015"
+                },
+                impact: {
+                    es: "Fue ampliamente sentido en Bucaramanga y Bogotá pese a su profundidad intermedia. En el reporte sirve para explicar que Colombia también alberga el nido sísmico intermedio más denso del mundo, un laboratorio natural excepcional para estudiar deshidratación, delaminación y ruptura a profundidad.",
+                    en: "It was widely felt in Bucaramanga and Bogotá despite its intermediate depth. In the report it illustrates that Colombia also hosts the world's densest intermediate-depth seismic nest, an exceptional natural laboratory for dehydration, delamination, and deep rupture processes.",
+                    de: "Trotz seiner mittleren Herdtiefe war das Beben in Bucaramanga und Bogotá deutlich zu spüren. Im Bericht dient es dazu zu zeigen, dass Kolumbien auch das weltweit dichteste Nest intermediärer Seismizität beherbergt - ein außergewöhnliches natürliches Labor für Dehydrierung, Delamination und tiefe Bruchprozesse."
+                },
+                significance: {
+                    es: "Conecta el riesgo sentido en superficie con procesos profundos del manto subducido.",
+                    en: "Connects felt hazard at the surface with deep processes in the subducted mantle.",
+                    de: "Verknüpft an der Oberfläche spürbares Risiko mit tiefen Prozessen im subduzierten Mantel."
+                },
+                sources: [1, 4, 8]
+            },
+            {
+                year: "2023",
+                date: "2023-08-17",
+                magnitude: 6.1,
+                depth: "10 km",
+                mmi: "VII",
+                deaths: "<5",
+                injured: { es: "Decenas", en: "Dozens", de: "Dutzende" },
+                location: {
+                    es: "El Calvario, Meta",
+                    en: "El Calvario, Meta",
+                    de: "El Calvario, Meta"
+                },
+                fault: {
+                    es: "Sistema frontal de la Cordillera Oriental",
+                    en: "Eastern Frontal Fault System",
+                    de: "Frontalstörungssystem der Ostkordillere"
+                },
+                title: {
+                    es: "Sismo de El Calvario de 2023",
+                    en: "2023 El Calvario Earthquake",
+                    de: "Erdbeben von El Calvario 2023"
+                },
+                impact: {
+                    es: "Este evento reciente confirma la vigencia del patrón descrito en el reporte: sismos moderados y someros en corredores andinos pueden generar deslizamientos, cierres viales y daños importantes aunque no alcancen magnitudes extremas.",
+                    en: "This recent event confirms the pattern described in the report: moderate shallow earthquakes in Andean corridors can trigger landslides, road closures, and significant damage even without extreme magnitudes.",
+                    de: "Dieses jüngere Ereignis bestätigt das im Bericht beschriebene Muster: Moderate, flache Erdbeben in andinen Korridoren können Erdrutsche, Straßensperrungen und erhebliche Schäden auslösen, auch ohne extreme Magnituden zu erreichen."
+                },
+                significance: {
+                    es: "Prueba contemporánea de exposición en infraestructura crítica y laderas inestables.",
+                    en: "Contemporary evidence of exposure in critical infrastructure and unstable slopes.",
+                    de: "Aktueller Nachweis der Exposition kritischer Infrastruktur und instabiler Hänge."
+                },
+                sources: [1, 39]
+            }
+        ];
+
+        const chronologyData = [
+            {
+                year: "1646",
+                magnitude: "n/a",
+                event: { es: "Muzo", en: "Muzo", de: "Muzo" },
+                note: {
+                    es: "Destrucción severa de mampostería colonial temprana.",
+                    en: "Severe destruction of early colonial masonry.",
+                    de: "Schwere Zerstörung früher kolonialer Mauerwerksbauten."
+                }
+            },
+            {
+                year: "1785",
+                magnitude: "6.9",
+                event: { es: "Nuevo Reino / La Calera", en: "New Granada / La Calera", de: "Neugranada / La Calera" },
+                note: {
+                    es: "Afectó fuertemente a Santa Fe de Bogotá e impulsó registros tempranos del riesgo.",
+                    en: "Strongly affected Santa Fe de Bogotá and prompted early hazard reporting.",
+                    de: "Traf Santa Fe de Bogotá schwer und förderte frühe Gefahrenberichte."
+                }
+            },
+            {
+                year: "1827",
+                magnitude: "7.7",
+                event: { es: "Timaná", en: "Timaná", de: "Timaná" },
+                note: {
+                    es: "Gran ruptura cortical en el valle del Magdalena.",
+                    en: "Major crustal rupture in the Magdalena Valley.",
+                    de: "Großer Krustenbruch im Magdalena-Tal."
+                }
+            },
+            {
+                year: "1868",
+                magnitude: "6.3 / 6.7",
+                event: { es: "Frontera Ecuador-Colombia", en: "Ecuador-Colombia border", de: "Grenze Ecuador-Kolumbien" },
+                note: {
+                    es: "Devastación regional en Nariño y el norte de Ecuador.",
+                    en: "Regional devastation across Nariño and northern Ecuador.",
+                    de: "Regionale Verwüstung in Nariño und im Norden Ecuadors."
+                }
+            },
+            {
+                year: "1917",
+                magnitude: "7.3",
+                event: { es: "Sumapaz / Acacías", en: "Sumapaz / Acacías", de: "Sumapaz / Acacías" },
+                note: {
+                    es: "Se sintió con fuerza en Bogotá y dañó el frente oriental andino.",
+                    en: "Strongly felt in Bogotá and damaged the eastern Andean front.",
+                    de: "War in Bogotá deutlich spürbar und beschädigte die östliche Andenfront."
+                }
+            },
+            {
+                year: "1970",
+                magnitude: "8.0",
+                event: { es: "Sismo profundo de Colombia", en: "Deep Colombia earthquake", de: "Tiefes Kolumbien-Beben" },
+                note: {
+                    es: "El más profundo registrado en Colombia (644.8 km).",
+                    en: "Deepest earthquake recorded in Colombia (644.8 km).",
+                    de: "Tiefstes in Kolumbien registriertes Erdbeben (644,8 km)."
+                }
+            },
+            {
+                year: "1992",
+                magnitude: "7.2",
+                event: { es: "Murindó", en: "Murindó", de: "Murindó" },
+                note: {
+                    es: "Grietas del terreno, licuefacción y destrucción estructural extensa.",
+                    en: "Ground cracking, liquefaction, and extensive structural destruction.",
+                    de: "Bodenrisse, Liquefaktion und ausgedehnte strukturelle Zerstörung."
+                }
+            },
+            {
+                year: "2008",
+                magnitude: "5.9",
+                event: { es: "El Calvario", en: "El Calvario", de: "El Calvario" },
+                note: {
+                    es: "Bloqueó la vía Bogotá-Villavicencio.",
+                    en: "Blocked the Bogotá-Villavicencio highway.",
+                    de: "Blockierte die Straße Bogotá-Villavicencio."
+                }
+            },
+            {
+                year: "2012",
+                magnitude: "7.3",
+                event: { es: "La Vega", en: "La Vega", de: "La Vega" },
+                note: {
+                    es: "Evento profundo sentido a escala nacional sin grandes colapsos.",
+                    en: "Deep event felt nationwide without major collapses.",
+                    de: "Tiefes Ereignis, landesweit spürbar ohne große Einstürze."
+                }
+            },
+            {
+                year: "2023",
+                magnitude: "6.1",
+                event: { es: "El Calvario", en: "El Calvario", de: "El Calvario" },
+                note: {
+                    es: "Deslizamientos recientes en la Cordillera Oriental.",
+                    en: "Recent landslides in the Eastern Cordillera.",
+                    de: "Jüngste Erdrutsche in der Ostkordillere."
+                }
+            }
+        ];
+
+        const reportContent = {
+            es: {
+                title: "Sismos Históricos de Colombia",
+                subtitle: "Resumen del reporte sobre tectónica, impacto humano e ingeniería sísmica",
+                depth: "Profundidad focal",
+                intensity: "Intensidad MMI",
+                deaths: "Fallecidos",
+                injured: "Heridos",
+                location: "Ubicación",
+                fault: "Sistema de fallas",
+                date: "Fecha exacta",
+                impactHeader: "Impacto humano, geológico y reglamentario",
+                significance: "Por qué importa en el reporte",
+                reportHeader: "Lo esencial del reporte",
+                chronologyHeader: "Cronología ampliada del reporte",
+                chronologyIntro: "Además de los casos destacados en la línea de tiempo, el reporte resume otros terremotos históricos que ayudan a entender la continuidad del riesgo sísmico colombiano.",
+                sourceHeader: "Fuentes enlazadas del reporte",
+                sourceNote: "La lista prioriza las referencias más útiles para comprobar la narrativa principal del reporte y cada tarjeta enlaza sus fuentes más relevantes.",
+                roadmapHeader: "Próximas funciones y mejoras",
+                searchPlaceholder: "Buscar evento o región...",
+                magnitudeLabel: "Magnitud",
+                eventSources: "Fuentes de este evento",
+                chronologyYear: "Año",
+                chronologyEvent: "Evento",
+                chronologyMagnitude: "Magnitud",
+                chronologyNote: "Nota",
+                overview: [
+                    {
+                        title: "Marco tectónico",
+                        text: "Colombia se ubica en una zona de convergencia compleja entre las placas de Nazca, Caribe y Suramérica, con participación del bloque de Panamá y del bloque Norte Andino. La combinación de subducción oceánica y fallamiento cortical explica por qué conviven sismos de megathrust, sismos intermedios y rupturas superficiales dañinas."
+                    },
+                    {
+                        title: "La lección central",
+                        text: "El reporte insiste en que la severidad de un desastre no depende solo de la magnitud. La profundidad, la cercanía a ciudades, la amplificación local del suelo, la vulnerabilidad constructiva y los peligros secundarios pueden volver más dañino un sismo moderado que uno mucho más grande y profundo."
+                    },
+                    {
+                        title: "Nido sísmico de Bucaramanga",
+                        text: "Bajo Santander se encuentra la concentración de sismicidad intermedia más densa del mundo. El reporte resume dos mecanismos principales: fragilización por deshidratación a ~130 km y delaminación / inestabilidad térmica entre ~150 y 170 km."
+                    },
+                    {
+                        title: "Evolución normativa",
+                        text: "Popayán 1983 impulsó el CCCSR-84; la Ley 400 de 1997 y la NSR-98 fortalecieron el marco legal y técnico; las fallas observadas en Armenia 1999 ayudaron a consolidar la NSR-10; y la Ley 1796 de 2016 añadió control independiente y revisión de diseños."
+                    },
+                    {
+                        title: "Riesgos persistentes",
+                        text: "Siguen siendo críticas la mampostería no reforzada, la urbanización informal en laderas andinas, la vulnerabilidad de corredores viales y energéticos, y los peligros encadenados como tsunamis, licuefacción, deslizamientos y flujos de escombros."
+                    }
+                ],
+                roadmap: [
+                    "Agregar un mapa interactivo con capas por tectónica, fallas activas, nidos sísmicos y zonas tsunamigénicas.",
+                    "Incorporar una comparación visual de códigos sismorresistentes (CCCSR-84, NSR-98, NSR-10, Ley 1796).",
+                    "Añadir gráficos de profundidad, magnitud y pérdidas para mostrar la tesis central del reporte.",
+                    "Crear fichas descargables por evento con citas y una vista de impresión / PDF.",
+                    "Integrar un glosario de términos geológicos y estructurales para público no experto.",
+                    "Conectar la cronología con una vista de riesgos actuales por región y tipo de infraestructura."
+                ]
+            },
+            en: {
+                title: "Historical Earthquakes in Colombia",
+                subtitle: "Report-based summary of tectonics, human impact, and seismic engineering",
+                depth: "Focal depth",
+                intensity: "MMI intensity",
+                deaths: "Fatalities",
+                injured: "Injured",
+                location: "Location",
+                fault: "Fault system",
+                date: "Exact date",
+                impactHeader: "Human, geological, and regulatory impact",
+                significance: "Why it matters in the report",
+                reportHeader: "Core findings from the report",
+                chronologyHeader: "Expanded chronology from the report",
+                chronologyIntro: "Beyond the headline case studies on the timeline, the report lists additional historical earthquakes that help explain the continuity of Colombia's seismic risk.",
+                sourceHeader: "Linked report sources",
+                sourceNote: "This list prioritizes the references most useful for checking the main narrative, and each event card links its most relevant sources.",
+                roadmapHeader: "Planned features and improvements",
+                searchPlaceholder: "Search event or region...",
+                magnitudeLabel: "Magnitude",
+                eventSources: "Sources for this event",
+                chronologyYear: "Year",
+                chronologyEvent: "Event",
+                chronologyMagnitude: "Magnitude",
+                chronologyNote: "Note",
+                overview: [
+                    {
+                        title: "Tectonic framework",
+                        text: "Colombia sits in a complex convergence zone involving the Nazca, Caribbean, and South American plates, together with the Panama block and the North Andes block. The mix of oceanic subduction and crustal faulting explains why megathrust, intermediate-depth, and destructive shallow earthquakes all occur in the same country."
+                    },
+                    {
+                        title: "Main lesson",
+                        text: "The report stresses that disaster severity is not controlled by magnitude alone. Depth, proximity to cities, local soil amplification, structural vulnerability, and secondary hazards can make a moderate earthquake more destructive than a much larger but deeper event."
+                    },
+                    {
+                        title: "Bucaramanga Seismic Nest",
+                        text: "Beneath Santander lies the world's densest concentration of intermediate-depth seismicity. The report highlights two main mechanisms: dehydration embrittlement near ~130 km depth and delamination / thermal-shear instability between ~150 and 170 km."
+                    },
+                    {
+                        title: "Code evolution",
+                        text: "Popayán 1983 triggered CCCSR-84; Law 400 of 1997 and NSR-98 strengthened the legal and technical framework; failures observed after Armenia 1999 informed the path toward NSR-10; and Law 1796 of 2016 added independent supervision and design review."
+                    },
+                    {
+                        title: "Persistent exposures",
+                        text: "Unreinforced masonry, informal hillside urbanization, vulnerable transport and energy corridors, and cascading hazards such as tsunamis, liquefaction, landslides, and debris flows remain central risk drivers."
+                    }
+                ],
+                roadmap: [
+                    "Add an interactive map with tectonic layers, active faults, seismic nests, and tsunami-prone coastlines.",
+                    "Include a visual comparison of seismic design codes (CCCSR-84, NSR-98, NSR-10, Law 1796).",
+                    "Add charts for depth, magnitude, and losses to make the report's core argument visible.",
+                    "Create downloadable event sheets with citations and a print / PDF mode.",
+                    "Integrate a glossary of geological and structural terms for non-specialist audiences.",
+                    "Link the historical chronology to current regional risk by infrastructure type."
+                ]
+            },
+            de: {
+                title: "Historische Erdbeben in Kolumbien",
+                subtitle: "Berichtsbasierte Zusammenfassung zu Tektonik, menschlichen Folgen und Erdbebeningenieurwesen",
+                depth: "Herdtiefe",
+                intensity: "MMI-Intensität",
+                deaths: "Todesopfer",
+                injured: "Verletzte",
+                location: "Ort",
+                fault: "Störungssystem",
+                date: "Exaktes Datum",
+                impactHeader: "Menschliche, geologische und regulatorische Auswirkungen",
+                significance: "Warum das im Bericht wichtig ist",
+                reportHeader: "Zentrale Aussagen des Berichts",
+                chronologyHeader: "Erweiterte Chronologie aus dem Bericht",
+                chronologyIntro: "Neben den hervorgehobenen Fallstudien in der Zeitleiste nennt der Bericht weitere historische Erdbeben, die die Kontinuität des seismischen Risikos in Kolumbien verdeutlichen.",
+                sourceHeader: "Verlinkte Quellen aus dem Bericht",
+                sourceNote: "Die Liste priorisiert die Quellen, mit denen sich die Hauptaussagen des Berichts am besten prüfen lassen; jede Ereigniskarte verlinkt zusätzlich ihre wichtigsten Belege.",
+                roadmapHeader: "Geplante Funktionen und Verbesserungen",
+                searchPlaceholder: "Ereignis oder Region suchen...",
+                magnitudeLabel: "Magnitude",
+                eventSources: "Quellen zu diesem Ereignis",
+                chronologyYear: "Jahr",
+                chronologyEvent: "Ereignis",
+                chronologyMagnitude: "Magnitude",
+                chronologyNote: "Hinweis",
+                overview: [
+                    {
+                        title: "Tektonischer Rahmen",
+                        text: "Kolumbien liegt in einer komplexen Konvergenzzone zwischen der Nazca-, Karibischen und Südamerikanischen Platte sowie dem Panama-Block und dem Nordanden-Block. Die Kombination aus ozeanischer Subduktion und Krustenstörungen erklärt, warum Megathrust-Beben, intermediäre Beben und zerstörerische flache Beben im selben Land auftreten."
+                    },
+                    {
+                        title: "Kernaussage",
+                        text: "Der Bericht betont, dass die Schwere einer Katastrophe nicht allein von der Magnitude abhängt. Herdtiefe, Stadtnähe, lokale Bodenverstärkung, bauliche Verwundbarkeit und Sekundärgefahren können ein moderates Erdbeben zerstörerischer machen als ein deutlich größeres, aber tieferes Ereignis."
+                    },
+                    {
+                        title: "Seismisches Nest von Bucaramanga",
+                        text: "Unter Santander liegt die weltweit dichteste Konzentration intermediärer Seismizität. Der Bericht hebt zwei Hauptmechanismen hervor: Versprödung durch Dehydrierung in etwa 130 km Tiefe sowie Delamination / thermische Scherinstabilität zwischen etwa 150 und 170 km."
+                    },
+                    {
+                        title: "Entwicklung der Bauvorschriften",
+                        text: "Popayán 1983 führte zum CCCSR-84; das Gesetz 400 von 1997 und die NSR-98 stärkten den rechtlichen und technischen Rahmen; die nach Armenia 1999 beobachteten Versagensmuster prägten den Weg zur NSR-10; und das Gesetz 1796 von 2016 ergänzte unabhängige Überwachung und Prüfungen der Entwürfe."
+                    },
+                    {
+                        title: "Fortbestehende Expositionen",
+                        text: "Unbewehrtes Mauerwerk, informelle Besiedlung an Andenhängen, anfällige Verkehrs- und Energiekorridore sowie Kaskadengefahren wie Tsunamis, Liquefaktion, Erdrutsche und Schuttströme bleiben zentrale Risikotreiber."
+                    }
+                ],
+                roadmap: [
+                    "Eine interaktive Karte mit tektonischen Ebenen, aktiven Störungen, seismischen Nestern und tsunami-gefährdeten Küsten ergänzen.",
+                    "Einen visuellen Vergleich der Erdbeben-Bauvorschriften (CCCSR-84, NSR-98, NSR-10, Gesetz 1796) einbauen.",
+                    "Diagramme zu Herdtiefe, Magnitude und Verlusten ergänzen, um das Kernargument des Berichts sichtbar zu machen.",
+                    "Herunterladbare Ereignisblätter mit Zitaten sowie einen Druck- / PDF-Modus erstellen.",
+                    "Ein Glossar geologischer und konstruktiver Begriffe für nicht spezialisierte Zielgruppen integrieren.",
+                    "Die historische Chronologie mit heutigen regionalen Risiken nach Infrastrukturtyp verknüpfen."
+                ]
+            }
+        };
+
+        let currentLang = 'es';
+        let activeIndex = 0;
+
+        function getSeverityColor(mag) {
+            if (mag >= 8.0) return 'var(--severity-extreme)';
+            if (mag >= 7.0) return 'var(--severity-high)';
+            if (mag >= 6.0) return 'var(--severity-moderate)';
+            return 'var(--severity-low)';
+        }
+
+        function renderSourceLinks(ids) {
+            return ids.map(id => {
+                const source = sources[id];
+                return `<li><a class="source-link" href="${source.url}" target="_blank" rel="noopener noreferrer">[${id}] ${source.title}</a></li>`;
+            }).join('');
+        }
+
+        function renderOverview(ui) {
+            return `
+                <div class="event-card">
+                    <div class="section-title">
+                        <span class="material-symbols-outlined">article</span>
+                        ${ui.reportHeader}
+                    </div>
+                    <div class="mini-grid">
+                        ${reportContent[currentLang].overview.map(section => `
+                            <div class="mini-card">
+                                <h3>${section.title}</h3>
+                                <p>${section.text}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderChronology(ui) {
+            return `
+                <div class="event-card">
+                    <div class="section-title">
+                        <span class="material-symbols-outlined">history</span>
+                        ${ui.chronologyHeader}
+                    </div>
+                    <div class="description-box">${ui.chronologyIntro}</div>
+                    <table class="timeline-table">
+                        <thead>
+                            <tr>
+                                <th>${ui.chronologyYear}</th>
+                                <th>${ui.chronologyEvent}</th>
+                                <th>${ui.chronologyMagnitude}</th>
+                                <th>${ui.chronologyNote}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${chronologyData.map(item => `
+                                <tr>
+                                    <td>${item.year}</td>
+                                    <td>${item.event[currentLang]}</td>
+                                    <td>${item.magnitude}</td>
+                                    <td>${item.note[currentLang]}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderSources(ui) {
+            const orderedIds = Object.keys(sources).map(Number).sort((a, b) => a - b);
+            return `
+                <div class="event-card">
+                    <div class="section-title">
+                        <span class="material-symbols-outlined">link</span>
+                        ${ui.sourceHeader}
+                    </div>
+                    <ol class="source-list">
+                        ${orderedIds.map(id => `
+                            <li><a class="source-link" href="${sources[id].url}" target="_blank" rel="noopener noreferrer">[${id}] ${sources[id].title}</a></li>
+                        `).join('')}
+                    </ol>
+                    <p class="source-note">${ui.sourceNote}</p>
+                </div>
+            `;
+        }
+
+        function renderRoadmap(ui) {
+            return `
+                <div class="event-card">
+                    <div class="section-title">
+                        <span class="material-symbols-outlined">rocket_launch</span>
+                        ${ui.roadmapHeader}
+                    </div>
+                    <ul class="bullet-list">
+                        ${reportContent[currentLang].roadmap.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText.toLowerCase() === lang);
+            });
+
+            const ui = reportContent[lang];
+            document.getElementById('ui-title').innerText = ui.title;
+            document.getElementById('ui-subtitle').innerText = ui.subtitle;
+            document.getElementById('searchInput').placeholder = ui.searchPlaceholder;
+
+            renderTimeline(document.getElementById('searchInput').value.toLowerCase());
+            renderEventDetail(activeIndex);
+        }
+
+        function renderTimeline(filterText = '') {
+            const container = document.getElementById('timelineNodes');
+            container.innerHTML = '';
+
+            eqData.forEach((eq, index) => {
+                const title = eq.title[currentLang];
+                const loc = eq.location[currentLang];
+                const query = filterText.trim();
+
+                if (query && !title.toLowerCase().includes(query) && !loc.toLowerCase().includes(query) && !eq.year.includes(query)) {
+                    return;
+                }
+
+                const node = document.createElement('div');
+                node.className = `timeline-node ${index === activeIndex ? 'active' : ''}`;
+                node.onclick = () => {
+                    activeIndex = index;
+                    renderTimeline(query);
+                    renderEventDetail(activeIndex);
+                };
+
+                const badgeColor = getSeverityColor(eq.magnitude);
+                node.innerHTML = `
+                    <div class="node-year">${eq.year}</div>
+                    <div class="node-title">${title}</div>
+                    <span class="node-mag" style="background:${badgeColor}">M ${eq.magnitude}</span>
+                `;
+                container.appendChild(node);
+            });
+        }
+
+        function renderEventDetail(index) {
+            const eq = eqData[index];
+            if (!eq) return;
+
+            const display = document.getElementById('eventDetailDisplay');
+            const badgeColor = getSeverityColor(eq.magnitude);
+            const ui = reportContent[currentLang];
+
+            display.innerHTML = `
+                ${renderOverview(ui)}
+                <div class="event-card">
+                    <div class="card-header">
+                        <div class="card-header-main">
+                            <h2>${eq.title[currentLang]}</h2>
+                            <div class="subtitle">
+                                <span class="material-symbols-outlined">location_on</span>
+                                ${eq.location[currentLang]}
+                            </div>
+                        </div>
+                        <div class="mag-badge" style="background: ${badgeColor}">
+                            ${eq.magnitude}
+                            <span>${ui.magnitudeLabel}</span>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><span class="material-symbols-outlined">calendar_today</span></div>
+                            <div class="stat-info">
+                                <div class="label">${ui.date}</div>
+                                <div class="value">${eq.date}</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><span class="material-symbols-outlined">straighten</span></div>
+                            <div class="stat-info">
+                                <div class="label">${ui.depth}</div>
+                                <div class="value">${eq.depth}</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><span class="material-symbols-outlined">group_off</span></div>
+                            <div class="stat-info">
+                                <div class="label">${ui.deaths}</div>
+                                <div class="value" style="color:var(--severity-extreme)">${eq.deaths}</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><span class="material-symbols-outlined">personal_injury</span></div>
+                            <div class="stat-info">
+                                <div class="label">${ui.injured}</div>
+                                <div class="value">${eq.injured[currentLang]}</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><span class="material-symbols-outlined">waves</span></div>
+                            <div class="stat-info">
+                                <div class="label">${ui.intensity}</div>
+                                <div class="value">${eq.mmi}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-stack">
+                        <div>
+                            <div class="section-title">
+                                <span class="material-symbols-outlined">info</span>
+                                ${ui.impactHeader}
+                            </div>
+                            <div class="description-box">${eq.impact[currentLang]}</div>
+                        </div>
+
+                        <div class="mini-card">
+                            <h3>${ui.significance}</h3>
+                            <p>${eq.significance[currentLang]}</p>
+                        </div>
+
+                        <div class="mini-card">
+                            <h3>${ui.eventSources}</h3>
+                            <ol class="source-list">${renderSourceLinks(eq.sources)}</ol>
+                        </div>
+                    </div>
+
+                    <div class="tag-container">
+                        <span class="tag"><b>${ui.fault}:</b> ${eq.fault[currentLang]}</span>
+                        <span class="tag">MMI ${eq.mmi}</span>
+                        <span class="tag">Mw ${eq.magnitude}</span>
+                    </div>
+                </div>
+                ${renderChronology(ui)}
+                ${renderSources(ui)}
+                ${renderRoadmap(ui)}
+            `;
+        }
+
+        function filterEvents() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            renderTimeline(query);
+        }
+
+        window.onload = () => {
+            setLanguage('es');
+        };
+    </script>
+</body>
+</html>
