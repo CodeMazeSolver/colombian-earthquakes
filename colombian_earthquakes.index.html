@@ -85,6 +85,36 @@
             gap: 1rem;
         }
 
+        .menu-btn,
+        .drawer-header,
+        .drawer-scrim,
+        .timeline-scroll-hint {
+            display: none;
+        }
+
+        .menu-btn,
+        .drawer-close {
+            border: none;
+            background: transparent;
+            color: var(--md-sys-color-primary);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .menu-btn:hover,
+        .drawer-close:hover {
+            background: var(--md-sys-color-primary-container);
+        }
+
+        .drawer-close {
+            display: inline-flex;
+        }
+
         .lang-selector {
             display: flex;
             background: var(--md-sys-color-surface-variant);
@@ -151,6 +181,10 @@
             height: calc(100vh - 73px);
             overflow-y: auto;
             background: var(--md-sys-color-surface);
+        }
+
+        .timeline-sidebar-inner {
+            position: relative;
         }
 
         .timeline-tree {
@@ -494,36 +528,95 @@
         }
 
         @media (max-width: 900px) {
+            body.drawer-open {
+                overflow: hidden;
+            }
+
             header {
-                padding: 1rem 1.25rem;
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0.9rem;
+                padding: 0.8rem 1rem;
+                display: grid;
+                grid-template-columns: auto 1fr;
+                align-items: center;
+                gap: 0.8rem;
             }
 
-            .header-title-box h1 {
-                font-size: 1.2rem;
-                line-height: 1.3;
+            .menu-btn {
+                display: inline-flex;
             }
 
-            .header-title-box p {
-                margin-top: 0.2rem;
-            }
-
-            .controls {
-                width: 100%;
-                flex-wrap: wrap;
-                gap: 0.75rem;
-                justify-content: space-between;
-            }
-
-            .search-box {
-                flex: 1 1 260px;
+            .header-title-box {
                 min-width: 0;
             }
 
-            .search-box input {
+            .header-title-box h1 {
+                font-size: 1.05rem;
+                line-height: 1.2;
+                gap: 0.4rem;
+            }
+
+            .header-title-box p {
+                display: none;
+            }
+
+            .controls {
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 220;
+                width: min(82vw, 320px);
+                padding: 1rem;
+                background: var(--md-sys-color-surface);
+                box-shadow: var(--shadow-3);
+                transform: translateX(100%);
+                transition: transform 0.25s ease;
+                flex-direction: column;
+                align-items: stretch;
+                justify-content: flex-start;
+                gap: 1rem;
+            }
+
+            body.drawer-open .controls {
+                transform: translateX(0);
+            }
+
+            .drawer-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 0.25rem;
+            }
+
+            .drawer-title {
+                font-size: 1rem;
+                font-weight: 700;
+                color: var(--md-sys-color-primary);
+            }
+
+            .drawer-scrim {
+                position: fixed;
+                inset: 0;
+                z-index: 210;
+                background: rgba(28, 27, 31, 0.36);
+            }
+
+            body.drawer-open .drawer-scrim {
+                display: block;
+            }
+
+            .search-box,
+            .search-box input,
+            .lang-selector {
                 width: 100%;
+            }
+
+            .lang-selector {
+                justify-content: space-between;
+            }
+
+            .lang-btn {
+                flex: 1 1 0;
+                text-align: center;
             }
 
             .app-container {
@@ -536,9 +629,10 @@
                 max-height: none;
                 position: relative;
                 top: 0;
-                padding: 1rem 1rem 0.8rem;
+                padding: 0.85rem 1rem 0.65rem;
                 border-right: none;
                 border-bottom: 1px solid var(--md-sys-color-surface-variant);
+                overflow: hidden;
             }
 
             .timeline-tree {
@@ -547,11 +641,37 @@
                 padding-left: 0;
                 overflow-x: auto;
                 padding-bottom: 0.3rem;
+                padding-right: 3.2rem;
                 scroll-snap-type: x proximity;
+                scrollbar-width: none;
             }
 
-            .timeline-tree::before {
+            .timeline-tree::-webkit-scrollbar {
                 display: none;
+            }
+
+            .timeline-scroll-hint {
+                display: inline-flex;
+                position: absolute;
+                right: 0.1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 34px;
+                height: 72px;
+                align-items: center;
+                justify-content: center;
+                border: none;
+                border-radius: 18px 0 0 18px;
+                background: linear-gradient(90deg, rgba(253, 248, 248, 0), rgba(253, 248, 248, 0.98) 42%);
+                color: var(--md-sys-color-primary);
+                box-shadow: none;
+                z-index: 5;
+                cursor: pointer;
+            }
+
+            .timeline-scroll-hint.hidden {
+                opacity: 0;
+                pointer-events: none;
             }
 
             .timeline-node {
@@ -569,21 +689,37 @@
             }
 
             .event-card {
-                padding: 1.5rem;
+                padding: 1.35rem;
                 border-radius: 22px;
             }
 
             .card-header {
-                flex-direction: column;
-                gap: 1rem;
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto;
+                align-items: start;
+                gap: 0.8rem;
+            }
+
+            .card-header-main {
+                min-width: 0;
             }
 
             .card-header-main h2 {
-                font-size: 1.55rem;
+                font-size: 1.2rem;
+                line-height: 1.2;
+                margin-bottom: 0.35rem;
+            }
+
+            .card-header-main .subtitle {
+                font-size: 0.86rem;
+                line-height: 1.3;
             }
 
             .mag-badge {
-                align-self: flex-start;
+                align-self: start;
+                font-size: 1rem;
+                min-width: 76px;
+                padding: 0.45rem 0.65rem;
             }
 
             .stats-grid {
@@ -599,35 +735,37 @@
 
         @media (max-width: 640px) {
             header {
-                padding: 0.9rem 0.9rem 1rem;
+                padding: 0.65rem 0.8rem;
+                gap: 0.65rem;
+            }
+
+            .menu-btn,
+            .drawer-close {
+                width: 40px;
+                height: 40px;
+            }
+
+            .header-title-box h1 {
+                font-size: 0.95rem;
             }
 
             .controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .search-box,
-            .lang-selector {
-                width: 100%;
-            }
-
-            .lang-selector {
-                justify-content: space-between;
-            }
-
-            .lang-btn {
-                flex: 1 1 0;
-                text-align: center;
+                width: min(88vw, 320px);
+                padding: 0.95rem 0.9rem 1.1rem;
             }
 
             .timeline-sidebar {
-                padding: 0.9rem 0.9rem 0.7rem;
+                padding: 0.8rem 0.8rem 0.65rem;
             }
 
             .timeline-node {
                 min-width: 150px;
                 padding: 0.75rem 0.85rem;
+            }
+
+            .timeline-scroll-hint {
+                width: 30px;
+                height: 64px;
             }
 
             .content-area {
@@ -640,12 +778,23 @@
                 margin-bottom: 1rem;
             }
 
+            .card-header {
+                grid-template-columns: minmax(0, 1fr) auto;
+                gap: 0.65rem;
+            }
+
             .card-header-main h2 {
-                font-size: 1.3rem;
+                font-size: 1.05rem;
             }
 
             .card-header-main .subtitle {
-                font-size: 0.88rem;
+                font-size: 0.8rem;
+            }
+
+            .mag-badge {
+                min-width: 68px;
+                font-size: 0.95rem;
+                padding: 0.4rem 0.55rem;
             }
 
             .stats-grid,
@@ -684,28 +833,43 @@
 <body>
 
     <header>
+        <button class="menu-btn" type="button" aria-label="Open menu" onclick="toggleMobileDrawer(true)">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
         <div class="header-title-box">
             <h1><span class="material-symbols-outlined">analytics</span> <span id="ui-title">Sismos Históricos de Colombia</span></h1>
             <p id="ui-subtitle">Plataforma Informativa e Histórica de Amenaza Sísmica</p>
         </div>
-        <div class="controls">
+        <div class="controls" id="mobileDrawer">
+            <div class="drawer-header">
+                <span class="drawer-title">Menu</span>
+                <button class="drawer-close" type="button" aria-label="Close menu" onclick="toggleMobileDrawer(false)">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
             <div class="search-box">
                 <span class="material-symbols-outlined">search</span>
                 <input type="text" id="searchInput" placeholder="Buscar / Search..." onkeyup="filterEvents()">
             </div>
             <div class="lang-selector">
-                <button class="lang-btn active" onclick="setLanguage('es')">ES</button>
-                <button class="lang-btn" onclick="setLanguage('en')">EN</button>
-                <button class="lang-btn" onclick="setLanguage('de')">DE</button>
+                <button class="lang-btn active" onclick="setLanguage('es'); toggleMobileDrawer(false)">ES</button>
+                <button class="lang-btn" onclick="setLanguage('en'); toggleMobileDrawer(false)">EN</button>
+                <button class="lang-btn" onclick="setLanguage('de'); toggleMobileDrawer(false)">DE</button>
             </div>
         </div>
     </header>
+    <button class="drawer-scrim" id="drawerScrim" type="button" aria-label="Close menu" onclick="toggleMobileDrawer(false)"></button>
 
     <div class="app-container">
         <!-- Sidebar Navigation -->
         <nav class="timeline-sidebar">
-            <div class="timeline-tree" id="timelineNodes">
-                <!-- Dynamic Nodes Inserted via JS -->
+            <div class="timeline-sidebar-inner">
+                <div class="timeline-tree" id="timelineNodes">
+                    <!-- Dynamic Nodes Inserted via JS -->
+                </div>
+                <button class="timeline-scroll-hint hidden" id="timelineScrollHint" type="button" aria-label="Scroll earthquake list to the right" onclick="scrollTimelineRight()">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
             </div>
         </nav>
 
@@ -1378,6 +1542,33 @@
         let currentLang = 'es';
         let activeIndex = 0;
 
+        function toggleMobileDrawer(forceState) {
+            const shouldOpen = typeof forceState === 'boolean'
+                ? forceState
+                : !document.body.classList.contains('drawer-open');
+            document.body.classList.toggle('drawer-open', shouldOpen);
+        }
+
+        function updateTimelineScrollHint() {
+            const container = document.getElementById('timelineNodes');
+            const hint = document.getElementById('timelineScrollHint');
+            if (!container || !hint || window.innerWidth > 900) {
+                hint?.classList.add('hidden');
+                return;
+            }
+
+            const hasOverflow = container.scrollWidth > container.clientWidth + 8;
+            const atRightEdge = container.scrollLeft + container.clientWidth >= container.scrollWidth - 8;
+            hint.classList.toggle('hidden', !hasOverflow || atRightEdge);
+        }
+
+        function scrollTimelineRight() {
+            const container = document.getElementById('timelineNodes');
+            if (!container) return;
+            container.scrollBy({ left: 220, behavior: 'smooth' });
+            window.setTimeout(updateTimelineScrollHint, 280);
+        }
+
         function getSeverityColor(mag) {
             if (mag >= 8.0) return 'var(--severity-extreme)';
             if (mag >= 7.0) return 'var(--severity-high)';
@@ -1457,6 +1648,7 @@
 
             renderTimeline(document.getElementById('searchInput').value.toLowerCase());
             renderEventDetail(activeIndex);
+            updateTimelineScrollHint();
         }
 
         function renderTimeline(filterText = '') {
@@ -1478,6 +1670,7 @@
                     activeIndex = index;
                     renderTimeline(query);
                     renderEventDetail(activeIndex);
+                    toggleMobileDrawer(false);
                 };
 
                 const badgeColor = getSeverityColor(eq.magnitude);
@@ -1488,6 +1681,8 @@
                 `;
                 container.appendChild(node);
             });
+
+            window.requestAnimationFrame(updateTimelineScrollHint);
         }
 
         function renderEventDetail(index) {
@@ -1598,6 +1793,10 @@
 
         window.onload = () => {
             setLanguage('es');
+
+            const timelineNodes = document.getElementById('timelineNodes');
+            timelineNodes?.addEventListener('scroll', updateTimelineScrollHint, { passive: true });
+            window.addEventListener('resize', updateTimelineScrollHint);
         };
     </script>
 </body>
