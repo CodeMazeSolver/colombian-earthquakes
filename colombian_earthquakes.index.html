@@ -368,6 +368,7 @@
         }
 
         .event-map-shell {
+            position: relative;
             margin-bottom: 1.5rem;
             border: 1px solid var(--md-sys-color-surface-variant);
             border-radius: var(--radius-l);
@@ -378,6 +379,37 @@
         .event-map {
             width: 100%;
             height: 340px;
+        }
+
+        .map-reset-btn {
+            position: absolute;
+            top: 0.9rem;
+            right: 0.9rem;
+            z-index: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            border: 1px solid rgba(139, 0, 0, 0.18);
+            background: rgba(255, 255, 255, 0.94);
+            color: var(--md-sys-color-primary);
+            border-radius: 999px;
+            padding: 0.45rem 0.75rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+            backdrop-filter: blur(8px);
+        }
+
+        .map-reset-btn .material-symbols-outlined {
+            font-size: 1rem;
+        }
+
+        .map-reset-btn:hover,
+        .map-reset-btn:focus-visible {
+            background: #fff;
+            outline: none;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
         }
 
         .event-map-shell .leaflet-container {
@@ -462,6 +494,360 @@
         .source-list li {
             font-size: 0.95rem;
             line-height: 1.55;
+        }
+
+        .reference-center {
+            background: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-l);
+            box-shadow: var(--shadow-1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .reference-header {
+            padding: 1.4rem 1.5rem 1rem;
+            border-bottom: 1px solid var(--md-sys-color-surface-variant);
+            background: linear-gradient(180deg, rgba(139,0,0,0.06), rgba(139,0,0,0));
+        }
+
+        .reference-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.74rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--md-sys-color-primary);
+            font-weight: 700;
+            margin-bottom: 0.45rem;
+        }
+
+        .reference-title-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.55rem;
+        }
+
+        .reference-title-row h2 {
+            font-size: 1.45rem;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .reference-subtitle {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--md-sys-color-on-surface-variant);
+            max-width: 860px;
+        }
+
+        .reference-trust-note {
+            margin-top: 0.8rem;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            color: var(--md-sys-color-outline);
+        }
+
+        .reference-tabs-shell {
+            position: relative;
+            border-bottom: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+        }
+
+        .reference-tabs-scroll {
+            overflow-x: auto;
+            scrollbar-width: thin;
+            background: var(--md-sys-color-surface);
+        }
+
+        .reference-tab-scroll-hint {
+            display: none;
+        }
+
+        .reference-tabs {
+            display: flex;
+            gap: 0.35rem;
+            padding: 0.7rem 1rem;
+            min-width: max-content;
+        }
+
+        .reference-tab-btn {
+            border: none;
+            background: transparent;
+            color: var(--md-sys-color-on-surface-variant);
+            border-radius: 999px;
+            padding: 0.7rem 1rem;
+            font-size: 0.92rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .reference-tab-btn:hover {
+            background: rgba(139, 0, 0, 0.08);
+            color: var(--md-sys-color-primary);
+        }
+
+        .reference-tab-btn.active {
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            box-shadow: var(--shadow-1);
+        }
+
+        .reference-body {
+            padding: 1.35rem 1.5rem 1.5rem;
+        }
+
+        .reference-overview-card {
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 1rem 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .reference-overview-card h3 {
+            color: var(--md-sys-color-primary);
+            font-size: 1rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .reference-overview-card p,
+        .reference-section p,
+        .reference-source-card p,
+        .reference-source-card li,
+        .glossary-list p {
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .reference-sections {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .reference-section {
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 1rem 1.05rem;
+        }
+
+        .reference-section h3 {
+            color: var(--md-sys-color-primary);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .reference-section ul,
+        .reference-source-card ul,
+        .reference-source-card ol,
+        .glossary-list {
+            margin: 0.7rem 0 0 1.15rem;
+        }
+
+        .reference-section li,
+        .reference-source-card li,
+        .glossary-list li {
+            margin-top: 0.4rem;
+            line-height: 1.55;
+        }
+
+        .reference-source-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .reference-source-card {
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 1rem 1.05rem;
+        }
+
+        .reference-source-card h3 {
+            color: var(--md-sys-color-primary);
+            font-size: 0.98rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .reference-source-card .source-list {
+            margin-left: 1rem;
+        }
+
+        .reference-source-card .source-list li + li {
+            margin-top: 0.55rem;
+        }
+
+        .reference-figure-card {
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 1rem 1.05rem;
+            margin-bottom: 1rem;
+        }
+
+        .reference-figure-card h3 {
+            color: var(--md-sys-color-primary);
+            font-size: 0.98rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .reference-figure-card p {
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .reference-figure {
+            margin: 0.9rem 0 0;
+        }
+
+        .reference-figure img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: calc(var(--radius-m) - 2px);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: #fff;
+        }
+
+        .reference-figure figcaption {
+            margin-top: 0.75rem;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .reference-media-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .reference-media-tile {
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 0.9rem;
+        }
+
+        .reference-media-tile img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: calc(var(--radius-m) - 4px);
+            background: #fff;
+            border: 1px solid var(--md-sys-color-surface-variant);
+            margin-bottom: 0.75rem;
+            aspect-ratio: 1 / 1;
+            object-fit: contain;
+        }
+
+        .reference-media-tile h3 {
+            color: var(--md-sys-color-primary);
+            font-size: 0.96rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .reference-media-tile p {
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .term-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            border: none;
+            background: rgba(139, 0, 0, 0.10);
+            color: var(--md-sys-color-primary);
+            border-radius: 999px;
+            padding: 0.08rem 0.45rem;
+            font-size: 0.88em;
+            font-weight: 600;
+            cursor: pointer;
+            vertical-align: baseline;
+            margin: 0 0.08rem;
+        }
+
+        .term-button .material-symbols-outlined {
+            font-size: 0.95rem;
+        }
+
+        .term-button.active {
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+        }
+
+        .term-panel {
+            margin-top: 1rem;
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            border-radius: var(--radius-m);
+            padding: 0.95rem 1rem;
+            border: 1px solid rgba(139, 0, 0, 0.14);
+        }
+
+        .term-panel.hidden {
+            display: none;
+        }
+
+        .term-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .term-panel-header h3 {
+            font-size: 1rem;
+        }
+
+        .term-panel-close {
+            border: none;
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+        }
+
+        .term-panel-close:hover {
+            background: rgba(65, 0, 2, 0.08);
+        }
+
+        .glossary-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.8rem 1rem;
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .glossary-list li {
+            margin-top: 0;
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 0.9rem 1rem;
+        }
+
+        .glossary-list strong {
+            display: block;
+            color: var(--md-sys-color-primary);
+            margin-bottom: 0.3rem;
         }
 
         .bullet-list {
@@ -740,6 +1126,66 @@
                 overflow-x: auto;
                 white-space: nowrap;
             }
+
+            .reference-header,
+            .reference-body {
+                padding-left: 1.15rem;
+                padding-right: 1.15rem;
+            }
+
+            .reference-tabs-scroll {
+                padding-left: 3.2rem;
+                padding-right: 3.2rem;
+                scrollbar-width: none;
+            }
+
+            .reference-tabs-scroll::-webkit-scrollbar {
+                display: none;
+            }
+
+            .reference-tab-scroll-hint {
+                display: inline-flex;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 34px;
+                height: 56px;
+                align-items: center;
+                justify-content: center;
+                border: none;
+                background: linear-gradient(90deg, rgba(253, 248, 248, 0), rgba(253, 248, 248, 0.98) 42%);
+                color: var(--md-sys-color-primary);
+                box-shadow: none;
+                z-index: 2;
+                cursor: pointer;
+            }
+
+            .reference-tab-scroll-hint--right {
+                right: 0.1rem;
+                border-radius: 18px 0 0 18px;
+            }
+
+            .reference-tab-scroll-hint--left {
+                left: 0.1rem;
+                border-radius: 0 18px 18px 0;
+                background: linear-gradient(270deg, rgba(253, 248, 248, 0), rgba(253, 248, 248, 0.98) 42%);
+            }
+
+            .reference-tab-scroll-hint.hidden {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            .reference-title-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .reference-sections,
+            .reference-source-grid,
+            .glossary-list {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 640px) {
@@ -836,6 +1282,36 @@
             .source-list {
                 margin-left: 1rem;
             }
+
+            .reference-header {
+                padding: 1rem 0.95rem 0.85rem;
+            }
+
+            .reference-body {
+                padding: 1rem 0.95rem 1.1rem;
+            }
+
+            .reference-title-row h2 {
+                font-size: 1.15rem;
+            }
+
+            .reference-tab-scroll-hint {
+                width: 30px;
+                height: 52px;
+            }
+
+            .reference-tab-btn {
+                padding: 0.62rem 0.82rem;
+                font-size: 0.86rem;
+            }
+
+            .reference-section,
+            .reference-source-card,
+            .reference-overview-card,
+            .glossary-list li,
+            .term-panel {
+                padding: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -890,6 +1366,39 @@
             <div id="eventDetailDisplay">
                 <!-- Active Event Card Injected via JS -->
             </div>
+            <section class="reference-center" id="referenceCenter" aria-label="Reference information tabs">
+                <div class="reference-header">
+                    <div class="reference-kicker"><span class="material-symbols-outlined">menu_book</span><span id="referenceKicker">Centro de referencia</span></div>
+                    <div class="reference-title-row">
+                        <h2 id="referenceTitle">Información científica y de emergencia</h2>
+                    </div>
+                    <p class="reference-subtitle" id="referenceSubtitle">Contexto general para entender cómo se miden los terremotos, por qué ocurren en Colombia, qué peligros secundarios pueden acompañarlos y cómo suele enseñarse la conducta básica de seguridad.</p>
+                    <p class="reference-trust-note" id="referenceTrustNote">Fuentes oficiales y científicas seleccionadas por su fiabilidad pública y su utilidad para lectores no especialistas.</p>
+                </div>
+                <div class="reference-tabs-shell">
+                    <div class="reference-tabs-scroll" id="referenceTabsScroll">
+                        <div class="reference-tabs" id="referenceTabs"></div>
+                    </div>
+                    <button class="reference-tab-scroll-hint reference-tab-scroll-hint--left hidden" id="referenceTabsHintLeft" type="button" aria-label="Scroll reference tabs to the left" onclick="scrollReferenceTabsLeft()">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                    <button class="reference-tab-scroll-hint reference-tab-scroll-hint--right hidden" id="referenceTabsHintRight" type="button" aria-label="Scroll reference tabs to the right" onclick="scrollReferenceTabsRight()">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
+                </div>
+                <div class="reference-body">
+                    <div id="referenceTabContent"></div>
+                    <div class="term-panel hidden" id="termPanel" aria-live="polite">
+                        <div class="term-panel-header">
+                            <h3 id="termPanelTitle"></h3>
+                            <button class="term-panel-close" type="button" aria-label="Close term panel" onclick="closeTermPanel()">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <p id="termPanelText"></p>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -899,6 +1408,10 @@
             1: {
                 title: "Wikipedia - List of earthquakes in Colombia",
                 url: "https://en.wikipedia.org/wiki/List_of_earthquakes_in_Colombia"
+            },
+            3: {
+                title: "Servicio Geológico Colombiano - Geología de Colombia: contexto tectónico y sísmico",
+                url: "https://www2.sgc.gov.co/Libro-geologia-colombia/tc/CAPITULO_1_3.htm"
             },
             4: {
                 title: "ResearchGate - A Reexamination of the Bucaramanga, Colombia, Earthquake Nest",
@@ -911,6 +1424,10 @@
             8: {
                 title: "PubMed - Lithospheric delamination as the driving mechanism of intermediate-depth seismicity in the Bucaramanga Nest, Colombia",
                 url: "https://pubmed.ncbi.nlm.nih.gov/38155214/"
+            },
+            9: {
+                title: "Ready.gov - Landslides & Debris Flow",
+                url: "https://www.ready.gov/landslides-debris-flow"
             },
             20: {
                 title: "Wikipedia (ES) - Terremoto de Popayán de 1983",
@@ -939,6 +1456,98 @@
             40: {
                 title: "USGS - M 7.4, 5 km S of San José del Palmar, Colombia",
                 url: "https://earthquake.usgs.gov/earthquakes/eventpage/us6000tjl2"
+            },
+            41: {
+                title: "Servicio Geológico Colombiano - Amenaza Sísmica",
+                url: "https://www2.sgc.gov.co/Direcciones-Tecnicas/Geoamenazas/amenaza-sismica/Paginas/default.aspx"
+            },
+            42: {
+                title: "Earthquakes Canada - Frequently Asked Questions about Earthquakes (FAQ)",
+                url: "https://www.earthquakescanada.nrcan.gc.ca/info-gen/faq-en.php"
+            },
+            43: {
+                title: "Ready.gov - Earthquakes",
+                url: "https://www.ready.gov/earthquakes"
+            },
+            44: {
+                title: "Weather.gov - Tsunami Safety",
+                url: "https://www.weather.gov/safety/tsunami"
+            },
+            45: {
+                title: "NOAA National Ocean Service - What is a tsunami?",
+                url: "https://oceanservice.noaa.gov/facts/tsunami.html"
+            },
+            46: {
+                title: "U.S. Tsunami Warning Centers",
+                url: "https://www.tsunami.gov/"
+            },
+            47: {
+                title: "Servicio Geológico Colombiano - Sismos",
+                url: "https://www.sgc.gov.co/sismos"
+            },
+            48: {
+                title: "Wikipedia - 1868 Ecuador earthquakes",
+                url: "https://en.wikipedia.org/wiki/1868_Ecuador_earthquakes"
+            },
+            49: {
+                title: "Wikipedia - 1875 Cúcuta earthquake",
+                url: "https://en.wikipedia.org/wiki/1875_C%C3%BAcuta_earthquake"
+            },
+            50: {
+                title: "Wikipedia - 1906 Ecuador–Colombia earthquake",
+                url: "https://en.wikipedia.org/wiki/1906_Ecuador%E2%80%93Colombia_earthquake"
+            },
+            51: {
+                title: "Wikipedia - 1958 Ecuador–Colombia earthquake",
+                url: "https://en.wikipedia.org/wiki/1958_Ecuador%E2%80%93Colombia_earthquake"
+            },
+            52: {
+                title: "Wikipedia - 1967 Neiva earthquake",
+                url: "https://en.wikipedia.org/wiki/1967_Neiva_earthquake"
+            },
+            53: {
+                title: "Wikipedia - 1970 Colombia earthquake",
+                url: "https://en.wikipedia.org/wiki/1970_Colombia_earthquake"
+            },
+            54: {
+                title: "Wikipedia - 1979 Tumaco earthquake",
+                url: "https://en.wikipedia.org/wiki/1979_Tumaco_earthquake"
+            },
+            55: {
+                title: "Wikipedia - 1987 Ecuador-Colombia earthquakes",
+                url: "https://en.wikipedia.org/wiki/1987_Ecuador-Colombia_earthquakes"
+            },
+            56: {
+                title: "Wikipedia - 1992 Murindó earthquake",
+                url: "https://en.wikipedia.org/wiki/1992_Murind%C3%B3_earthquake"
+            },
+            57: {
+                title: "Wikipedia - 1994 Páez River earthquake",
+                url: "https://en.wikipedia.org/wiki/1994_P%C3%A1ez_River_earthquake"
+            },
+            58: {
+                title: "Wikipedia - 1995 Chocó earthquake",
+                url: "https://en.wikipedia.org/wiki/1995_Cali_earthquake"
+            },
+            59: {
+                title: "Wikipedia - 1999 Colombia earthquake",
+                url: "https://en.wikipedia.org/wiki/1999_Colombia_earthquake"
+            },
+            60: {
+                title: "Wikipedia - 2008 El Calvario earthquake",
+                url: "https://en.wikipedia.org/wiki/2008_El_Calvario_earthquake"
+            },
+            61: {
+                title: "Wikipedia - 2016 Ecuador earthquake",
+                url: "https://en.wikipedia.org/wiki/2016_Ecuador_earthquake"
+            },
+            62: {
+                title: "Wikipedia - 2025 Cundinamarca earthquake",
+                url: "https://en.wikipedia.org/wiki/2025_Cundinamarca_earthquake"
+            },
+            63: {
+                title: "Wikipedia - 2026 Colombia earthquake",
+                url: "https://en.wikipedia.org/wiki/2026_Colombia_earthquake"
             }
         };
 
@@ -946,8 +1555,45 @@
 
         let eventMap = null;
         let eventMarker = null;
+        let eventMapDefaultBounds = null;
 
         const eqData = [
+            {
+                year: "1868",
+                date: "1868-08-15/16",
+                magnitude: 6.7,
+                depth: "20 km",
+                mmi: "X",
+                deaths: "~70,000",
+                injured: { es: "Sin confirmar", en: "Unconfirmed", de: "Unbestätigt" },
+                location: {
+                    es: "Frontera Ecuador-Colombia (Nariño)",
+                    en: "Ecuador-Colombia border (Nariño)",
+                    de: "Grenze Ecuador-Kolumbien (Nariño)"
+                },
+                coordinates: "0.31, -78.18",
+                fault: {
+                    es: "Sismicidad cortical del norte andino",
+                    en: "Northern Andean crustal seismicity",
+                    de: "Krustenseismizität der Nordanden"
+                },
+                title: {
+                    es: "Terremotos Ecuador-Colombia de 1868",
+                    en: "1868 Ecuador-Colombia Earthquakes",
+                    de: "Ecuador-Kolumbien-Erdbeben 1868"
+                },
+                impact: {
+                    es: "Una secuencia de dos grandes terremotos afectó gravemente el norte de Ecuador y el suroccidente de Colombia. La ficha muestra que la historia sísmica colombiana también incluye desastres fronterizos con efectos regionales y altísimas pérdidas humanas.",
+                    en: "A two-earthquake sequence severely affected northern Ecuador and southwestern Colombia. This card shows that Colombia's earthquake history also includes border-region disasters with regional effects and extremely high loss of life.",
+                    de: "Eine Folge von zwei großen Erdbeben traf den Norden Ecuadors und den Südwesten Kolumbiens schwer. Die Karte zeigt, dass zur kolumbianischen Erdbebengeschichte auch grenzüberschreitende Katastrophen mit regionalen Auswirkungen und sehr hohen Opferzahlen gehören."
+                },
+                significance: {
+                    es: "Referencia clave para los desastres sísmicos regionales del siglo XIX.",
+                    en: "Key reference for nineteenth-century regional seismic disasters.",
+                    de: "Wichtiger Bezugspunkt für regionale Erdbebenkatastrophen des 19. Jahrhunderts."
+                },
+                sources: [1, 48]
+            },
             {
                 year: "1875",
                 date: "1875-05-18",
@@ -982,7 +1628,7 @@
                     en: "Early example of urban seismic risk from shallow faulting in the northeastern Andes.",
                     de: "Frühes Beispiel für urbanes Erdbebenrisiko durch flache Verwerfungen in den nordöstlichen Anden."
                 },
-                sources: [1]
+                sources: [1, 49]
             },
             {
                 year: "1906",
@@ -1018,7 +1664,115 @@
                     en: "Key event for understanding megathrust and tsunami risk in Nariño and Cauca.",
                     de: "Schlüsselereignis zum Verständnis des Megathrust- und Tsunami-Risikos in Nariño und Cauca."
                 },
-                sources: [1]
+                sources: [1, 50]
+            },
+            {
+                year: "1958",
+                date: "1958-01-19",
+                magnitude: 7.8,
+                depth: "40–60 km",
+                mmi: "VIII",
+                deaths: "111",
+                injured: { es: "45", en: "45", de: "45" },
+                location: {
+                    es: "Costa Ecuador-Colombia",
+                    en: "Ecuador-Colombia coast",
+                    de: "Küste Ecuador-Kolumbien"
+                },
+                coordinates: "1.5, -79.5",
+                fault: {
+                    es: "Margen de subducción del Pacífico oriental",
+                    en: "Eastern Pacific subduction margin",
+                    de: "Subduktionsrand des östlichen Pazifiks"
+                },
+                title: {
+                    es: "Terremoto Ecuador-Colombia de 1958",
+                    en: "1958 Ecuador-Colombia Earthquake",
+                    de: "Ecuador-Kolumbien-Erdbeben 1958"
+                },
+                impact: {
+                    es: "El terremoto dañó severamente la costa noroccidental ecuatoriana y también se sintió con fuerza en el litoral colombiano. Refuerza la idea de que el margen pacífico produce repetidamente terremotos grandes con efectos costeros y de infraestructura.",
+                    en: "The earthquake severely damaged the northwestern Ecuadorian coast and was also strongly felt along the Colombian littoral. It reinforces that the Pacific margin repeatedly produces large earthquakes with coastal and infrastructure impacts.",
+                    de: "Das Erdbeben beschädigte die nordwestliche Küste Ecuadors schwer und war auch an der kolumbianischen Pazifikküste stark zu spüren. Es unterstreicht, dass der Pazifikrand wiederholt große Erdbeben mit Küsten- und Infrastrukturauswirkungen erzeugt."
+                },
+                significance: {
+                    es: "Ayuda a conectar 1906, 1958 y 1979 como una misma historia de amenaza pacífica.",
+                    en: "Helps connect 1906, 1958, and 1979 as one Pacific hazard story.",
+                    de: "Hilft, 1906, 1958 und 1979 als zusammenhängende Pazifik-Gefährdungsgeschichte zu lesen."
+                },
+                sources: [1, 51]
+            },
+            {
+                year: "1967",
+                date: "1967-02-09",
+                magnitude: 7.2,
+                depth: "55 km",
+                mmi: "VIII-X",
+                deaths: "98",
+                injured: { es: "Sin confirmar", en: "Unconfirmed", de: "Unbestätigt" },
+                location: {
+                    es: "Neiva / Algeciras, Huila",
+                    en: "Neiva / Algeciras, Huila",
+                    de: "Neiva / Algeciras, Huila"
+                },
+                coordinates: "2.8490, -74.7980",
+                fault: {
+                    es: "Falla de Algeciras, sistema frontal oriental",
+                    en: "Algeciras Fault, Eastern Frontal system",
+                    de: "Algeciras-Störung, östliches Frontalsystem"
+                },
+                title: {
+                    es: "Terremoto de Neiva de 1967",
+                    en: "1967 Neiva Earthquake",
+                    de: "Erdbeben von Neiva 1967"
+                },
+                impact: {
+                    es: "Asociado con la falla de Algeciras, este terremoto fue sentido en gran parte del noroeste de Suramérica y produjo decenas de muertes. Añade un ejemplo fuerte del frente andino oriental antes de los eventos recientes de Meta y Cundinamarca.",
+                    en: "Associated with the Algeciras Fault, this earthquake was felt across much of northwestern South America and caused dozens of deaths. It adds a strong example from the eastern Andean front before the recent Meta and Cundinamarca events.",
+                    de: "Dieses mit der Algeciras-Störung verbundene Erdbeben war in weiten Teilen des nordwestlichen Südamerikas zu spüren und forderte zahlreiche Todesopfer. Es ergänzt ein starkes Beispiel von der östlichen Andenfront vor den jüngeren Ereignissen in Meta und Cundinamarca."
+                },
+                significance: {
+                    es: "Referencia histórica importante para el sistema de fallas del frente oriental andino.",
+                    en: "Important historical reference for the eastern Andean frontal fault system.",
+                    de: "Wichtiger historischer Bezugspunkt für das Störungssystem der östlichen Andenfront."
+                },
+                sources: [1, 52]
+            },
+            {
+                year: "1970",
+                date: "1970-07-31",
+                magnitude: 8.0,
+                depth: "644.8 km",
+                mmi: "IV",
+                deaths: "1",
+                injured: { es: "0", en: "0", de: "0" },
+                location: {
+                    es: "Amazonas",
+                    en: "Amazonas",
+                    de: "Amazonas"
+                },
+                coordinates: "-1.6, -72.53",
+                fault: {
+                    es: "Sismicidad profunda intraplaca del manto subducido",
+                    en: "Deep intraslab seismicity in the subducted mantle",
+                    de: "Tiefe Intraslab-Seismizität im subduzierten Mantel"
+                },
+                title: {
+                    es: "Sismo profundo de Colombia de 1970",
+                    en: "1970 Deep Colombia Earthquake",
+                    de: "Tiefes Kolumbien-Erdbeben 1970"
+                },
+                impact: {
+                    es: "Este evento extremadamente profundo es el caso más claro del sitio para explicar que Colombia no solo registra sismos corticales o de subducción somera. Aunque produjo pocos daños directos, destaca por su profundidad excepcional.",
+                    en: "This extremely deep event is the clearest case on the site for showing that Colombia records more than shallow crustal or subduction earthquakes. It caused little direct damage but stands out for its exceptional depth.",
+                    de: "Dieses extrem tiefe Ereignis ist der klarste Fall auf der Seite, um zu zeigen, dass Kolumbien nicht nur flache Krusten- oder Subduktionsbeben registriert. Direkte Schäden waren gering, doch die außergewöhnliche Herdtiefe macht das Ereignis besonders relevant."
+                },
+                significance: {
+                    es: "Ancla la explicación del espectro completo de profundidades sísmicas en Colombia.",
+                    en: "Anchors the explanation of Colombia's full earthquake-depth spectrum.",
+                    de: "Verankert die Erklärung des gesamten Herdtiefenspektrums kolumbianischer Erdbeben."
+                },
+                sources: [1, 53]
             },
             {
                 year: "1979",
@@ -1054,7 +1808,7 @@
                     en: "Confirms the need to integrate earthquake, tsunami, and coastal housing vulnerability.",
                     de: "Bestätigt die Notwendigkeit, Erdbeben-, Tsunami- und Küstenwohnungsrisiken gemeinsam zu betrachten."
                 },
-                sources: [1]
+                sources: [1, 54]
             },
             {
                 year: "1983",
@@ -1093,6 +1847,78 @@
                 sources: [1, 20, 23]
             },
             {
+                year: "1987",
+                date: "1987-03-05/06",
+                magnitude: 7.2,
+                depth: "8.5–14.1 km",
+                mmi: "VII-IX",
+                deaths: "~1,000",
+                injured: { es: "4,000+ desaparecidos", en: "4,000+ missing", de: "4.000+ vermisst" },
+                location: {
+                    es: "Frontera Ecuador-Colombia (Amazonía andina)",
+                    en: "Ecuador-Colombia border (Andean Amazon)",
+                    de: "Grenze Ecuador-Kolumbien (Anden-Amazonas)"
+                },
+                coordinates: "0.07, -77.75",
+                fault: {
+                    es: "Cinturón sísmico andino oriental",
+                    en: "Eastern Andean seismic belt",
+                    de: "Östlicher andiner Seismikgürtel"
+                },
+                title: {
+                    es: "Terremotos Ecuador-Colombia de 1987",
+                    en: "1987 Ecuador-Colombia Earthquakes",
+                    de: "Ecuador-Kolumbien-Erdbeben 1987"
+                },
+                impact: {
+                    es: "La secuencia de 1987 volvió a mostrar cómo un terremoto fronterizo puede golpear con fuerza corredores andino-amazónicos, redes viales y asentamientos aislados. Sirve como contrapunto a los grandes eventos del Pacífico colombiano.",
+                    en: "The 1987 sequence again showed how a border-region earthquake can severely affect Andean-Amazon corridors, road networks, and isolated settlements. It serves as a counterpoint to Colombia's major Pacific earthquakes.",
+                    de: "Die Sequenz von 1987 zeigte erneut, wie stark ein grenzüberschreitendes Erdbeben andinisch-amazonische Korridore, Verkehrsnetze und abgelegene Siedlungen treffen kann. Sie bildet einen Kontrapunkt zu den großen Pazifikbeben Kolumbiens."
+                },
+                significance: {
+                    es: "Amplía la cronología con un desastre transfronterizo no costero de gran escala.",
+                    en: "Expands the timeline with a large non-coastal cross-border disaster.",
+                    de: "Erweitert die Chronologie um eine große grenzüberschreitende, nicht küstennahe Katastrophe."
+                },
+                sources: [1, 55]
+            },
+            {
+                year: "1992",
+                date: "1992-10-18",
+                magnitude: 7.2,
+                depth: "10 km",
+                mmi: "X",
+                deaths: "10",
+                injured: { es: "100+", en: "100+", de: "100+" },
+                location: {
+                    es: "Murindó, Antioquia",
+                    en: "Murindó, Antioquia",
+                    de: "Murindó, Antioquia"
+                },
+                coordinates: "7.075, -76.862",
+                fault: {
+                    es: "Sistema sísmico del Atrato / noroccidente colombiano",
+                    en: "Atrato seismic system / northwestern Colombia",
+                    de: "Atrato-Seismiksystem / Nordwestkolumbien"
+                },
+                title: {
+                    es: "Terremoto de Murindó de 1992",
+                    en: "1992 Murindó Earthquake",
+                    de: "Erdbeben von Murindó 1992"
+                },
+                impact: {
+                    es: "El sismo de Murindó dañó severamente decenas de municipios del noroccidente colombiano. Introduce un caso importante del Chocó-Antioquia interior, más allá de los grandes terremotos del margen pacífico.",
+                    en: "The Murindó earthquake severely damaged dozens of municipalities in northwestern Colombia. It introduces an important Chocó-Antioquia interior case beyond the great Pacific-margin earthquakes.",
+                    de: "Das Murindó-Erdbeben beschädigte Dutzende Gemeinden im Nordwesten Kolumbiens schwer. Es ergänzt einen wichtigen Fall aus dem Binnenraum Chocó-Antioquia jenseits der großen Pazifikrandbeben."
+                },
+                significance: {
+                    es: "Ejemplo fuerte de daño severo en el noroccidente continental colombiano.",
+                    en: "Strong example of severe damage in continental northwestern Colombia.",
+                    de: "Starkes Beispiel für schwere Schäden im kontinentalen Nordwesten Kolumbiens."
+                },
+                sources: [1, 56]
+            },
+            {
                 year: "1994",
                 date: "1994-06-06",
                 magnitude: 6.8,
@@ -1126,7 +1952,43 @@
                     en: "Shows that Andean seismic hazard includes large gravity-driven cascading processes.",
                     de: "Zeigt, dass die seismische Gefahr in den Anden auch großräumige gravitative Kaskadenprozesse umfasst."
                 },
-                sources: [1]
+                sources: [1, 57]
+            },
+            {
+                year: "1995",
+                date: "1995-02-08",
+                magnitude: 6.4,
+                depth: "73.5 km",
+                mmi: "V",
+                deaths: "35",
+                injured: { es: "Sin confirmar", en: "Unconfirmed", de: "Unbestätigt" },
+                location: {
+                    es: "Cali / Buga, Valle del Cauca",
+                    en: "Cali / Buga, Valle del Cauca",
+                    de: "Cali / Buga, Valle del Cauca"
+                },
+                coordinates: "4.104, -76.622",
+                fault: {
+                    es: "Sismicidad del occidente andino colombiano",
+                    en: "Seismicity of the western Colombian Andes",
+                    de: "Seismizität der westlichen kolumbianischen Anden"
+                },
+                title: {
+                    es: "Terremoto de Cali de 1995",
+                    en: "1995 Cali Earthquake",
+                    de: "Erdbeben von Cali 1995"
+                },
+                impact: {
+                    es: "Afectó amplias zonas del suroccidente colombiano y causó daños importantes en Valle del Cauca, Chocó y Risaralda. Añade un evento intermedio relevante entre Páez 1994 y Armenia 1999.",
+                    en: "It affected broad areas of southwestern Colombia and caused important damage in Valle del Cauca, Chocó, and Risaralda. It adds a relevant intermediate event between Páez 1994 and Armenia 1999.",
+                    de: "Es traf weite Teile des südwestlichen Kolumbiens und verursachte erhebliche Schäden in Valle del Cauca, Chocó und Risaralda. Damit ergänzt es ein wichtiges Zwischenereignis zwischen Páez 1994 und Armenia 1999."
+                },
+                significance: {
+                    es: "Ayuda a mostrar la continuidad de la amenaza sísmica andina en los años noventa.",
+                    en: "Helps show the continuity of Andean seismic hazard in the 1990s.",
+                    de: "Hilft, die Kontinuität der andinen Erdbebengefahr in den 1990er Jahren sichtbar zu machen."
+                },
+                sources: [1, 58]
             },
             {
                 year: "1999",
@@ -1165,6 +2027,42 @@
                 sources: [1, 5, 25]
             },
             {
+                year: "2008",
+                date: "2008-05-24",
+                magnitude: 5.9,
+                depth: "35 km",
+                mmi: "VII",
+                deaths: "11",
+                injured: { es: "4,181", en: "4,181", de: "4.181" },
+                location: {
+                    es: "El Calvario / Quetame, Meta-Cundinamarca",
+                    en: "El Calvario / Quetame, Meta-Cundinamarca",
+                    de: "El Calvario / Quetame, Meta-Cundinamarca"
+                },
+                coordinates: "4.447, -73.670",
+                fault: {
+                    es: "Frente oriental andino",
+                    en: "Eastern Andean front",
+                    de: "Östliche Andenfront"
+                },
+                title: {
+                    es: "Terremoto de El Calvario de 2008",
+                    en: "2008 El Calvario Earthquake",
+                    de: "Erdbeben von El Calvario 2008"
+                },
+                impact: {
+                    es: "Provocó víctimas, miles de heridos y graves afectaciones en Quetame y corredores viales estratégicos hacia Bogotá. Es un antecedente directo para entender por qué los eventos recientes de Meta y Cundinamarca importan tanto para la infraestructura.",
+                    en: "It caused fatalities, thousands of injuries, and major disruption in Quetame and strategic road corridors toward Bogotá. It is a direct precedent for understanding why recent Meta and Cundinamarca events matter so much for infrastructure.",
+                    de: "Das Beben verursachte Todesopfer, Tausende Verletzte und schwere Schäden in Quetame sowie auf strategischen Verkehrskorridoren Richtung Bogotá. Es ist ein direktes Vorereignis, um die Bedeutung jüngerer Beben in Meta und Cundinamarca für die Infrastruktur zu verstehen."
+                },
+                significance: {
+                    es: "Puente histórico entre Sumapaz 1917 y la sismicidad reciente del frente oriental.",
+                    en: "Historic bridge between Sumapaz 1917 and the recent seismicity of the eastern front.",
+                    de: "Historische Brücke zwischen Sumapaz 1917 und der jüngeren Seismizität der östlichen Front."
+                },
+                sources: [1, 60]
+            },
+            {
                 year: "2015",
                 date: "2015-03-10",
                 magnitude: 6.2,
@@ -1199,6 +2097,42 @@
                     de: "Verknüpft an der Oberfläche spürbares Risiko mit tiefen Prozessen im subduzierten Mantel."
                 },
                 sources: [1, 4, 8]
+            },
+            {
+                year: "2016",
+                date: "2016-04-16",
+                magnitude: 7.8,
+                depth: "20.6 km",
+                mmi: "IX",
+                deaths: "676",
+                injured: { es: "Miles", en: "Thousands", de: "Tausende" },
+                location: {
+                    es: "Costa Ecuador-Colombia",
+                    en: "Ecuador-Colombia coast",
+                    de: "Küste Ecuador-Kolumbien"
+                },
+                coordinates: "0.371, -79.940",
+                fault: {
+                    es: "Gran sismo de subducción del Pacífico oriental",
+                    en: "Great eastern Pacific subduction earthquake",
+                    de: "Großes Subduktionsbeben des östlichen Pazifiks"
+                },
+                title: {
+                    es: "Terremoto Ecuador-Colombia de 2016",
+                    en: "2016 Ecuador-Colombia Earthquake",
+                    de: "Ecuador-Kolumbien-Erdbeben 2016"
+                },
+                impact: {
+                    es: "Aunque el epicentro estuvo en Ecuador, el evento volvió a demostrar la escala regional del riesgo sísmico y costero del margen pacífico compartido. Ayuda a conectar la historia larga de 1906, 1958 y 1979 con el presente.",
+                    en: "Although the epicenter was in Ecuador, the event again demonstrated the regional scale of earthquake and coastal risk along the shared Pacific margin. It helps connect the long history from 1906, 1958, and 1979 to the present.",
+                    de: "Obwohl das Epizentrum in Ecuador lag, zeigte das Ereignis erneut die regionale Dimension des Erdbeben- und Küstenrisikos am gemeinsamen Pazifikrand. Es verbindet die lange Geschichte von 1906, 1958 und 1979 mit der Gegenwart."
+                },
+                significance: {
+                    es: "Actualiza la cronología transfronteriza del margen de subducción del Pacífico.",
+                    en: "Updates the cross-border chronology of the Pacific subduction margin.",
+                    de: "Aktualisiert die grenzüberschreitende Chronologie des pazifischen Subduktionsrandes."
+                },
+                sources: [1, 61]
             },
             {
                 year: "2023",
@@ -1237,40 +2171,76 @@
                 sources: [1, 39]
             },
             {
+                year: "2025",
+                date: "2025-06-08",
+                magnitude: 6.3,
+                depth: "9 km",
+                mmi: "VIII",
+                deaths: "0",
+                injured: { es: "31+", en: "31+", de: "31+" },
+                location: {
+                    es: "Paratebueno, Cundinamarca",
+                    en: "Paratebueno, Cundinamarca",
+                    de: "Paratebueno, Cundinamarca"
+                },
+                coordinates: "4.512, -73.155",
+                fault: {
+                    es: "Frente oriental andino / Cundinamarca",
+                    en: "Eastern Andean front / Cundinamarca",
+                    de: "Östliche Andenfront / Cundinamarca"
+                },
+                title: {
+                    es: "Terremoto de Cundinamarca de 2025",
+                    en: "2025 Cundinamarca Earthquake",
+                    de: "Erdbeben von Cundinamarca 2025"
+                },
+                impact: {
+                    es: "Este sismo reciente de magnitud 6.3 cerca de Paratebueno dejó decenas de personas heridas y confirma que el corredor oriental cercano a Bogotá sigue siendo una zona de exposición sensible.",
+                    en: "This recent magnitude 6.3 earthquake near Paratebueno injured dozens of people and confirms that the eastern corridor near Bogotá remains a sensitive exposure zone.",
+                    de: "Dieses jüngere Beben der Magnitude 6,3 bei Paratebueno verletzte Dutzende Menschen und bestätigt, dass der östliche Korridor nahe Bogotá weiterhin ein sensibler Expositionsraum ist."
+                },
+                significance: {
+                    es: "Añade una referencia inmediatamente anterior al gran evento de Chocó de 2026.",
+                    en: "Adds an immediately preceding reference point before the large 2026 Chocó event.",
+                    de: "Ergänzt einen unmittelbaren Bezugspunkt vor dem großen Chocó-Ereignis von 2026."
+                },
+                sources: [1, 62]
+            },
+            {
                 year: "2026",
                 date: "2026-08-10",
                 magnitude: 7.4,
-                depth: "110 km",
-                mmi: { es: "No confirmado", en: "Unconfirmed", de: "Unbestätigt" },
-                deaths: { es: "Sin confirmar", en: "Unconfirmed", de: "Unbestätigt" },
-                injured: { es: "Sin confirmar", en: "Unconfirmed", de: "Unbestätigt" },
+                depth: "110.3 km",
+                mmi: "VII",
+                deaths: "111+",
+                injured: { es: "87+", en: "87+", de: "87+" },
                 location: {
-                    es: "San José del Palmar, Chocó",
-                    en: "San José del Palmar, Chocó",
-                    de: "San José del Palmar, Chocó"
+                    es: "Chocó / San José del Palmar",
+                    en: "Chocó / San José del Palmar",
+                    de: "Chocó / San José del Palmar"
                 },
-                coordinates: "4.8436, -76.2422",
+                coordinates: "4.903, -76.189",
                 fault: {
                     es: "Sismicidad intermedia del occidente colombiano",
                     en: "Intermediate-depth seismicity in western Colombia",
                     de: "Seismizität mittlerer Tiefe im Westen Kolumbiens"
                 },
                 title: {
-                    es: "Terremoto de San José del Palmar de 2026",
-                    en: "2026 San José del Palmar Earthquake",
-                    de: "Erdbeben von San José del Palmar 2026"
+                    es: "Terremoto de Chocó de 2026",
+                    en: "2026 Chocó Earthquake",
+                    de: "Erdbeben von Chocó 2026"
                 },
                 impact: {
-                    es: "El USGS reportó este sismo de magnitud 7.4 a unos 110 km de profundidad al sur de San José del Palmar, en Chocó. Se incorpora al sitio como el evento colombiano más reciente destacado de 2026 y como referencia contemporánea para el occidente andino y pacífico.",
-                    en: "USGS reported this magnitude 7.4 earthquake at about 110 km depth south of San José del Palmar, Chocó. It is added here as the most recent notable Colombia event of 2026 and as a contemporary reference point for the western Andean and Pacific region.",
-                    de: "Der USGS meldete dieses Erdbeben der Magnitude 7,4 in etwa 110 km Tiefe südlich von San José del Palmar in Chocó. Es wird hier als das jüngste bedeutende kolumbianische Ereignis des Jahres 2026 und als aktueller Referenzpunkt für den westlichen Anden- und Pazifikraum ergänzt."
+                    es: "El fuerte sismo de 2026 en Chocó produjo víctimas mortales, decenas de personas heridas y daños extensos en distintas zonas del país. Se incorpora como el caso colombiano más reciente de gran magnitud y como referencia contemporánea para el occidente andino y pacífico.",
+                    en: "The strong 2026 earthquake in Chocó caused fatalities, dozens of injuries, and extensive damage in different parts of the country. It is included as the most recent major Colombian case and as a contemporary reference point for the western Andean and Pacific region.",
+                    de: "Das starke Erdbeben von 2026 in Chocó verursachte Todesopfer, Dutzende Verletzte und erhebliche Schäden in verschiedenen Teilen des Landes. Es wird als jüngster großer Fall Kolumbiens und als aktueller Referenzpunkt für den westlichen Anden- und Pazifikraum aufgenommen."
                 },
                 significance: {
-                    es: "Aporta un punto de referencia actualizado para la cronología reciente de sismos fuertes en Colombia.",
-                    en: "Adds an up-to-date reference point for the recent chronology of strong earthquakes in Colombia.",
-                    de: "Liefert einen aktuellen Bezugspunkt für die jüngere Chronologie starker Erdbeben in Kolumbien."
+                    es: "Actualiza la cronología con un gran evento reciente ya documentado por múltiples fuentes públicas.",
+                    en: "Updates the timeline with a recent major event already documented by multiple public sources.",
+                    de: "Aktualisiert die Chronologie um ein jüngeres Großereignis, das bereits durch mehrere öffentliche Quellen dokumentiert ist."
                 },
-                sources: [40]
+                sources: [40, 63]
             }
         ];
 
@@ -1389,6 +2359,7 @@
                 fault: "Sistema de fallas",
                 date: "Fecha exacta",
                 coordinates: "Coordenadas",
+                mapReset: "Reiniciar mapa",
                 impactHeader: "Impacto humano, geológico y reglamentario",
                 significance: "Por qué importa en el reporte",
                 reportHeader: "Lo esencial del reporte",
@@ -1446,6 +2417,7 @@
                 fault: "Fault system",
                 date: "Exact date",
                 coordinates: "Coordinates",
+                mapReset: "Reset map",
                 impactHeader: "Human, geological, and regulatory impact",
                 significance: "Why it matters in the report",
                 reportHeader: "Core findings from the report",
@@ -1503,6 +2475,7 @@
                 fault: "Störungssystem",
                 date: "Exaktes Datum",
                 coordinates: "Koordinaten",
+                mapReset: "Karte zurücksetzen",
                 impactHeader: "Menschliche, geologische und regulatorische Auswirkungen",
                 significance: "Warum das im Bericht wichtig ist",
                 reportHeader: "Zentrale Aussagen des Berichts",
@@ -1551,8 +2524,768 @@
             }
         };
 
+        const referenceTabOrder = ['measurement', 'tectonics', 'hazards', 'emergency', 'glossary', 'sources'];
+
+        const referenceContent = {
+            es: {
+                ui: {
+                    kicker: 'Centro de referencia',
+                    title: 'Información científica y de emergencia',
+                    subtitle: 'Contexto general para entender cómo se miden los terremotos, por qué ocurren en Colombia, qué peligros secundarios pueden acompañarlos y cómo suele enseñarse la conducta básica de seguridad.',
+                    trust: 'Fuentes oficiales y científicas seleccionadas por su fiabilidad pública y su utilidad para lectores no especialistas.',
+                    glossaryTitle: 'Término relacionado',
+                    sourceBox: 'Fuentes usadas en esta vista',
+                    fullReferenceList: 'Lista completa de referencias',
+                    furtherReading: 'Para seguir leyendo',
+                    fullFurtherReadingList: 'Lista completa de lecturas adicionales',
+                    sourceIntro: 'Esta vista reúne fuentes oficiales y científicas seleccionadas por su estabilidad y legibilidad pública.'
+                },
+                terms: {
+                    magnitude: { label: 'magnitud', text: 'Medida del tamaño del terremoto en su fuente. Un mismo sismo tiene una sola magnitud, aunque se sienta de formas distintas según el lugar.' },
+                    intensity: { label: 'intensidad', text: 'Describe cuán fuerte se siente el movimiento en un lugar concreto y qué efectos observan las personas, los objetos o los edificios.' },
+                    depth: { label: 'profundidad focal', text: 'Distancia aproximada entre la superficie y el punto donde comienza la ruptura. Ayuda a entender cómo puede percibirse el movimiento en la superficie.' },
+                    epicenter: { label: 'epicentro', text: 'Punto en la superficie situado sobre el lugar donde empieza la ruptura sísmica dentro de la Tierra.' },
+                    aftershock: { label: 'réplica', text: 'Sismo que ocurre después del principal en la misma zona general, mientras la corteza sigue reajustándose.' },
+                    subduction: { label: 'subducción', text: 'Proceso en el que una placa tectónica se introduce por debajo de otra, generando deformación y, a veces, terremotos y tsunamis.' },
+                    tsunami: { label: 'tsunami', text: 'Serie de olas causadas por un gran desplazamiento de agua, a menudo vinculado a terremotos submarinos o costeros.' },
+                    landslide: { label: 'deslizamiento', text: 'Movimiento de roca, suelo o escombros ladera abajo. Un sismo fuerte puede desestabilizar pendientes y desencadenarlo.' },
+                    plate: { label: 'placa tectónica', text: 'Gran bloque rígido de la parte externa de la Tierra que se mueve lentamente a lo largo del tiempo geológico.' },
+                    fault: { label: 'falla', text: 'Fractura en la roca a lo largo de la cual puede producirse movimiento.' }
+                },
+                tabs: {
+                    measurement: {
+                        label: 'Medición sísmica',
+                        overviewTitle: 'Cómo leer las cifras del sitio',
+                        overviewText: 'Esta vista separa las medidas más comunes que aparecen en una ficha sísmica para que el público no confunda tamaño del evento, sacudida local y factores que condicionan el daño.',
+                        sections: [
+                            {
+                                title: 'Magnitud',
+                                paragraphs: [
+                                    'La {{magnitude}} describe el tamaño del terremoto en la fuente. Por eso un mismo evento tiene una sola magnitud, aunque distintas ciudades lo perciban con intensidades diferentes.',
+                                    'Las agencias científicas insisten en que la magnitud no resume por sí sola la experiencia humana del sismo.'
+                                ]
+                            },
+                            {
+                                title: 'Intensidad',
+                                paragraphs: [
+                                    'La {{intensity}} se refiere a cómo se siente el movimiento en un lugar concreto y a los efectos observables allí.',
+                                    'Puede cambiar incluso dentro de una misma ciudad o de un mismo edificio, porque el suelo, la topografía y la altura del piso modifican la sacudida.'
+                                ]
+                            },
+                            {
+                                title: 'Profundidad focal',
+                                paragraphs: [
+                                    'La {{depth}} ayuda a interpretar por qué algunos sismos se sienten en áreas muy amplias y otros concentran sus efectos más cerca del origen.',
+                                    'No funciona como predictor único del daño, pero sí forma parte del contexto físico que los lectores necesitan para comparar eventos históricos.'
+                                ]
+                            },
+                            {
+                                title: 'Por qué el daño no depende de una sola cifra',
+                                paragraphs: [
+                                    'La severidad final también depende de la distancia, el tipo de suelo, la vulnerabilidad constructiva y los peligros secundarios.',
+                                    'Por eso un evento moderado puede causar más problemas locales que otro de magnitud mayor pero más profundo o más lejano.'
+                                ]
+                            }
+                        ],
+                        sourceIds: [41, 42, 47],
+                        furtherIds: [43]
+                    },
+                    tectonics: {
+                        label: 'Tectónica de Colombia',
+                        overviewTitle: 'Por qué Colombia tiene terremotos tan distintos',
+                        overviewText: 'Colombia no está controlada por una sola fuente sísmica. El país combina subducción oceánica, deformación continental y sismicidad intermedia, por lo que la palabra “terremoto” puede describir eventos físicamente muy distintos.',
+                        sections: [
+                            {
+                                title: 'Tres placas que ordenan la explicación',
+                                paragraphs: [
+                                    'Una explicación pública útil puede empezar con tres {{plate}}s: Nazca, Caribe y Suramericana.',
+                                    'Ese marco simple ayuda a entender por qué Colombia puede registrar sismos frente a la costa pacífica, en el interior andino y también a profundidades intermedias bajo el nororiente del país.'
+                                ]
+                            },
+                            {
+                                title: 'Subducción del Pacífico',
+                                paragraphs: [
+                                    'La {{subduction}} de la placa de Nazca bajo la Suramericana es una pieza central del contexto sísmico colombiano.',
+                                    'Ese proceso ayuda a explicar por qué la costa pacífica y su margen cercano pueden asociarse con terremotos grandes y, en algunos casos, con preocupación por {{tsunami}}s.'
+                                ]
+                            },
+                            {
+                                title: 'Fallas continentales y sismos andinos',
+                                paragraphs: [
+                                    'No todos los sismos colombianos vienen de la misma interfaz oceánica. También existen terremotos ligados a {{fault}}as corticales dentro del continente.',
+                                    'Eso ayuda a entender por qué un evento relativamente moderado, si es somero y cercano a una ciudad, puede resultar mucho más destructivo de lo que el público esperaría al mirar solo la magnitud.'
+                                ]
+                            },
+                            {
+                                title: 'Profundidad intermedia y Nido de Bucaramanga',
+                                paragraphs: [
+                                    'La sismicidad intermedia del oriente colombiano recuerda que la {{depth}} también cambia la historia física y humana de un terremoto.',
+                                    'Un sismo profundo puede sentirse en un área amplia sin reproducir el mismo patrón de daño concentrado que un terremoto superficial cercano a una zona urbana vulnerable.'
+                                ]
+                            },
+                            {
+                                title: 'Qué debe llevarse el lector',
+                                paragraphs: [
+                                    'La tectónica compleja no significa que todo el país tenga la misma amenaza. Significa, más bien, que la amenaza cambia según la región, el tipo de fuente, la profundidad y la exposición construida.'
+                                ]
+                            }
+                        ],
+                        sourceIds: [3, 41],
+                        furtherIds: [47]
+                    },
+                    hazards: {
+                        label: 'Peligros secundarios',
+                        overviewTitle: 'Cuando el problema no es solo la sacudida',
+                        overviewText: 'Los terremotos pueden desencadenar otros peligros. Esta vista resume los dos más importantes para este proyecto sin convertir la explicación en un catálogo técnico.',
+                        sections: [
+                            {
+                                title: 'Tsunamis',
+                                paragraphs: [
+                                    'Un {{tsunami}} no es una sola ola gigante, sino una serie de olas originadas por un gran desplazamiento de agua.',
+                                    'Después de un terremoto costero fuerte, la primera ola puede no ser la última ni la mayor.'
+                                ]
+                            },
+                            {
+                                title: 'Deslizamientos',
+                                paragraphs: [
+                                    'La sacudida fuerte puede activar {{landslide}}s en laderas inestables, sobre todo donde el relieve y las condiciones del suelo favorecen la pérdida de estabilidad.',
+                                    'Por eso dos terremotos de magnitud parecida pueden dejar consecuencias muy distintas en contextos geográficos diferentes.'
+                                ]
+                            },
+                            {
+                                title: 'El lugar importa',
+                                paragraphs: [
+                                    'La cercanía al mar, la presencia de pendientes pronunciadas y el tipo de suelo condicionan qué peligros secundarios tienen más probabilidad de aparecer.',
+                                    'La misma sacudida no produce el mismo perfil de amenazas en una costa, en un valle urbano o en una ladera andina.'
+                                ]
+                            },
+                            {
+                                title: 'Lectura útil para el público',
+                                paragraphs: [
+                                    'Pensar en “peligros encadenados” ayuda a interpretar por qué algunos desastres sísmicos amplían sus efectos mucho más allá del momento inicial del terremoto.'
+                                ]
+                            }
+                        ],
+                        sourceIds: [44, 45, 46, 9],
+                        furtherIds: [41]
+                    },
+                    emergency: {
+                        label: 'Información de emergencia',
+                        overviewTitle: 'Conducta básica durante y justo después',
+                        overviewText: 'Esta vista no sustituye la orientación oficial local. Resume una lógica general, calmada y enseñable para todas las edades sobre comportamiento durante la sacudida y en los minutos posteriores.',
+                        sections: [
+                            {
+                                title: 'Durante la sacudida',
+                                paragraphs: [
+                                    'Una enseñanza ampliamente difundida es proteger primero la cabeza y el cuerpo, y evitar correr al exterior mientras el movimiento sigue activo.',
+                                    'La idea central es reducir la exposición inmediata a caídas, vidrios y objetos que puedan desprenderse.'
+                                ]
+                            },
+                            {
+                                title: 'Cuando la sacudida termina',
+                                paragraphs: [
+                                    'Después del evento principal conviene recordar que pueden llegar {{aftershock}}s y que un edificio dañado merece una evaluación prudente antes de volver a usarse.',
+                                    'También se vuelve importante atender la información emitida por canales oficiales y evitar la saturación innecesaria de llamadas.'
+                                ]
+                            },
+                            {
+                                title: 'Evacuación y estructuras dañadas',
+                                paragraphs: [
+                                    'Si hay daños visibles, desprendimientos o condiciones inseguras, alejarse de la estructura pasa a ser la prioridad más lógica.',
+                                    'La evacuación deja de ser una respuesta genérica y se convierte en una respuesta a señales concretas de peligro.'
+                                ]
+                            },
+                            {
+                                title: 'Conciencia costera sobre tsunamis',
+                                paragraphs: [
+                                    'En zonas costeras, un sismo fuerte puede obligar a pensar también en el {{tsunami}}. Moverse tierra adentro o hacia terreno más alto puede ser importante cuando la zona es potencialmente expuesta.',
+                                    'Como la energía puede llegar en varias olas y corrientes, el riesgo no termina necesariamente con la primera llegada del agua.'
+                                ]
+                            }
+                        ],
+                        mediaCards: [
+                            {
+                                title: 'Dentro de un edificio',
+                                text: 'Busque cobertura inmediata bajo un mueble resistente, aléjese de ventanas y protéjase de objetos que puedan caer.',
+                                src: 'assets/ethz-behaviour-inside-building.png',
+                                alt: 'Ilustración de conducta durante un terremoto dentro de un edificio.'
+                            },
+                            {
+                                title: 'En espacios abiertos',
+                                text: 'Permanezca afuera y mantenga distancia de fachadas, puentes, postes, árboles grandes y otros elementos que puedan colapsar o caer.',
+                                src: 'assets/ethz-behaviour-outside.png',
+                                alt: 'Ilustración de conducta durante un terremoto al aire libre.'
+                            },
+                            {
+                                title: 'En un vehículo',
+                                text: 'Detenga el vehículo en un lugar más seguro y permanezca dentro durante la sacudida, evitando puentes, túneles y edificios inestables.',
+                                src: 'assets/ethz-behaviour-vehicle.png',
+                                alt: 'Ilustración de conducta durante un terremoto dentro de un vehículo.'
+                            },
+                            {
+                                title: 'Después: réplicas y comunicación',
+                                text: 'Espere réplicas, use el teléfono solo si es realmente necesario y siga la información oficial antes de regresar o desplazarse.',
+                                src: 'assets/ethz-behaviour-aftershocks.png',
+                                alt: 'Ilustración sobre réplicas y comportamiento después de un terremoto.'
+                            }
+                        ],
+                        sourceIds: [43, 44],
+                        furtherIds: [9]
+                    },
+                    glossary: {
+                        label: 'Glosario',
+                        overviewTitle: 'Términos esenciales del sitio',
+                        overviewText: 'Este glosario reúne el vocabulario mínimo necesario para leer las fichas sísmicas y las pestañas de contexto sin perderse en tecnicismos.',
+                        sections: [
+                            {
+                                title: 'Cómo usar este glosario',
+                                paragraphs: [
+                                    'Las definiciones son breves a propósito: no buscan reemplazar un manual, sino ayudar a interpretar mejor palabras que aparecen repetidamente en la cronología y en las tarjetas de contexto.',
+                                    'Cuando un término también aparece dentro de otra pestaña, puede abrirse como ayuda táctil para no interrumpir la lectura principal.'
+                                ]
+                            },
+                            {
+                                title: 'Términos de medición y localización',
+                                paragraphs: [
+                                    'Aquí resultan especialmente útiles {{magnitude}}, {{intensity}}, {{depth}} y {{epicenter}}, porque explican cómo se describe un terremoto y por qué dos lugares pueden vivirlo de forma distinta.',
+                                    'Estos conceptos ayudan a separar el tamaño físico del evento de la experiencia local del movimiento y del daño observado.'
+                                ]
+                            },
+                            {
+                                title: 'Términos tectónicos y de amenaza',
+                                paragraphs: [
+                                    'Palabras como {{plate}}, {{subduction}}, {{fault}}, {{tsunami}} y {{landslide}} ayudan a relacionar cada terremoto con su contexto geológico y con posibles peligros encadenados.',
+                                    'También sirven para entender por qué la historia sísmica colombiana no puede resumirse en una sola clase de evento.'
+                                ]
+                            }
+                        ],
+                        glossaryKeys: ['magnitude', 'intensity', 'epicenter', 'depth', 'aftershock', 'plate', 'subduction', 'fault', 'tsunami', 'landslide'],
+                        sourceIds: [41, 42, 45],
+                        furtherIds: [3]
+                    },
+                    sources: {
+                        label: 'Fuentes y lectura',
+                        overviewTitle: 'Fuentes usadas y lecturas para profundizar',
+                        overviewText: 'Esta pestaña reúne la bibliografía completa del sitio para que el lector pueda revisar todas las referencias numeradas y toda la lectura adicional sin tener que reconstruirlas tab por tab.',
+                        sections: [
+                            {
+                                title: 'Cómo usar esta bibliografía completa',
+                                paragraphs: [
+                                    'La primera lista reúne todas las referencias numeradas del sitio, desde [1] hasta la última entrada disponible.',
+                                    'La segunda lista consolida toda la lectura adicional sugerida en las demás pestañas para que pueda explorarse como una sola bibliografía de profundización.'
+                                ]
+                            }
+                        ],
+                        mediaFigure: {
+                            title: 'Escala macrosísmica EMS-98',
+                            intro: 'La figura resume cómo la escala EMS-98 relaciona intensidad sentida, impacto observado, magnitud aproximada y daño típico en edificios de mampostería. Aquí funciona como apoyo visual independiente dentro de la página de recursos.',
+                            src: 'assets/ems-scale-ethz.png',
+                            srcByLang: {
+                                es: 'assets/ems-scale-ethz_es_gemini.png',
+                                de: 'assets/ems-scale-ethz-de.jpg'
+                            },
+                            alt: 'Tabla de la escala macrosísmica EMS-98 con niveles de intensidad, impacto y daño típico en edificios de mampostería.',
+                            altByLang: {
+                                es: 'Versión en español de la escala macrosísmica EMS-98, generada por IA a partir de la referencia de ETH Zürich.',
+                                de: 'Mögliche Auswirkungen von Erdbeben geordnet nach Intensität und Magnitude.'
+                            },
+                            caption: 'Imagen adaptada de la Swiss Seismological Service (SED/ETH Zürich): EMS-98 intensity scale infographic.',
+                            captionByLang: {
+                                es: 'Versión en español generada por IA (Gemini Nano Banana) a partir de la referencia visual del Swiss Seismological Service (SED/ETH Zürich).',
+                                de: 'Adaptiertes Bild des Schweizerischen Erdbebendienstes (SED/ETH Zürich): EMS-98-Intensitätsgrafik.'
+                            }
+                        },
+                        useAllSources: true,
+                        useAllFurtherReading: true
+                    }
+                }
+            },
+            en: {
+                ui: {
+                    kicker: 'Reference center',
+                    title: 'Scientific and emergency information',
+                    subtitle: 'General context for understanding how earthquakes are measured, why they happen in Colombia, which secondary hazards may accompany them, and how basic safety behavior is commonly taught.',
+                    trust: 'Official and scientific sources selected for public reliability and readability.',
+                    glossaryTitle: 'Related term',
+                    sourceBox: 'Sources used in this view',
+                    fullReferenceList: 'Full reference list',
+                    furtherReading: 'Further reading',
+                    fullFurtherReadingList: 'Full further reading list',
+                    sourceIntro: 'This view brings together official and scientific sources chosen for long-term stability and public readability.'
+                },
+                terms: {
+                    magnitude: { label: 'magnitude', text: 'A measure of earthquake size at the source. One earthquake has one magnitude even though it may be felt differently from place to place.' },
+                    intensity: { label: 'intensity', text: 'Describes how strongly shaking is experienced at a specific place and what people, objects, or buildings there experience.' },
+                    depth: { label: 'focal depth', text: 'Approximate distance between the surface and the point where rupture begins. It helps explain how shaking may be felt at the surface.' },
+                    epicenter: { label: 'epicenter', text: 'The point on the surface directly above where rupture begins inside the Earth.' },
+                    aftershock: { label: 'aftershock', text: 'An earthquake that follows a larger one in the same general area while the crust continues to readjust.' },
+                    subduction: { label: 'subduction', text: 'A process in which one tectonic plate moves beneath another, producing deformation and sometimes earthquakes and tsunamis.' },
+                    tsunami: { label: 'tsunami', text: 'A series of waves caused by a large displacement of water, often linked to offshore or coastal earthquakes.' },
+                    landslide: { label: 'landslide', text: 'Downslope movement of rock, soil, or debris. Strong shaking can destabilize slopes and help trigger it.' },
+                    plate: { label: 'tectonic plate', text: 'A large rigid block of Earth’s outer shell that moves slowly over geologic time.' },
+                    fault: { label: 'fault', text: 'A fracture in rock along which movement can occur.' }
+                },
+                tabs: {
+                    measurement: {
+                        label: 'Seismic measurement',
+                        overviewTitle: 'How to read the numbers on this site',
+                        overviewText: 'This view separates the most common earthquake measures so readers do not confuse event size, local shaking, and the physical factors that shape damage.',
+                        sections: [
+                            {
+                                title: 'Magnitude',
+                                paragraphs: [
+                                    '{{magnitude}} describes earthquake size at the source. That is why one event has one magnitude even when different cities experience it differently.',
+                                    'Scientific agencies repeatedly stress that magnitude alone does not summarize the human experience of an earthquake.'
+                                ]
+                            },
+                            {
+                                title: 'Intensity',
+                                paragraphs: [
+                                    '{{intensity}} describes how strongly the ground shakes at a specific place and which observable effects occur there.',
+                                    'It can vary even within the same city or the same building because soil, topography, and floor level affect shaking.'
+                                ]
+                            },
+                            {
+                                title: 'Focal depth',
+                                paragraphs: [
+                                    '{{depth}} helps explain why some earthquakes are felt across broad regions while others concentrate their strongest effects closer to the source.',
+                                    'It is not a stand-alone damage predictor, but it is an important part of the physical context readers need when comparing historical events.'
+                                ]
+                            },
+                            {
+                                title: 'Why damage is never one-number simple',
+                                paragraphs: [
+                                    'Final disaster severity also depends on distance, ground conditions, structural vulnerability, and secondary hazards.',
+                                    'That is why a moderate event can sometimes be more locally destructive than a larger but deeper or farther earthquake.'
+                                ]
+                            }
+                        ],
+                        sourceIds: [41, 42, 47],
+                        furtherIds: [43]
+                    },
+                    tectonics: {
+                        label: 'Colombia tectonics',
+                        overviewTitle: 'Why Colombia has very different earthquakes',
+                        overviewText: 'Colombia lies in a tectonically complex part of northwestern South America. A useful public explanation does not need every technical detail, but it does need to show that several interactions operate at once.',
+                        sections: [
+                            {
+                                title: 'Three key plates',
+                                paragraphs: [
+                                    'The simplest public explanation begins with three {{plate}}s: Nazca, Caribbean, and South American.',
+                                    'Their movements help explain why the country records coastal, Andean, and intermediate-depth earthquakes.'
+                                ]
+                            },
+                            {
+                                title: 'Subduction and continental deformation',
+                                paragraphs: [
+                                    '{{subduction}} of the Nazca Plate beneath the South American Plate occurs alongside crustal faulting and other regional interactions in the north and northwest of the country.',
+                                    'This means not every Colombian earthquake comes from the same physical mechanism.'
+                                ]
+                            },
+                            {
+                                title: 'Depth and region change the story',
+                                paragraphs: [
+                                    'Some events are shallow and highly destructive; others are deeper and felt across wide areas without producing the same collapse pattern.',
+                                    'The site’s main timeline becomes easier to read once visitors understand that “a Colombian earthquake” is not a single event type.'
+                                ]
+                            },
+                            {
+                                title: 'Public takeaway',
+                                paragraphs: [
+                                    'Tectonic complexity does not mean the same risk everywhere. Instead, it helps explain why hazard changes by region, source type, and exposure.'
+                                ]
+                            }
+                        ],
+                        sourceIds: [3, 41],
+                        furtherIds: [47]
+                    },
+                    hazards: {
+                        label: 'Secondary hazards',
+                        overviewTitle: 'When shaking is not the whole problem',
+                        overviewText: 'Earthquakes can trigger other hazards. This view keeps the explanation focused on the two most useful ones for this project without turning the page into a technical catalog.',
+                        sections: [
+                            {
+                                title: 'Tsunamis',
+                                paragraphs: [
+                                    'A {{tsunami}} is not a single giant wave but a series of waves caused by a major displacement of water.',
+                                    'After a strong coastal earthquake, the first wave may not be the last or the largest.'
+                                ]
+                            },
+                            {
+                                title: 'Landslides',
+                                paragraphs: [
+                                    'Strong shaking can trigger {{landslide}}s on unstable slopes, especially where terrain and soil conditions already favor failure.',
+                                    'That is one reason similar-magnitude earthquakes can leave very different consequences in different landscapes.'
+                                ]
+                            },
+                            {
+                                title: 'Place matters',
+                                paragraphs: [
+                                    'Coastal position, steep relief, and soil conditions all shape which secondary hazards are most likely to follow strong shaking.',
+                                    'The same shaking does not create the same downstream hazard profile on a coastline, in an urban valley, or on an Andean hillside.'
+                                ]
+                            },
+                            {
+                                title: 'Useful public reading',
+                                paragraphs: [
+                                    'Thinking in terms of cascading hazards helps explain why some earthquake disasters extend far beyond the first minutes of shaking.'
+                                ]
+                            }
+                        ],
+                        sourceIds: [44, 45, 46, 9],
+                        furtherIds: [41]
+                    },
+                    emergency: {
+                        label: 'Emergency information',
+                        overviewTitle: 'Basic behavior during and just after shaking',
+                        overviewText: 'This view does not replace local official instructions. It summarizes a calm, general public logic for behavior during shaking and in the minutes that follow.',
+                        sections: [
+                            {
+                                title: 'During shaking',
+                                paragraphs: [
+                                    'A widely taught safety model focuses on protecting the head and body first and avoiding the impulse to run outside while shaking is still active.',
+                                    'The core idea is to reduce immediate exposure to falling debris, glass, and unstable objects.'
+                                ]
+                            },
+                            {
+                                title: 'When the shaking stops',
+                                paragraphs: [
+                                    'After the main event, {{aftershock}}s remain possible and a damaged building deserves careful judgment before re-entry.',
+                                    'It also becomes important to watch official information channels and avoid overloading communications unnecessarily.'
+                                ]
+                            },
+                            {
+                                title: 'Evacuation and damaged structures',
+                                paragraphs: [
+                                    'If visible damage, falling material, or other unsafe conditions are present, moving away from the structure becomes the most reasonable next step.',
+                                    'Evacuation is therefore not a generic reflex but a response to concrete signs of danger.'
+                                ]
+                            },
+                            {
+                                title: 'Coastal tsunami awareness',
+                                paragraphs: [
+                                    'In coastal areas, a strong earthquake can also raise {{tsunami}} awareness. Moving inland or to higher ground may become important when the area is potentially exposed.',
+                                    'Because wave energy can arrive in several pulses and currents, danger does not necessarily end with the first arrival of water.'
+                                ]
+                            }
+                        ],
+                        mediaCards: [
+                            {
+                                title: 'Inside a building',
+                                text: 'Take cover under sturdy furniture, stay away from windows, and focus first on avoiding falling objects and shattered glass.',
+                                src: 'assets/ethz-behaviour-inside-building.png',
+                                alt: 'Behavior guidance icon for being inside a building during an earthquake.'
+                            },
+                            {
+                                title: 'Outside',
+                                text: 'Stay outside and keep away from facades, bridges, power lines, large trees, and other things that could fall or collapse.',
+                                src: 'assets/ethz-behaviour-outside.png',
+                                alt: 'Behavior guidance icon for being outdoors during an earthquake.'
+                            },
+                            {
+                                title: 'In a vehicle',
+                                text: 'Stop in a safer location and remain inside the vehicle during the shaking, avoiding bridges, tunnels, and unstable roadside structures.',
+                                src: 'assets/ethz-behaviour-vehicle.png',
+                                alt: 'Behavior guidance icon for being in a vehicle during an earthquake.'
+                            },
+                            {
+                                title: 'Aftershocks and communication',
+                                text: 'Expect aftershocks, limit phone use to real emergencies, and rely on official updates before returning or travelling.',
+                                src: 'assets/ethz-behaviour-aftershocks.png',
+                                alt: 'Behavior guidance icon for aftershocks and post-earthquake communication.'
+                            }
+                        ],
+                        sourceIds: [43, 44],
+                        furtherIds: [9]
+                    },
+                    glossary: {
+                        label: 'Glossary',
+                        overviewTitle: 'Essential terms used across the site',
+                        overviewText: 'The glossary keeps definitions short so the main tabs stay readable. The most important terms also appear as tap-to-open aids inside other tabs.',
+                        glossaryKeys: ['magnitude', 'intensity', 'epicenter', 'depth', 'aftershock', 'plate', 'subduction', 'fault', 'tsunami', 'landslide'],
+                        sourceIds: [41, 42, 45],
+                        furtherIds: [3]
+                    },
+                    sources: {
+                        label: 'Sources & reading',
+                        overviewTitle: 'Used sources and further reading',
+                        overviewText: 'This tab gathers the site-wide bibliography so readers can inspect the full numbered reference list and the full further-reading list without piecing them together from the other tabs.',
+                        sections: [
+                            {
+                                title: 'How to use this full bibliography',
+                                paragraphs: [
+                                    'The first list contains every numbered reference used by the site, from [1] through the last available entry.',
+                                    'The second list consolidates all of the further-reading suggestions from the other tabs into one place for deeper follow-up reading.'
+                                ]
+                            }
+                        ],
+                        mediaFigure: {
+                            title: 'EMS-98 macroseismic scale',
+                            intro: 'This figure summarizes how the EMS-98 scale relates felt intensity, observed impact, approximate magnitude, and typical masonry-building damage. Here it serves as a standalone visual reference on the resources page.',
+                            src: 'assets/ems-scale-ethz.png',
+                            srcByLang: {
+                                de: 'assets/ems-scale-ethz-de.jpg'
+                            },
+                            alt: 'Infographic table of the EMS-98 macroseismic scale with intensity levels, impact descriptions, approximate magnitude values, and typical masonry building damage.',
+                            altByLang: {
+                                de: 'Mögliche Auswirkungen von Erdbeben geordnet nach Intensität und Magnitude.'
+                            },
+                            caption: 'Adapted image from the Swiss Seismological Service (SED/ETH Zurich): EMS-98 intensity scale infographic.',
+                            captionByLang: {
+                                de: 'Adaptiertes Bild des Schweizerischen Erdbebendienstes (SED/ETH Zürich): EMS-98-Intensitätsgrafik.'
+                            }
+                        },
+                        useAllSources: true,
+                        useAllFurtherReading: true
+                    }
+                }
+            },
+            de: {
+                ui: {
+                    kicker: 'Referenzzentrum',
+                    title: 'Wissenschaftliche und sicherheitsbezogene Informationen',
+                    subtitle: 'Allgemeiner Kontext dazu, wie Erdbeben gemessen werden, warum sie in Kolumbien auftreten, welche Sekundärgefahren sie begleiten können und wie grundlegendes Sicherheitsverhalten häufig vermittelt wird.',
+                    trust: 'Offizielle und wissenschaftliche Quellen, ausgewählt nach öffentlicher Verlässlichkeit und guter Lesbarkeit.',
+                    glossaryTitle: 'Zugehöriger Begriff',
+                    sourceBox: 'In dieser Ansicht genutzte Quellen',
+                    fullReferenceList: 'Vollständige Referenzliste',
+                    furtherReading: 'Weiterführende Lektüre',
+                    fullFurtherReadingList: 'Vollständige Liste der weiterführenden Lektüre',
+                    sourceIntro: 'Diese Ansicht bündelt offizielle und wissenschaftliche Quellen, die wegen ihrer langfristigen Stabilität und öffentlichen Lesbarkeit ausgewählt wurden.'
+                },
+                terms: {
+                    magnitude: { label: 'Magnitude', text: 'Maß für die Größe des Erdbebens an seiner Quelle. Ein Erdbeben hat genau eine Magnitude, auch wenn es an verschiedenen Orten unterschiedlich wahrgenommen wird.' },
+                    intensity: { label: 'Intensität', text: 'Beschreibt, wie stark die Erschütterung an einem bestimmten Ort erlebt wird und welche Wirkungen dort beobachtet werden.' },
+                    depth: { label: 'Herdtiefe', text: 'Ungefähre Entfernung zwischen Oberfläche und dem Punkt, an dem die Bruchbewegung beginnt. Sie hilft zu erklären, wie sich das Beben an der Oberfläche anfühlen kann.' },
+                    epicenter: { label: 'Epizentrum', text: 'Punkt an der Oberfläche direkt über dem Ort, an dem der Bruch im Erdinneren beginnt.' },
+                    aftershock: { label: 'Nachbeben', text: 'Erdbeben, das nach einem größeren Ereignis im selben allgemeinen Gebiet auftritt, während sich die Erdkruste weiter anpasst.' },
+                    subduction: { label: 'Subduktion', text: 'Vorgang, bei dem eine tektonische Platte unter eine andere abtaucht und dabei Verformung sowie teils Erdbeben und Tsunamis erzeugt.' },
+                    tsunami: { label: 'Tsunami', text: 'Serie von Wellen, ausgelöst durch eine große Wasserverlagerung, oft im Zusammenhang mit küstennahen oder submarinen Erdbeben.' },
+                    landslide: { label: 'Erdrutsch', text: 'Hangabwärts gerichtete Bewegung von Gestein, Boden oder Trümmern. Starke Erschütterung kann Hänge destabilisieren und den Prozess auslösen.' },
+                    plate: { label: 'tektonische Platte', text: 'Großer starrer Block der äußeren Erdhülle, der sich über geologische Zeiträume langsam bewegt.' },
+                    fault: { label: 'Störung', text: 'Bruchzone im Gestein, entlang derer Bewegung stattfinden kann.' }
+                },
+                tabs: {
+                    measurement: {
+                        label: 'Seismische Messung',
+                        overviewTitle: 'Wie man die Zahlen auf dieser Website liest',
+                        overviewText: 'Diese Ansicht trennt die häufigsten Erdbebenmaße, damit Leser Ereignisgröße, lokale Erschütterung und die physikalischen Einflussfaktoren auf Schäden nicht verwechseln.',
+                        sections: [
+                            {
+                                title: 'Magnitude',
+                                paragraphs: [
+                                    'Die {{magnitude}} beschreibt die Größe des Erdbebens an seiner Quelle. Deshalb hat ein Ereignis genau eine Magnitude, auch wenn verschiedene Städte es unterschiedlich erleben.',
+                                    'Wissenschaftliche Institutionen betonen immer wieder, dass die Magnitude allein die menschliche Erfahrung eines Erdbebens nicht zusammenfasst.'
+                                ]
+                            },
+                            {
+                                title: 'Intensität',
+                                paragraphs: [
+                                    'Die {{intensity}} beschreibt, wie stark der Boden an einem bestimmten Ort erschüttert wird und welche beobachtbaren Wirkungen dort auftreten.',
+                                    'Sie kann sogar innerhalb derselben Stadt oder desselben Gebäudes variieren, weil Boden, Topographie und Etagenlage die Erschütterung beeinflussen.'
+                                ]
+                            },
+                            {
+                                title: 'Herdtiefe',
+                                paragraphs: [
+                                    'Die {{depth}} hilft zu erklären, warum manche Erdbeben über große Regionen hinweg gespürt werden, während andere ihre stärksten Wirkungen näher an der Quelle konzentrieren.',
+                                    'Sie ist kein alleiniger Schadensindikator, gehört aber zum physikalischen Kontext, den Leser für historische Vergleiche benötigen.'
+                                ]
+                            },
+                            {
+                                title: 'Warum Schäden nie nur eine Zahl sind',
+                                paragraphs: [
+                                    'Die endgültige Schwere hängt außerdem von Entfernung, Bodenverhältnissen, baulicher Verwundbarkeit und Sekundärgefahren ab.',
+                                    'Darum kann ein moderates Ereignis lokal zerstörerischer sein als ein größeres, aber tieferes oder weiter entferntes Erdbeben.'
+                                ]
+                            }
+                        ],
+                        sourceIds: [41, 42, 47],
+                        furtherIds: [43]
+                    },
+                    tectonics: {
+                        label: 'Tektonik Kolumbiens',
+                        overviewTitle: 'Warum Kolumbien sehr unterschiedliche Erdbeben hat',
+                        overviewText: 'Kolumbien liegt in einem tektonisch komplexen Teil des nordwestlichen Südamerikas. Eine nützliche öffentliche Erklärung braucht nicht jedes Detail, sollte aber zeigen, dass mehrere Wechselwirkungen zugleich wirken.',
+                        sections: [
+                            {
+                                title: 'Drei zentrale Platten',
+                                paragraphs: [
+                                    'Die einfachste öffentliche Erklärung beginnt mit drei {{plate}}n: Nazca, Karibik und Südamerika.',
+                                    'Ihre Bewegungen helfen zu verstehen, warum das Land Küstenbeben, Andenbeben und Beben mittlerer Tiefe registriert.'
+                                ]
+                            },
+                            {
+                                title: 'Subduktion und kontinentale Deformation',
+                                paragraphs: [
+                                    'Die {{subduction}} der Nazca-Platte unter die Südamerikanische Platte tritt gemeinsam mit Krustenstörungen und weiteren regionalen Wechselwirkungen im Norden und Nordwesten des Landes auf.',
+                                    'Deshalb hat nicht jedes kolumbianische Erdbeben denselben physikalischen Mechanismus.'
+                                ]
+                            },
+                            {
+                                title: 'Tiefe und Region verändern die Geschichte',
+                                paragraphs: [
+                                    'Einige Ereignisse sind flach und stark zerstörerisch; andere sind tiefer und über weite Räume spürbar, ohne dass sie dasselbe Kollapsmuster erzeugen.',
+                                    'Die Hauptzeitleiste der Website wird leichter lesbar, sobald Besucher verstehen, dass „ein kolumbianisches Erdbeben“ kein einheitlicher Ereignistyp ist.'
+                                ]
+                            },
+                            {
+                                title: 'Öffentliche Kernaussage',
+                                paragraphs: [
+                                    'Tektonische Komplexität bedeutet nicht überall dasselbe Risiko. Sie erklärt vielmehr, warum sich die Gefährdung je nach Region, Quellentyp und Exposition verändert.'
+                                ]
+                            }
+                        ],
+                        sourceIds: [3, 41],
+                        furtherIds: [47]
+                    },
+                    hazards: {
+                        label: 'Sekundärgefahren',
+                        overviewTitle: 'Wenn die Erschütterung nicht das ganze Problem ist',
+                        overviewText: 'Erdbeben können weitere Gefahren auslösen. Diese Ansicht konzentriert sich auf die zwei wichtigsten für dieses Projekt, ohne zu einem technischen Katalog zu werden.',
+                        sections: [
+                            {
+                                title: 'Tsunamis',
+                                paragraphs: [
+                                    'Ein {{tsunami}} ist keine einzelne riesige Welle, sondern eine Serie von Wellen, die durch eine große Wasserverlagerung ausgelöst werden.',
+                                    'Nach einem starken Küstenbeben ist die erste Welle nicht unbedingt die letzte oder größte.'
+                                ]
+                            },
+                            {
+                                title: 'Erdrutsche',
+                                paragraphs: [
+                                    'Starke Erschütterung kann {{landslide}}s an instabilen Hängen auslösen, besonders dort, wo Gelände und Boden ohnehin ein Versagen begünstigen.',
+                                    'Das ist ein Grund dafür, warum Erdbeben ähnlicher Magnitude in unterschiedlichen Landschaften sehr verschiedene Folgen haben können.'
+                                ]
+                            },
+                            {
+                                title: 'Der Ort ist entscheidend',
+                                paragraphs: [
+                                    'Küstenlage, steiles Relief und Bodenverhältnisse bestimmen mit, welche Sekundärgefahren nach starker Erschütterung am wahrscheinlichsten sind.',
+                                    'Dieselbe Erschütterung erzeugt an einer Küste, in einem städtischen Tal oder an einem Andenhang kein identisches Gefahrenprofil.'
+                                ]
+                            },
+                            {
+                                title: 'Nützliche öffentliche Lesart',
+                                paragraphs: [
+                                    'Das Denken in Kaskadengefahren hilft zu verstehen, warum sich manche Erdbebenkatastrophen weit über die ersten Minuten hinaus ausdehnen.'
+                                ]
+                            }
+                        ],
+                        sourceIds: [44, 45, 46, 9],
+                        furtherIds: [41]
+                    },
+                    emergency: {
+                        label: 'Sicherheitsinformationen',
+                        overviewTitle: 'Grundverhalten während und kurz nach der Erschütterung',
+                        overviewText: 'Diese Ansicht ersetzt keine lokalen amtlichen Anweisungen. Sie fasst eine ruhige, allgemeinverständliche Logik für das Verhalten während des Bebens und in den Minuten danach zusammen.',
+                        sections: [
+                            {
+                                title: 'Während der Erschütterung',
+                                paragraphs: [
+                                    'Ein weithin vermitteltes Sicherheitsmodell konzentriert sich darauf, zuerst Kopf und Körper zu schützen und nicht reflexhaft ins Freie zu laufen, solange die Erschütterung andauert.',
+                                    'Die Grundidee ist, die unmittelbare Exposition gegenüber herabfallenden Teilen, Glas und instabilen Gegenständen zu verringern.'
+                                ]
+                            },
+                            {
+                                title: 'Wenn die Erschütterung endet',
+                                paragraphs: [
+                                    'Nach dem Hauptereignis bleiben {{aftershock}}s möglich, und ein beschädigtes Gebäude sollte vor einer erneuten Nutzung sorgfältig eingeschätzt werden.',
+                                    'Ebenso wichtig wird es, offizielle Informationskanäle zu verfolgen und Kommunikationsnetze nicht unnötig zu überlasten.'
+                                ]
+                            },
+                            {
+                                title: 'Evakuierung und beschädigte Strukturen',
+                                paragraphs: [
+                                    'Wenn sichtbare Schäden, herabfallendes Material oder andere unsichere Bedingungen vorliegen, ist das Verlassen des Bereichs um die Struktur der sinnvollste nächste Schritt.',
+                                    'Evakuierung ist damit kein allgemeiner Reflex, sondern eine Reaktion auf konkrete Gefahrenzeichen.'
+                                ]
+                            },
+                            {
+                                title: 'Küstennähe und Tsunami-Bewusstsein',
+                                paragraphs: [
+                                    'In Küstenzonen kann ein starkes Erdbeben auch {{tsunami}}-Bewusstsein erforderlich machen. Eine Bewegung landeinwärts oder in höheres Gelände kann wichtig werden, wenn das Gebiet potenziell exponiert ist.',
+                                    'Da Wellenenergie in mehreren Pulsen und Strömungen ankommen kann, endet die Gefahr nicht zwangsläufig mit dem ersten Wassereintritt.'
+                                ]
+                            }
+                        ],
+                        mediaCards: [
+                            {
+                                title: 'Im Gebäude',
+                                text: 'Unter stabilen Möbeln Schutz suchen, Abstand zu Fenstern halten und zuerst herabfallende Teile und Glassplitter vermeiden.',
+                                src: 'assets/ethz-behaviour-inside-building.png',
+                                alt: 'Verhaltenssymbol für ein Erdbeben innerhalb eines Gebäudes.'
+                            },
+                            {
+                                title: 'Im Freien',
+                                text: 'Draußen bleiben und Abstand zu Fassaden, Brücken, Stromleitungen, großen Bäumen und anderen absturzgefährdeten Strukturen halten.',
+                                src: 'assets/ethz-behaviour-outside.png',
+                                alt: 'Verhaltenssymbol für ein Erdbeben im Freien.'
+                            },
+                            {
+                                title: 'Im Fahrzeug',
+                                text: 'An möglichst sicherer Stelle anhalten und während der Erschütterung im Fahrzeug bleiben; Brücken, Tunnel und instabile Straßenränder meiden.',
+                                src: 'assets/ethz-behaviour-vehicle.png',
+                                alt: 'Verhaltenssymbol für ein Erdbeben im Fahrzeug.'
+                            },
+                            {
+                                title: 'Nachbeben und Kommunikation',
+                                text: 'Mit Nachbeben rechnen, das Telefon nur für echte Notfälle nutzen und sich vor Rückkehr oder Weiterfahrt an offiziellen Informationen orientieren.',
+                                src: 'assets/ethz-behaviour-aftershocks.png',
+                                alt: 'Verhaltenssymbol für Nachbeben und Kommunikation nach einem Erdbeben.'
+                            }
+                        ],
+                        sourceIds: [43, 44],
+                        furtherIds: [9]
+                    },
+                    glossary: {
+                        label: 'Glossar',
+                        overviewTitle: 'Wesentliche Begriffe der Website',
+                        overviewText: 'Das Glossar hält Definitionen bewusst kurz, damit die Hauptansichten lesbar bleiben. Die wichtigsten Begriffe erscheinen zusätzlich als antippbare Hilfen in anderen Tabs.',
+                        glossaryKeys: ['magnitude', 'intensity', 'epicenter', 'depth', 'aftershock', 'plate', 'subduction', 'fault', 'tsunami', 'landslide'],
+                        sourceIds: [41, 42, 45],
+                        furtherIds: [3]
+                    },
+                    sources: {
+                        label: 'Quellen & Lesen',
+                        overviewTitle: 'Genutzte Quellen und weiterführende Lektüre',
+                        overviewText: 'Dieser Tab bündelt die vollständige Bibliografie der Website, damit Leserinnen und Leser die komplette nummerierte Referenzliste und die vollständige weiterführende Lektüre an einer Stelle prüfen können.',
+                        sections: [
+                            {
+                                title: 'So nutzt man diese vollständige Bibliografie',
+                                paragraphs: [
+                                    'Die erste Liste enthält jede nummerierte Referenz der Website, von [1] bis zum letzten verfügbaren Eintrag.',
+                                    'Die zweite Liste fasst sämtliche Vorschläge zur weiterführenden Lektüre aus den übrigen Tabs an einer Stelle für vertiefende Anschlusslektüre zusammen.'
+                                ]
+                            }
+                        ],
+                        mediaFigure: {
+                            title: 'Makroseismische Skala EMS-98',
+                            intro: 'Die Grafik zeigt, wie die EMS-98-Skala gefühlte Intensität, beobachtete Auswirkungen, ungefähre Magnitude und typische Schäden an Mauerwerksbauten zusammenführt. Hier dient sie als eigenständige visuelle Referenz auf der Ressourcenseite.',
+                            src: 'assets/ems-scale-ethz.png',
+                            srcByLang: {
+                                de: 'assets/ems-scale-ethz-de.jpg'
+                            },
+                            alt: 'Infografische Tabelle der makroseismischen Skala EMS-98 mit Intensitätsstufen, Wirkungsbeschreibungen, ungefähren Magnituden und typischen Schäden an Mauerwerksbauten.',
+                            altByLang: {
+                                de: 'Mögliche Auswirkungen von Erdbeben geordnet nach Intensität und Magnitude.'
+                            },
+                            caption: 'Adaptiertes Bild des Schweizerischen Erdbebendienstes (SED/ETH Zürich): Infografik zur Intensitätsskala EMS-98.',
+                            captionByLang: {
+                                de: 'Adaptiertes Bild des Schweizerischen Erdbebendienstes (SED/ETH Zürich): Infografik zur Intensitätsskala EMS-98.'
+                            }
+                        },
+                        useAllSources: true,
+                        useAllFurtherReading: true
+                    }
+                }
+            }
+        };
+
         let currentLang = 'es';
         let activeIndex = 0;
+        let activeReferenceTab = 'measurement';
+        let activeTermKey = null;
 
         function toggleMobileDrawer(forceState) {
             const shouldOpen = typeof forceState === 'boolean'
@@ -1607,6 +3340,52 @@
             window.setTimeout(updateTimelineScrollHint, 280);
         }
 
+        function updateReferenceTabScrollHint() {
+            const container = document.getElementById('referenceTabsScroll');
+            const rightHint = document.getElementById('referenceTabsHintRight');
+            const leftHint = document.getElementById('referenceTabsHintLeft');
+            if (!container || !rightHint || !leftHint || window.innerWidth > 900) {
+                rightHint?.classList.add('hidden');
+                leftHint?.classList.add('hidden');
+                return;
+            }
+
+            const hasOverflow = container.scrollWidth > container.clientWidth + 8;
+            const buttons = container.querySelectorAll('.reference-tab-btn');
+            const firstButton = buttons[0];
+            const lastButton = buttons[buttons.length - 1];
+
+            if (!hasOverflow || !firstButton || !lastButton) {
+                rightHint.classList.add('hidden');
+                leftHint.classList.add('hidden');
+                return;
+            }
+
+            const visibilityTolerance = 12;
+            const containerRect = container.getBoundingClientRect();
+            const firstRect = firstButton.getBoundingClientRect();
+            const lastRect = lastButton.getBoundingClientRect();
+            const firstItemVisible = firstRect.right > containerRect.left + visibilityTolerance;
+            const lastItemVisible = lastRect.left < containerRect.right - visibilityTolerance;
+
+            leftHint.classList.toggle('hidden', firstItemVisible);
+            rightHint.classList.toggle('hidden', lastItemVisible);
+        }
+
+        function scrollReferenceTabsLeft() {
+            const container = document.getElementById('referenceTabsScroll');
+            if (!container) return;
+            container.scrollBy({ left: -220, behavior: 'smooth' });
+            window.setTimeout(updateReferenceTabScrollHint, 280);
+        }
+
+        function scrollReferenceTabsRight() {
+            const container = document.getElementById('referenceTabsScroll');
+            if (!container) return;
+            container.scrollBy({ left: 220, behavior: 'smooth' });
+            window.setTimeout(updateReferenceTabScrollHint, 280);
+        }
+
         function getSeverityColor(mag) {
             if (mag >= 8.0) return 'var(--severity-extreme)';
             if (mag >= 7.0) return 'var(--severity-high)';
@@ -1619,6 +3398,246 @@
                 const source = sources[id];
                 return `<li><a class="source-link" href="${source.url}" target="_blank" rel="noopener noreferrer">[${id}] ${source.title}</a></li>`;
             }).join('');
+        }
+
+        function escapeHtml(text) {
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function getReferenceBundle() {
+            return referenceContent[currentLang] || referenceContent.es;
+        }
+
+        function renderTermButton(termKey) {
+            const bundle = getReferenceBundle();
+            const term = bundle.terms[termKey];
+            if (!term) return '';
+            const isActive = activeTermKey === termKey;
+            return `<button class="term-button ${isActive ? 'active' : ''}" type="button" onclick="openTermPanel('${termKey}')"><span>${escapeHtml(term.label)}</span><span class="material-symbols-outlined">help</span></button>`;
+        }
+
+        function applyTermMarkup(text) {
+            return text.replace(/\{\{(.*?)\}\}/g, (_, termKey) => renderTermButton(termKey.trim()));
+        }
+
+        function renderReferenceLinkList(ids) {
+            if (!ids?.length) return '';
+            return `<ol class="source-list">${renderSourceLinks(ids)}</ol>`;
+        }
+
+        function getAllReferenceSourceIds() {
+            return Object.keys(sources)
+                .map(id => Number(id))
+                .sort((a, b) => a - b);
+        }
+
+        function getAllFurtherReadingIds(bundle) {
+            const ids = new Set();
+            Object.values(bundle.tabs).forEach(tab => {
+                (tab.furtherIds || []).forEach(id => ids.add(id));
+            });
+            return Array.from(ids).sort((a, b) => a - b);
+        }
+
+        function getFullReferenceHeading(bundle) {
+            const sourceIds = getAllReferenceSourceIds();
+            const maxId = sourceIds[sourceIds.length - 1];
+            return `${bundle.ui.fullReferenceList} [1]–[${maxId}]`;
+        }
+
+        function openTermPanel(termKey) {
+            const bundle = getReferenceBundle();
+            const term = bundle.terms[termKey];
+            const panel = document.getElementById('termPanel');
+            if (!term || !panel) return;
+
+            activeTermKey = termKey;
+            document.getElementById('termPanelTitle').innerText = `${bundle.ui.glossaryTitle}: ${term.label}`;
+            document.getElementById('termPanelText').innerText = term.text;
+            panel.classList.remove('hidden');
+            renderReferenceCenter();
+        }
+
+        function closeTermPanel() {
+            activeTermKey = null;
+            document.getElementById('termPanel')?.classList.add('hidden');
+            renderReferenceCenter();
+        }
+
+        function renderReferenceSections(tab) {
+            return `
+                <div class="reference-sections">
+                    ${tab.sections.map(section => `
+                        <section class="reference-section">
+                            <h3>${escapeHtml(section.title)}</h3>
+                            ${section.paragraphs.map(paragraph => `<p>${applyTermMarkup(paragraph)}</p>`).join('')}
+                        </section>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderGlossaryList(tab, bundle) {
+            return `
+                <ul class="glossary-list">
+                    ${tab.glossaryKeys.map(key => {
+                        const term = bundle.terms[key];
+                        return `
+                            <li>
+                                <strong>${escapeHtml(term.label)}</strong>
+                                <p>${escapeHtml(term.text)}</p>
+                            </li>
+                        `;
+                    }).join('')}
+                </ul>
+            `;
+        }
+
+        function renderSourceGroups(tab, bundle) {
+            return `
+                <div class="reference-source-grid">
+                    ${tab.sourceGroups.map(group => `
+                        <section class="reference-source-card">
+                            <h3>${escapeHtml(group.title)}</h3>
+                            <p>${escapeHtml(group.description || bundle.ui.sourceIntro)}</p>
+                            ${renderReferenceLinkList(group.ids)}
+                        </section>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderReferenceSourcesPanel(tab, bundle) {
+            const sourceIds = tab.useAllSources ? getAllReferenceSourceIds() : tab.sourceIds;
+            const furtherIds = tab.useAllFurtherReading ? getAllFurtherReadingIds(bundle) : tab.furtherIds;
+            const sourceHeading = tab.useAllSources ? getFullReferenceHeading(bundle) : bundle.ui.sourceBox;
+            const furtherHeading = tab.useAllFurtherReading ? (bundle.ui.fullFurtherReadingList || bundle.ui.furtherReading) : bundle.ui.furtherReading;
+            return `
+                <div class="reference-source-grid">
+                    <section class="reference-source-card">
+                        <h3>${escapeHtml(sourceHeading)}</h3>
+                        ${renderReferenceLinkList(sourceIds)}
+                    </section>
+                    <section class="reference-source-card">
+                        <h3>${escapeHtml(furtherHeading)}</h3>
+                        ${renderReferenceLinkList(furtherIds)}
+                    </section>
+                </div>
+            `;
+        }
+
+        function renderReferenceMediaFigure(tab) {
+            const figure = tab.mediaFigure;
+            if (!figure) return '';
+            const src = figure.srcByLang?.[currentLang] || figure.src;
+            const alt = figure.altByLang?.[currentLang] || figure.alt;
+            const caption = figure.captionByLang?.[currentLang] || figure.caption;
+            return `
+                <section class="reference-figure-card">
+                    <h3>${escapeHtml(figure.title)}</h3>
+                    <p>${escapeHtml(figure.intro)}</p>
+                    <figure class="reference-figure">
+                        <img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy">
+                        <figcaption>${escapeHtml(caption)}</figcaption>
+                    </figure>
+                </section>
+            `;
+        }
+
+        function renderReferenceMediaGrid(tab) {
+            if (!tab.mediaCards?.length) return '';
+            return `
+                <div class="reference-media-grid">
+                    ${tab.mediaCards.map(card => {
+                        const src = card.srcByLang?.[currentLang] || card.src;
+                        const alt = card.altByLang?.[currentLang] || card.alt;
+                        return `
+                            <section class="reference-media-tile">
+                                <img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy">
+                                <h3>${escapeHtml(card.title)}</h3>
+                                <p>${escapeHtml(card.text)}</p>
+                            </section>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function renderReferenceCenter() {
+            const bundle = getReferenceBundle();
+            const activeTab = bundle.tabs[activeReferenceTab] || bundle.tabs.measurement;
+
+            document.getElementById('referenceKicker').innerText = bundle.ui.kicker;
+            document.getElementById('referenceTitle').innerText = bundle.ui.title;
+            document.getElementById('referenceSubtitle').innerText = bundle.ui.subtitle;
+            document.getElementById('referenceTrustNote').innerText = bundle.ui.trust;
+
+            document.getElementById('referenceTabs').innerHTML = referenceTabOrder.map(tabKey => {
+                const tab = bundle.tabs[tabKey];
+                return `<button class="reference-tab-btn ${tabKey === activeReferenceTab ? 'active' : ''}" type="button" onclick="setReferenceTab('${tabKey}')">${escapeHtml(tab.label)}</button>`;
+            }).join('');
+
+            let bodyContent = `
+                <section class="reference-overview-card">
+                    <h3>${escapeHtml(activeTab.overviewTitle)}</h3>
+                    <p>${escapeHtml(activeTab.overviewText)}</p>
+                </section>
+            `;
+
+            if (activeTab.sections) {
+                bodyContent += renderReferenceSections(activeTab);
+            }
+
+            if (activeTab.mediaFigure) {
+                bodyContent += renderReferenceMediaFigure(activeTab);
+            }
+
+            if (activeTab.mediaCards) {
+                bodyContent += renderReferenceMediaGrid(activeTab);
+            }
+
+            if (activeTab.glossaryKeys) {
+                bodyContent += renderGlossaryList(activeTab, bundle);
+            }
+
+            if (activeTab.sourceGroups) {
+                bodyContent += renderSourceGroups(activeTab, bundle);
+            }
+
+            if (activeTab.sourceIds || activeTab.furtherIds || activeTab.useAllSources || activeTab.useAllFurtherReading) {
+                bodyContent += renderReferenceSourcesPanel(activeTab, bundle);
+            } else if (activeTab.sourceGroups && activeTab.furtherIds) {
+                bodyContent += `
+                    <section class="reference-source-card" style="margin-top: 1rem;">
+                        <h3>${escapeHtml(bundle.ui.furtherReading)}</h3>
+                        ${renderReferenceLinkList(activeTab.furtherIds)}
+                    </section>
+                `;
+            }
+
+            document.getElementById('referenceTabContent').innerHTML = bodyContent;
+            window.requestAnimationFrame(updateReferenceTabScrollHint);
+
+            const panel = document.getElementById('termPanel');
+            if (panel && activeTermKey && bundle.terms[activeTermKey]) {
+                document.getElementById('termPanelTitle').innerText = `${bundle.ui.glossaryTitle}: ${bundle.terms[activeTermKey].label}`;
+                document.getElementById('termPanelText').innerText = bundle.terms[activeTermKey].text;
+                panel.classList.remove('hidden');
+            } else {
+                panel?.classList.add('hidden');
+            }
+        }
+
+        function setReferenceTab(tabKey) {
+            activeReferenceTab = referenceTabOrder.includes(tabKey) ? tabKey : 'measurement';
+            activeTermKey = null;
+            renderReferenceCenter();
+            document.getElementById('referenceCenter')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function createStarIcon() {
@@ -1638,6 +3657,7 @@
                 eventMap.remove();
                 eventMap = null;
             }
+            eventMapDefaultBounds = null;
 
             const [lat, lon] = eq.coordinates.split(',').map(value => parseFloat(value.trim()));
 
@@ -1662,7 +3682,8 @@
                 }
             }).addTo(eventMap);
 
-            eventMap.fitBounds(borderLayer.getBounds().pad(0.08));
+            eventMapDefaultBounds = borderLayer.getBounds().pad(0.08);
+            eventMap.fitBounds(eventMapDefaultBounds);
 
             eventMarker = L.marker([lat, lon], {
                 icon: createStarIcon(),
@@ -1670,6 +3691,11 @@
             }).addTo(eventMap);
 
             eventMarker.bindPopup(`<strong>${eq.title[currentLang]}</strong><br>${eq.location[currentLang]}<br>${eq.coordinates}`);
+        }
+
+        function resetEventMapView() {
+            if (!eventMap || !eventMapDefaultBounds) return;
+            eventMap.fitBounds(eventMapDefaultBounds);
         }
 
         function setLanguage(lang) {
@@ -1686,6 +3712,7 @@
 
             renderTimeline(document.getElementById('searchInput').value.toLowerCase());
             renderEventDetail(activeIndex);
+            renderReferenceCenter();
             updateTimelineScrollHint();
         }
 
@@ -1795,6 +3822,10 @@
                     </div>
 
                     <div class="event-map-shell">
+                        <button class="map-reset-btn" type="button" onclick="resetEventMapView()">
+                            <span class="material-symbols-outlined">center_focus_strong</span>
+                            ${ui.mapReset}
+                        </button>
                         <div id="eventMap" class="event-map" aria-label="Earthquake map"></div>
                     </div>
 
@@ -1834,7 +3865,12 @@
 
             const timelineNodes = document.getElementById('timelineNodes');
             timelineNodes?.addEventListener('scroll', updateTimelineScrollHint, { passive: true });
+
+            const referenceTabsScroll = document.getElementById('referenceTabsScroll');
+            referenceTabsScroll?.addEventListener('scroll', updateReferenceTabScrollHint, { passive: true });
+
             window.addEventListener('resize', updateTimelineScrollHint);
+            window.addEventListener('resize', updateReferenceTabScrollHint);
         };
     </script>
 </body>
