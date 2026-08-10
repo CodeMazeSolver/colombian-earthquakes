@@ -1572,10 +1572,25 @@
             }
 
             const hasOverflow = container.scrollWidth > container.clientWidth + 8;
-            const atLeftEdge = container.scrollLeft <= 8;
-            const atRightEdge = container.scrollLeft + container.clientWidth >= container.scrollWidth - 8;
-            rightHint.classList.toggle('hidden', !hasOverflow || atRightEdge);
-            leftHint.classList.toggle('hidden', !hasOverflow || atLeftEdge);
+            const nodes = container.querySelectorAll('.timeline-node');
+            const firstNode = nodes[0];
+            const lastNode = nodes[nodes.length - 1];
+
+            if (!hasOverflow || !firstNode || !lastNode) {
+                rightHint.classList.add('hidden');
+                leftHint.classList.add('hidden');
+                return;
+            }
+
+            const visibilityTolerance = 12;
+            const containerRect = container.getBoundingClientRect();
+            const firstRect = firstNode.getBoundingClientRect();
+            const lastRect = lastNode.getBoundingClientRect();
+            const firstItemVisible = firstRect.right > containerRect.left + visibilityTolerance;
+            const lastItemVisible = lastRect.left < containerRect.right - visibilityTolerance;
+
+            leftHint.classList.toggle('hidden', firstItemVisible);
+            rightHint.classList.toggle('hidden', lastItemVisible);
         }
 
         function scrollTimelineLeft() {
