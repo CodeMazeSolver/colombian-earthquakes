@@ -638,7 +638,7 @@
             .timeline-tree {
                 display: flex;
                 gap: 0.85rem;
-                padding-left: 0;
+                padding-left: 3.2rem;
                 overflow-x: auto;
                 padding-bottom: 0.3rem;
                 padding-right: 3.2rem;
@@ -653,7 +653,6 @@
             .timeline-scroll-hint {
                 display: inline-flex;
                 position: absolute;
-                right: 0.1rem;
                 top: 50%;
                 transform: translateY(-50%);
                 width: 34px;
@@ -661,12 +660,22 @@
                 align-items: center;
                 justify-content: center;
                 border: none;
-                border-radius: 18px 0 0 18px;
                 background: linear-gradient(90deg, rgba(253, 248, 248, 0), rgba(253, 248, 248, 0.98) 42%);
                 color: var(--md-sys-color-primary);
                 box-shadow: none;
                 z-index: 5;
                 cursor: pointer;
+            }
+
+            .timeline-scroll-hint--right {
+                right: 0.1rem;
+                border-radius: 18px 0 0 18px;
+            }
+
+            .timeline-scroll-hint--left {
+                left: 0.1rem;
+                border-radius: 0 18px 18px 0;
+                background: linear-gradient(270deg, rgba(253, 248, 248, 0), rgba(253, 248, 248, 0.98) 42%);
             }
 
             .timeline-scroll-hint.hidden {
@@ -867,7 +876,10 @@
                 <div class="timeline-tree" id="timelineNodes">
                     <!-- Dynamic Nodes Inserted via JS -->
                 </div>
-                <button class="timeline-scroll-hint hidden" id="timelineScrollHint" type="button" aria-label="Scroll earthquake list to the right" onclick="scrollTimelineRight()">
+                <button class="timeline-scroll-hint timeline-scroll-hint--left hidden" id="timelineScrollHintLeft" type="button" aria-label="Scroll earthquake list to the left" onclick="scrollTimelineLeft()">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button class="timeline-scroll-hint timeline-scroll-hint--right hidden" id="timelineScrollHint" type="button" aria-label="Scroll earthquake list to the right" onclick="scrollTimelineRight()">
                     <span class="material-symbols-outlined">chevron_right</span>
                 </button>
             </div>
@@ -1551,15 +1563,26 @@
 
         function updateTimelineScrollHint() {
             const container = document.getElementById('timelineNodes');
-            const hint = document.getElementById('timelineScrollHint');
-            if (!container || !hint || window.innerWidth > 900) {
-                hint?.classList.add('hidden');
+            const rightHint = document.getElementById('timelineScrollHint');
+            const leftHint = document.getElementById('timelineScrollHintLeft');
+            if (!container || !rightHint || !leftHint || window.innerWidth > 900) {
+                rightHint?.classList.add('hidden');
+                leftHint?.classList.add('hidden');
                 return;
             }
 
             const hasOverflow = container.scrollWidth > container.clientWidth + 8;
+            const atLeftEdge = container.scrollLeft <= 8;
             const atRightEdge = container.scrollLeft + container.clientWidth >= container.scrollWidth - 8;
-            hint.classList.toggle('hidden', !hasOverflow || atRightEdge);
+            rightHint.classList.toggle('hidden', !hasOverflow || atRightEdge);
+            leftHint.classList.toggle('hidden', !hasOverflow || atLeftEdge);
+        }
+
+        function scrollTimelineLeft() {
+            const container = document.getElementById('timelineNodes');
+            if (!container) return;
+            container.scrollBy({ left: -220, behavior: 'smooth' });
+            window.setTimeout(updateTimelineScrollHint, 280);
         }
 
         function scrollTimelineRight() {
