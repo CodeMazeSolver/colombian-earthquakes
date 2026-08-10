@@ -6,7 +6,7 @@ A multilingual static website about historically significant earthquakes in and 
 
 ## What this project includes
 
-- **Single-page static site** in `colombian_earthquakes.index.html`
+- **Single-page static site** in `index.html`
 - **Three languages:** Spanish, English, and German
 - **19 historical earthquake entries** with coordinates and at least two sources per event
 - **Interactive event map** with Colombia-wide reset control
@@ -36,7 +36,7 @@ A multilingual static website about historically significant earthquakes in and 
 │   ├── ems-scale-ethz-de.jpg
 │   ├── ems-scale-ethz_es_gemini.png
 │   └── ethz-behaviour-*.png
-├── colombian_earthquakes.index.html
+├── index.html
 ├── Impactful Earthquakes in Colombia History.md
 └── README.md
 ```
@@ -50,7 +50,7 @@ Because this is a static site, you can open the HTML file directly or serve the 
 Open:
 
 ```text
-colombian_earthquakes.index.html
+index.html
 ```
 
 ### Option 2: run a local server
@@ -64,7 +64,7 @@ python -m http.server 8123
 Then visit:
 
 ```text
-http://127.0.0.1:8123/colombian_earthquakes.index.html
+http://127.0.0.1:8123/
 ```
 
 ## Main data and content sources
