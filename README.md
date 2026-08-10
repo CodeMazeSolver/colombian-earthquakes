@@ -95,6 +95,10 @@ This repository is aimed at a static, readable, reference-style earthquake histo
 - multilingual accessibility
 - mobile usability
 
+## AI-assisted creation
+
+This project was created with the help of AI tools under human supervision. Human review guided the structure, content decisions, design direction, and acceptance of changes, while AI-assisted workflows were used to support research synthesis, drafting, implementation, and iteration.
+
 ## License / reuse
 
 No explicit open-source license has been added yet. Reuse of third-party visual assets may depend on their original source terms, especially for ETH Zurich reference graphics and adapted derivatives.
