@@ -2423,7 +2423,6 @@
                     </div>
                 </section>
             </div>
-            <p class="overview-placeholder-note" id="overviewPlaceholderNote">El mapa por evento del modo histórico permanece sin cambios; esta vista sirve solo para exploración comparativa.</p>
         </div>
     </section>
 
@@ -3412,7 +3411,6 @@
                 viewOverview: "Vista general",
                 overviewShellTitle: "Vista general exploratoria",
                 overviewShellIntro: "Esta vista secundaria muestra los terremotos históricos en un mapa común y permite cambiar el contexto exploratorio sin tocar la tarjeta educativa del modo histórico.",
-                overviewShellNote: "El mapa por evento del modo histórico permanece sin cambios; esta vista sirve solo para exploración comparativa.",
                 overviewFilterChipLabel: "Filtro activo",
                 overviewFilterSummary: "Usa la búsqueda superior para filtrar inmediatamente el mapa y la lista enlazada.",
                 overviewFilterSummaryWithQuery: "Filtrando mapa y lista por:",
@@ -3497,7 +3495,6 @@
                 viewOverview: "Overview",
                 overviewShellTitle: "Exploratory overview",
                 overviewShellIntro: "This secondary view places the historical earthquakes on one shared map and lets readers change the exploratory context without touching the educational card in historical mode.",
-                overviewShellNote: "The per-event map in historical mode stays unchanged; this view exists only for comparative exploration.",
                 overviewFilterChipLabel: "Active filter",
                 overviewFilterSummary: "Use the top search field to filter the map and linked list immediately.",
                 overviewFilterSummaryWithQuery: "Filtering map and list by:",
@@ -3582,7 +3579,6 @@
                 viewOverview: "Überblick",
                 overviewShellTitle: "Erkundender Überblick",
                 overviewShellIntro: "Diese Sekundäransicht zeigt die historischen Erdbeben auf einer gemeinsamen Karte und erlaubt einen explorativen Kontextwechsel, ohne die Bildungskarte des historischen Modus zu verändern.",
-                overviewShellNote: "Die ereignisbezogene Karte im historischen Modus bleibt unverändert; diese Ansicht dient nur der vergleichenden Exploration.",
                 overviewFilterChipLabel: "Aktiver Filter",
                 overviewFilterSummary: "Nutzen Sie die Suche oben, um Karte und verknüpfte Liste sofort zu filtern.",
                 overviewFilterSummaryWithQuery: "Karte und Liste werden gefiltert nach:",
@@ -5081,11 +5077,12 @@
 
             const renderSeries = (container, series, activeValue) => {
                 const maxCount = Math.max(1, ...series.map(item => item.count));
-                const axisTicks = [maxCount, Math.max(0, Math.round(maxCount / 2)), 0];
+                const axisMax = maxCount <= 2 ? maxCount : Math.ceil(maxCount / 2) * 2;
+                const axisTicks = [axisMax, axisMax / 2, 0];
                 const bars = series.map(item => {
                     const isActive = activeValue === item.label;
                     const isDimmed = activeValue && activeValue !== item.label;
-                    const height = item.count > 0 ? Math.max(10, Math.round((item.count / maxCount) * 100)) : 6;
+                    const height = item.count > 0 ? Math.max(10, Math.round((item.count / axisMax) * 100)) : 6;
                     const disabled = item.count === 0 ? 'disabled' : '';
                     return `
                         <button class="overview-chart-bar ${isActive ? 'active' : ''} ${isDimmed ? 'is-dimmed' : ''}" type="button" ${disabled} aria-label="${item.label}: ${item.count}" aria-pressed="${isActive}" onclick="toggleOverviewChartFilter('${item.type}', '${item.label}')">
@@ -5253,7 +5250,6 @@
             document.getElementById('overviewMagnitudeChartNote').innerText = ui.overviewMagnitudeNote;
             document.getElementById('overviewClearFiltersBtn').innerText = ui.overviewClearCharts;
             document.getElementById('overviewListHeading').innerText = `${ui.overviewListHeading} (${entries.length})`;
-            document.getElementById('overviewPlaceholderNote').innerText = ui.overviewShellNote;
             document.getElementById('overviewMap').setAttribute('aria-label', ui.overviewMapAria);
 
             syncOverviewYearRangeUi();
