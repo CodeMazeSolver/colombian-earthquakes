@@ -902,14 +902,30 @@
         .overview-list-more {
             position: sticky;
             bottom: 0;
-            margin-top: -2.35rem;
-            padding: 1.15rem 0 0.2rem;
-            text-align: center;
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: var(--md-sys-color-primary);
-            background: linear-gradient(180deg, rgba(255, 251, 247, 0) 0%, rgba(255, 251, 247, 0.96) 52%, rgba(255, 251, 247, 1) 100%);
+            margin-top: -2.6rem;
+            padding: 1.2rem 0 0.15rem;
+            display: flex;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(255, 251, 247, 0) 0%, rgba(255, 251, 247, 0.94) 46%, rgba(255, 251, 247, 1) 100%);
             pointer-events: none;
+        }
+
+        .overview-list-more-badge {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 18px 18px 10px 10px;
+            color: var(--md-sys-color-primary);
+            background: linear-gradient(180deg, rgba(139, 0, 0, 0.03), rgba(139, 0, 0, 0.12));
+            border: 1px solid rgba(139, 0, 0, 0.14);
+            box-shadow: var(--shadow-1);
+        }
+
+        .overview-list-more-badge .material-symbols-outlined {
+            font-size: 1.45rem;
+            line-height: 1;
         }
 
         .overview-list-more[hidden] {
@@ -2774,7 +2790,11 @@
                             <h3 id="overviewListHeading">Eventos filtrados</h3>
                             <div class="overview-list-shell">
                                 <div id="overviewFilteredList" class="overview-list"></div>
-                                <div id="overviewListMore" class="overview-list-more" hidden>Desplázate para ver todos los resultados</div>
+                                <div id="overviewListMore" class="overview-list-more" hidden aria-hidden="true">
+                                    <span class="overview-list-more-badge">
+                                        <span class="material-symbols-outlined">expand_more</span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -3795,7 +3815,6 @@
                 overviewDecadeTag: "Década",
                 overviewMagnitudeTag: "Magnitud",
                 overviewListHeading: "Eventos filtrados",
-                overviewListMore: "Desplázate para ver los {count} eventos filtrados",
                 overviewDistancePanelTitle: "Herramientas de distancia",
                 overviewDistancePanelClosed: "Abre este bloque para usar herramientas de ubicación y distancia.",
                 overviewDistancePanelOpenSummary: "Calcula distancias desde tu ubicación al evento resaltado o a toda la lista filtrada.",
@@ -3904,7 +3923,6 @@
                 overviewDecadeTag: "Decade",
                 overviewMagnitudeTag: "Magnitude",
                 overviewListHeading: "Filtered events",
-                overviewListMore: "Scroll to explore all {count} filtered events",
                 overviewDistancePanelTitle: "Distance tools",
                 overviewDistancePanelClosed: "Open this panel to use location and distance tools.",
                 overviewDistancePanelOpenSummary: "Calculate distances from your location to the highlighted event or the full filtered list.",
@@ -4013,7 +4031,6 @@
                 overviewDecadeTag: "Jahrzehnt",
                 overviewMagnitudeTag: "Magnitude",
                 overviewListHeading: "Gefilterte Ereignisse",
-                overviewListMore: "Scrollen Sie, um alle {count} gefilterten Ereignisse zu sehen",
                 overviewDistancePanelTitle: "Distanzwerkzeuge",
                 overviewDistancePanelClosed: "Öffnen Sie diesen Bereich für Standort- und Distanzwerkzeuge.",
                 overviewDistancePanelOpenSummary: "Berechnet Distanzen von Ihrem Standort zum markierten Ereignis oder zur gesamten gefilterten Liste.",
@@ -5901,7 +5918,6 @@
             const distanceResultsContainer = document.getElementById('overviewDistanceResults');
 
             if (listMore) {
-                listMore.textContent = ui.overviewListMore.replace('{count}', String(entries.length));
                 listMore.hidden = entries.length <= 4;
             }
 
