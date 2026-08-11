@@ -4870,7 +4870,10 @@
 
         function getActiveScrollContainer() {
             if (currentPrimaryView === 'historical' && window.innerWidth > 900) {
-                return document.querySelector('#historicalView .content-area') || window;
+                const historicalContentArea = document.querySelector('#historicalView .content-area');
+                if (historicalContentArea && historicalContentArea.scrollHeight > historicalContentArea.clientHeight + 4) {
+                    return historicalContentArea;
+                }
             }
             return window;
         }
