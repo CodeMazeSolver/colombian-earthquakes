@@ -660,12 +660,12 @@
             width: min(100%, 34px);
             min-height: 6px;
             border-radius: 8px 8px 0 0;
-            background: #b63b17;
-            transition: height 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+            background: var(--bar-color, #b63b17);
+            transition: height 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
         }
 
         .overview-chart-bar.active .overview-chart-fill {
-            background: var(--md-sys-color-primary);
+            background: var(--bar-color, var(--md-sys-color-primary));
             box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.14);
         }
 
@@ -1546,6 +1546,12 @@
             padding: 4px 10px;
             border-radius: 12px;
             font-weight: 500;
+        }
+
+        .tag--severity {
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
         }
 
         .mini-grid {
@@ -5702,6 +5708,13 @@
             return '8.0+';
         }
 
+        function getMagnitudeBucketColor(bucketLabel) {
+            if (bucketLabel === '8.0+') return 'var(--severity-extreme)';
+            if (bucketLabel === '7.0–7.9') return 'var(--severity-high)';
+            if (bucketLabel === '6.0–6.9') return 'var(--severity-moderate)';
+            return 'var(--severity-low)';
+        }
+
         function formatDistanceKm(distanceKm) {
             return new Intl.NumberFormat(currentLang === 'de' ? 'de-DE' : currentLang === 'es' ? 'es-CO' : 'en-US', {
                 maximumFractionDigits: distanceKm >= 100 ? 0 : 1,
@@ -5879,7 +5892,7 @@
                     return `
                         <button class="overview-chart-bar ${isActive ? 'active' : ''} ${isDimmed ? 'is-dimmed' : ''}" type="button" ${disabled} aria-label="${item.label}: ${item.count}" aria-pressed="${isActive}" onclick="toggleOverviewChartFilter('${item.type}', '${item.label}')">
                             <div class="overview-chart-track">
-                                <div class="overview-chart-fill" style="height:${height}%"></div>
+                                <div class="overview-chart-fill" style="height:${height}%; --bar-color:${item.type === 'magnitude' ? getMagnitudeBucketColor(item.label) : 'var(--md-sys-color-primary)'}"></div>
                             </div>
                         </button>
                     `;
@@ -6119,6 +6132,7 @@
             }
 
             const eq = selectedEntry.eq;
+            const eqSeverityColor = getSeverityColor(eq.magnitude);
             const mmiValue = typeof eq.mmi === 'object' ? eq.mmi[currentLang] : eq.mmi;
             const distanceResults = overviewUserLocation
                 ? entries.map(({ eq, index }) => {
@@ -6137,7 +6151,7 @@
                     <div class="overview-selected-meta">${eq.year} · ${eq.location[currentLang]}</div>
                     <div class="overview-selected-summary">${eq.impact[currentLang]}</div>
                     <div class="overview-selected-tags">
-                        <span class="tag">Mw ${eq.magnitude}</span>
+                        <span class="tag tag--severity" style="background:${eqSeverityColor}">Mw ${eq.magnitude}</span>
                         <span class="tag">${ui.depth}: ${eq.depth}</span>
                         <span class="tag">MMI ${mmiValue}</span>
                     </div>
@@ -6182,7 +6196,7 @@
                     <button class="overview-list-item ${selectedClass}" type="button" onclick="activeIndex=${index}; renderTimeline(document.getElementById('searchInput').value.toLowerCase()); renderOverviewPlaceholder();">
                         <div class="overview-list-topline">
                             <span class="overview-list-year">${eq.year}</span>
-                            <span class="tag">M ${eq.magnitude}</span>
+                            <span class="tag tag--severity" style="background:${getSeverityColor(eq.magnitude)}">M ${eq.magnitude}</span>
                         </div>
                         <div class="overview-list-title">${eq.title[currentLang]}</div>
                         <div class="overview-list-location">${eq.location[currentLang]}</div>
