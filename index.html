@@ -194,8 +194,26 @@
 
         .overview-workspace-layout {
             display: grid;
-            grid-template-columns: minmax(0, 1.4fr) minmax(300px, 0.9fr);
             gap: 1.25rem;
+            align-items: start;
+        }
+
+        .overview-primary-card,
+        .overview-secondary-card {
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            overflow: hidden;
+        }
+
+        .overview-primary-card {
+            padding: 1rem;
+        }
+
+        .overview-primary-card-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.85fr);
+            gap: 1rem;
             align-items: start;
         }
 
@@ -225,6 +243,21 @@
             padding: 1rem;
             display: grid;
             gap: 1rem;
+            align-content: start;
+            height: 100%;
+        }
+
+        .overview-secondary-card {
+            padding: 1rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .overview-secondary-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+            gap: 1rem;
+            align-items: start;
         }
 
         .overview-toolbar {
@@ -1860,6 +1893,16 @@
             }
 
             .overview-workspace-layout {
+                gap: 1rem;
+            }
+
+            .overview-primary-card,
+            .overview-secondary-card {
+                padding: 0.95rem;
+            }
+
+            .overview-primary-card-layout,
+            .overview-secondary-layout {
                 grid-template-columns: 1fr;
             }
 
@@ -2327,41 +2370,49 @@
                 </div>
             </div>
             <div class="overview-workspace-layout">
-                <div class="overview-map-panel">
-                    <div id="overviewMap" class="overview-map-frame" aria-label="Overview earthquake map"></div>
-                </div>
-                <aside class="overview-detail-panel">
-                    <div class="overview-panel-block">
-                        <h3 id="overviewSelectedHeading">Evento resaltado</h3>
-                        <div id="overviewSelectedEvent"></div>
-                    </div>
-                    <div class="overview-panel-block">
-                        <div class="overview-panel-block-header">
-                            <h3 id="overviewChartsHeading">Filtros analíticos</h3>
-                            <button class="overview-clear-filters" id="overviewClearFiltersBtn" type="button" onclick="clearOverviewChartFilters()">Limpiar filtros</button>
+                <section class="overview-primary-card" aria-label="Overview map and selected earthquake">
+                    <div class="overview-primary-card-layout">
+                        <div class="overview-map-panel">
+                            <div id="overviewMap" class="overview-map-frame" aria-label="Overview earthquake map"></div>
                         </div>
-                        <div class="overview-chart-blocks">
-                            <section class="overview-chart-card" aria-labelledby="overviewDecadeChartTitle">
-                                <div>
-                                    <h4 id="overviewDecadeChartTitle">Eventos por década</h4>
-                                    <p id="overviewDecadeChartNote">Selecciona una década para filtrar la exploración actual.</p>
-                                </div>
-                                <div id="overviewDecadeChart" class="overview-chart-grid"></div>
-                            </section>
-                            <section class="overview-chart-card" aria-labelledby="overviewMagnitudeChartTitle">
-                                <div>
-                                    <h4 id="overviewMagnitudeChartTitle">Distribución por magnitud</h4>
-                                    <p id="overviewMagnitudeChartNote">Selecciona un rango de magnitud para filtrar el mapa y la lista.</p>
-                                </div>
-                                <div id="overviewMagnitudeChart" class="overview-chart-grid"></div>
-                            </section>
+                        <aside class="overview-detail-panel">
+                            <div class="overview-panel-block">
+                                <h3 id="overviewSelectedHeading">Evento resaltado</h3>
+                                <div id="overviewSelectedEvent"></div>
+                            </div>
+                        </aside>
+                    </div>
+                </section>
+                <section class="overview-secondary-card" aria-label="Overview charts and filtered event list">
+                    <div class="overview-secondary-layout">
+                        <div class="overview-panel-block">
+                            <div class="overview-panel-block-header">
+                                <h3 id="overviewChartsHeading">Filtros analíticos</h3>
+                                <button class="overview-clear-filters" id="overviewClearFiltersBtn" type="button" onclick="clearOverviewChartFilters()">Limpiar filtros</button>
+                            </div>
+                            <div class="overview-chart-blocks">
+                                <section class="overview-chart-card" aria-labelledby="overviewDecadeChartTitle">
+                                    <div>
+                                        <h4 id="overviewDecadeChartTitle">Eventos por década</h4>
+                                        <p id="overviewDecadeChartNote">Selecciona una década para filtrar la exploración actual.</p>
+                                    </div>
+                                    <div id="overviewDecadeChart" class="overview-chart-grid"></div>
+                                </section>
+                                <section class="overview-chart-card" aria-labelledby="overviewMagnitudeChartTitle">
+                                    <div>
+                                        <h4 id="overviewMagnitudeChartTitle">Distribución por magnitud</h4>
+                                        <p id="overviewMagnitudeChartNote">Selecciona un rango de magnitud para filtrar el mapa y la lista.</p>
+                                    </div>
+                                    <div id="overviewMagnitudeChart" class="overview-chart-grid"></div>
+                                </section>
+                            </div>
+                        </div>
+                        <div class="overview-panel-block">
+                            <h3 id="overviewListHeading">Eventos filtrados</h3>
+                            <div id="overviewFilteredList" class="overview-list"></div>
                         </div>
                     </div>
-                    <div class="overview-panel-block">
-                        <h3 id="overviewListHeading">Eventos filtrados</h3>
-                        <div id="overviewFilteredList" class="overview-list"></div>
-                    </div>
-                </aside>
+                </section>
             </div>
             <p class="overview-placeholder-note" id="overviewPlaceholderNote">El mapa por evento del modo histórico permanece sin cambios; esta vista sirve solo para exploración comparativa.</p>
         </div>
