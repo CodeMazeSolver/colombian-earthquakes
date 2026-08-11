@@ -235,6 +235,144 @@
             margin-top: 1rem;
         }
 
+        .overview-year-range-card {
+            margin-top: 1rem;
+            background: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 0.95rem 1rem;
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .overview-year-range-header {
+            display: flex;
+            align-items: start;
+            justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .overview-year-range-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--md-sys-color-primary);
+        }
+
+        .overview-year-range-copy {
+            display: grid;
+            gap: 0.3rem;
+        }
+
+        .overview-year-range-copy p {
+            margin: 0;
+            font-size: 0.84rem;
+            color: var(--md-sys-color-on-surface-variant);
+            line-height: 1.45;
+        }
+
+        .overview-year-range-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border-radius: 999px;
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-primary);
+            padding: 0.38rem 0.72rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .overview-year-range-shell {
+            position: relative;
+            padding: 0.4rem 0;
+        }
+
+        .overview-year-range-track,
+        .overview-year-range-active {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 6px;
+            border-radius: 999px;
+            transform: translateY(-50%);
+        }
+
+        .overview-year-range-track {
+            background: rgba(139, 0, 0, 0.12);
+        }
+
+        .overview-year-range-active {
+            background: linear-gradient(90deg, rgba(255, 140, 0, 0.92) 0%, rgba(139, 0, 0, 0.95) 100%);
+            pointer-events: none;
+        }
+
+        .overview-year-range-inputs {
+            position: relative;
+            height: 30px;
+        }
+
+        .overview-year-range-inputs input[type="range"] {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            margin: 0;
+            transform: translateY(-50%);
+            background: transparent;
+            pointer-events: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .overview-year-range-inputs input[type="range"]::-webkit-slider-runnable-track {
+            height: 6px;
+            background: transparent;
+        }
+
+        .overview-year-range-inputs input[type="range"]::-moz-range-track {
+            height: 6px;
+            background: transparent;
+        }
+
+        .overview-year-range-inputs input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--md-sys-color-surface);
+            border: 3px solid var(--md-sys-color-primary);
+            box-shadow: var(--shadow-1);
+            pointer-events: auto;
+            cursor: pointer;
+            margin-top: -7px;
+        }
+
+        .overview-year-range-inputs input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--md-sys-color-surface);
+            border: 3px solid var(--md-sys-color-primary);
+            box-shadow: var(--shadow-1);
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .overview-year-range-labels {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            font-size: 0.82rem;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .overview-year-range-labels strong {
+            color: var(--md-sys-color-on-surface);
+        }
+
         .overview-filter-chip {
             display: inline-flex;
             align-items: center;
@@ -2070,6 +2208,27 @@
                     <span class="overview-filter-chip"><span class="material-symbols-outlined">filter_alt</span><span id="overviewFilterChipLabel">Filtro activo</span></span>
                     <span class="overview-filter-summary" id="overviewFilterSummary">Usa la búsqueda superior para filtrar inmediatamente el mapa y la lista enlazada.</span>
                 </div>
+                <div class="overview-year-range-card">
+                    <div class="overview-year-range-header">
+                        <div class="overview-year-range-copy">
+                            <h3 id="overviewYearRangeTitle">Ventana temporal</h3>
+                            <p id="overviewYearRangeNote">Arrastra ambos extremos para limitar el rango de años usado en la exploración.</p>
+                        </div>
+                        <span class="overview-year-range-pill" id="overviewYearRangePill">1868–2026</span>
+                    </div>
+                    <div class="overview-year-range-shell">
+                        <div class="overview-year-range-track"></div>
+                        <div class="overview-year-range-active" id="overviewYearRangeActive"></div>
+                        <div class="overview-year-range-inputs">
+                            <input id="overviewYearMinInput" type="range" min="1868" max="2026" value="1868" step="1" oninput="setOverviewYearRange('min', this.value)">
+                            <input id="overviewYearMaxInput" type="range" min="1868" max="2026" value="2026" step="1" oninput="setOverviewYearRange('max', this.value)">
+                        </div>
+                    </div>
+                    <div class="overview-year-range-labels">
+                        <span id="overviewYearMinLabel">Desde <strong>1868</strong></span>
+                        <span id="overviewYearMaxLabel">Hasta <strong>2026</strong></span>
+                    </div>
+                </div>
             </div>
             <div class="overview-workspace-layout">
                 <div class="overview-map-panel">
@@ -2083,7 +2242,7 @@
                     <div class="overview-panel-block">
                         <div class="overview-panel-block-header">
                             <h3 id="overviewChartsHeading">Filtros analíticos</h3>
-                            <button class="overview-clear-filters" id="overviewClearFiltersBtn" type="button" onclick="clearOverviewChartFilters()">Limpiar gráficos</button>
+                            <button class="overview-clear-filters" id="overviewClearFiltersBtn" type="button" onclick="clearOverviewChartFilters()">Limpiar filtros</button>
                         </div>
                         <div class="overview-chart-blocks">
                             <section class="overview-chart-card" aria-labelledby="overviewDecadeChartTitle">
@@ -3102,9 +3261,14 @@
                 overviewFilterSummary: "Usa la búsqueda superior para filtrar inmediatamente el mapa y la lista enlazada.",
                 overviewFilterSummaryWithQuery: "Filtrando mapa y lista por:",
                 overviewFilterSummaryWithCharts: "Mapa y lista filtrados por:",
+                overviewYearRangeTitle: "Ventana temporal",
+                overviewYearRangeNote: "Arrastra ambos extremos para limitar el rango de años usado en la exploración.",
+                overviewYearRangeTag: "Años",
+                overviewYearRangeFrom: "Desde",
+                overviewYearRangeTo: "Hasta",
                 overviewSelectedHeading: "Evento resaltado",
                 overviewChartsHeading: "Filtros analíticos",
-                overviewClearCharts: "Limpiar gráficos",
+                overviewClearCharts: "Limpiar filtros",
                 overviewDecadeTitle: "Eventos por década",
                 overviewDecadeNote: "Selecciona una década para filtrar la exploración actual.",
                 overviewMagnitudeTitle: "Distribución por magnitud",
@@ -3182,9 +3346,14 @@
                 overviewFilterSummary: "Use the top search field to filter the map and linked list immediately.",
                 overviewFilterSummaryWithQuery: "Filtering map and list by:",
                 overviewFilterSummaryWithCharts: "Map and list filtered by:",
+                overviewYearRangeTitle: "Time window",
+                overviewYearRangeNote: "Drag both handles to limit the year range used in the exploration.",
+                overviewYearRangeTag: "Years",
+                overviewYearRangeFrom: "From",
+                overviewYearRangeTo: "To",
                 overviewSelectedHeading: "Highlighted event",
                 overviewChartsHeading: "Analytical filters",
-                overviewClearCharts: "Clear charts",
+                overviewClearCharts: "Clear filters",
                 overviewDecadeTitle: "Events by decade",
                 overviewDecadeNote: "Select a decade to filter the current exploration state.",
                 overviewMagnitudeTitle: "Magnitude distribution",
@@ -3262,9 +3431,14 @@
                 overviewFilterSummary: "Nutzen Sie die Suche oben, um Karte und verknüpfte Liste sofort zu filtern.",
                 overviewFilterSummaryWithQuery: "Karte und Liste werden gefiltert nach:",
                 overviewFilterSummaryWithCharts: "Karte und Liste gefiltert nach:",
+                overviewYearRangeTitle: "Zeitfenster",
+                overviewYearRangeNote: "Ziehen Sie beide Regler, um den für die Exploration verwendeten Jahresbereich zu begrenzen.",
+                overviewYearRangeTag: "Jahre",
+                overviewYearRangeFrom: "Von",
+                overviewYearRangeTo: "Bis",
                 overviewSelectedHeading: "Hervorgehobenes Ereignis",
                 overviewChartsHeading: "Analytische Filter",
-                overviewClearCharts: "Diagramme zurücksetzen",
+                overviewClearCharts: "Filter zurücksetzen",
                 overviewDecadeTitle: "Ereignisse nach Jahrzehnt",
                 overviewDecadeNote: "Wählen Sie ein Jahrzehnt, um die aktuelle Exploration zu filtern.",
                 overviewMagnitudeTitle: "Magnitudenverteilung",
@@ -4086,6 +4260,17 @@
         let activeReferenceTab = 'measurement';
         let activeTermKey = null;
         let currentPrimaryView = 'historical';
+        const overviewYearDomain = eqData.reduce((acc, eq) => {
+            const year = Number(eq.year);
+            return {
+                min: Math.min(acc.min, year),
+                max: Math.max(acc.max, year)
+            };
+        }, { min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY });
+        let overviewYearRange = {
+            min: overviewYearDomain.min,
+            max: overviewYearDomain.max
+        };
         let overviewChartFilters = {
             decade: null,
             magnitude: null
@@ -4656,11 +4841,50 @@
             return '8.0+';
         }
 
+        function setOverviewYearRange(boundary, rawValue) {
+            const value = Number(rawValue);
+            if (boundary === 'min') {
+                overviewYearRange.min = Math.min(value, overviewYearRange.max);
+            } else {
+                overviewYearRange.max = Math.max(value, overviewYearRange.min);
+            }
+            renderOverviewPlaceholder();
+        }
+
+        function syncOverviewYearRangeUi() {
+            const ui = reportContent[currentLang];
+            const minInput = document.getElementById('overviewYearMinInput');
+            const maxInput = document.getElementById('overviewYearMaxInput');
+            const activeBar = document.getElementById('overviewYearRangeActive');
+            const pill = document.getElementById('overviewYearRangePill');
+            const minLabel = document.getElementById('overviewYearMinLabel');
+            const maxLabel = document.getElementById('overviewYearMaxLabel');
+            if (!minInput || !maxInput || !activeBar || !pill || !minLabel || !maxLabel) return;
+
+            minInput.min = String(overviewYearDomain.min);
+            minInput.max = String(overviewYearDomain.max);
+            maxInput.min = String(overviewYearDomain.min);
+            maxInput.max = String(overviewYearDomain.max);
+            minInput.value = String(overviewYearRange.min);
+            maxInput.value = String(overviewYearRange.max);
+
+            const span = Math.max(1, overviewYearDomain.max - overviewYearDomain.min);
+            const leftPercent = ((overviewYearRange.min - overviewYearDomain.min) / span) * 100;
+            const rightPercent = ((overviewYearRange.max - overviewYearDomain.min) / span) * 100;
+            activeBar.style.left = `${leftPercent}%`;
+            activeBar.style.right = `${100 - rightPercent}%`;
+            pill.textContent = `${overviewYearRange.min}–${overviewYearRange.max}`;
+            minLabel.innerHTML = `${ui.overviewYearRangeFrom} <strong>${overviewYearRange.min}</strong>`;
+            maxLabel.innerHTML = `${ui.overviewYearRangeTo} <strong>${overviewYearRange.max}</strong>`;
+        }
+
         function getOverviewFilteredEventEntries(filterText = '') {
             return getSearchFilteredEventEntries(filterText).filter(({ eq }) => {
+                const year = Number(eq.year);
+                const matchesYearRange = year >= overviewYearRange.min && year <= overviewYearRange.max;
                 const matchesDecade = !overviewChartFilters.decade || `${Math.floor(Number(eq.year) / 10) * 10}s` === overviewChartFilters.decade;
                 const matchesMagnitude = !overviewChartFilters.magnitude || getMagnitudeBucketKey(eq.magnitude) === overviewChartFilters.magnitude;
-                return matchesDecade && matchesMagnitude;
+                return matchesYearRange && matchesDecade && matchesMagnitude;
             });
         }
 
@@ -4672,6 +4896,7 @@
 
         function clearOverviewChartFilters() {
             overviewChartFilters = { decade: null, magnitude: null };
+            overviewYearRange = { min: overviewYearDomain.min, max: overviewYearDomain.max };
             renderOverviewPlaceholder();
         }
 
@@ -4723,7 +4948,10 @@
 
             renderSeries(decadeContainer, decadeSeries, overviewChartFilters.decade);
             renderSeries(magnitudeContainer, magnitudeSeries, overviewChartFilters.magnitude);
-            clearBtn.disabled = !overviewChartFilters.decade && !overviewChartFilters.magnitude;
+            clearBtn.disabled = !overviewChartFilters.decade
+                && !overviewChartFilters.magnitude
+                && overviewYearRange.min === overviewYearDomain.min
+                && overviewYearRange.max === overviewYearDomain.max;
             clearBtn.textContent = ui.overviewClearCharts;
         }
 
@@ -4788,13 +5016,23 @@
             const ui = reportContent[currentLang];
             const rawQuery = document.getElementById('searchInput').value.trim();
             const query = rawQuery.toLowerCase();
-            const baseEntries = getSearchFilteredEventEntries(query);
-            const entries = getOverviewFilteredEventEntries(query);
+            const baseEntries = getSearchFilteredEventEntries(query).filter(({ eq }) => {
+                const year = Number(eq.year);
+                return year >= overviewYearRange.min && year <= overviewYearRange.max;
+            });
+            const entries = baseEntries.filter(({ eq }) => {
+                const matchesDecade = !overviewChartFilters.decade || `${Math.floor(Number(eq.year) / 10) * 10}s` === overviewChartFilters.decade;
+                const matchesMagnitude = !overviewChartFilters.magnitude || getMagnitudeBucketKey(eq.magnitude) === overviewChartFilters.magnitude;
+                return matchesDecade && matchesMagnitude;
+            });
             const selectedEntry = entries.find(entry => entry.index === activeIndex) || entries[0] || null;
             const activeFilterParts = [];
 
             if (rawQuery) {
                 activeFilterParts.push(`“${rawQuery}”`);
+            }
+            if (overviewYearRange.min !== overviewYearDomain.min || overviewYearRange.max !== overviewYearDomain.max) {
+                activeFilterParts.push(`${ui.overviewYearRangeTag}: ${overviewYearRange.min}–${overviewYearRange.max}`);
             }
             if (overviewChartFilters.decade) {
                 activeFilterParts.push(`${ui.overviewDecadeTag}: ${overviewChartFilters.decade}`);
@@ -4811,6 +5049,8 @@
             document.getElementById('overviewPlaceholderTitle').innerText = ui.overviewShellTitle;
             document.getElementById('overviewPlaceholderIntro').innerText = ui.overviewShellIntro;
             document.getElementById('overviewFilterChipLabel').innerText = ui.overviewFilterChipLabel;
+            document.getElementById('overviewYearRangeTitle').innerText = ui.overviewYearRangeTitle;
+            document.getElementById('overviewYearRangeNote').innerText = ui.overviewYearRangeNote;
             document.getElementById('overviewFilterSummary').innerText = activeFilterParts.length
                 ? `${rawQuery ? ui.overviewFilterSummaryWithQuery : ui.overviewFilterSummaryWithCharts} ${activeFilterParts.join(' · ')}`
                 : ui.overviewFilterSummary;
@@ -4825,6 +5065,7 @@
             document.getElementById('overviewPlaceholderNote').innerText = ui.overviewShellNote;
             document.getElementById('overviewMap').setAttribute('aria-label', ui.overviewMapAria);
 
+            syncOverviewYearRangeUi();
             renderOverviewCharts(baseEntries);
 
             const selectedContainer = document.getElementById('overviewSelectedEvent');
