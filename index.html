@@ -794,6 +794,30 @@
             font-size: 1rem;
         }
 
+        .overview-distance-line-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 72px;
+            padding: 0.24rem 0.55rem;
+            border-radius: 999px;
+            border: 1px solid rgba(13, 71, 161, 0.24);
+            background: rgba(255, 255, 255, 0.94);
+            color: #0d47a1;
+            font-size: 0.77rem;
+            font-weight: 700;
+            line-height: 1;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
+            backdrop-filter: blur(8px);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .overview-distance-line-label-marker {
+            background: transparent;
+            border: none;
+        }
+
         .overview-distance-panel-card {
             border: 1px solid var(--md-sys-color-surface-variant);
             background: var(--md-sys-color-surface);
@@ -5732,6 +5756,10 @@
             return earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         }
 
+        function getMidpointLatLng(lat1, lon1, lat2, lon2) {
+            return [(lat1 + lat2) / 2, (lon1 + lon2) / 2];
+        }
+
         function setOverviewDistanceMode(mode) {
             overviewDistanceMode = mode === 'all' ? 'all' : 'selected';
             renderOverviewPlaceholder();
@@ -6030,6 +6058,15 @@
                         weight: 3,
                         opacity: 0.8,
                         dashArray: '8 8'
+                    }).addTo(overviewDynamicLayer);
+                    const midpoint = getMidpointLatLng(overviewUserLocation.lat, overviewUserLocation.lng, selectedLat, selectedLng);
+                    const lineDistanceKm = calculateDistanceKm(overviewUserLocation.lat, overviewUserLocation.lng, selectedLat, selectedLng);
+                    L.marker(midpoint, {
+                        interactive: false,
+                        icon: L.divIcon({
+                            className: 'overview-distance-line-label-marker',
+                            html: `<span class="overview-distance-line-label">${formatDistanceKm(lineDistanceKm)} km</span>`
+                        })
                     }).addTo(overviewDynamicLayer);
                     boundsParts.push(line.getBounds());
                 }
