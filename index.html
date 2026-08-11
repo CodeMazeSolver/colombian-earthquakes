@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore major historical earthquakes in Colombia through a bilingual static timeline and overview workspace.">
+    <meta name="theme-color" content="#8b0000">
     <title>Sismos Históricos de Colombia | Timeline</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="shortcut icon" href="assets/favicon.svg" type="image/svg+xml">
     <!-- Google Fonts & Material Symbols -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,6 +27,7 @@
             --md-sys-color-on-surface-variant: #534343;
             --md-sys-color-outline: #857373;
             --md-sys-color-bg: #fffbfb;
+            --header-height: 73px;
             
             --severity-extreme: #b71c1c;
             --severity-high: #e65100;
@@ -56,6 +61,10 @@
             overflow: hidden;
         }
 
+        .hidden {
+            display: none !important;
+        }
+
         header {
             background-color: var(--md-sys-color-surface);
             border-bottom: 1px solid var(--md-sys-color-surface-variant);
@@ -81,6 +90,982 @@
         .header-title-box p {
             font-size: 0.85rem;
             color: var(--md-sys-color-outline);
+        }
+
+        .primary-view-shell {
+            position: sticky;
+            top: var(--header-height);
+            z-index: 1200;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem 0.75rem;
+            text-align: center;
+            transition: transform 0.24s ease, opacity 0.24s ease;
+        }
+
+        .primary-view-shell::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255, 251, 251, 0.96), rgba(255, 251, 251, 0.88));
+            backdrop-filter: blur(8px);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .primary-view-shell.is-hidden {
+            transform: translateY(calc(-100% - 0.45rem));
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .primary-view-switch {
+            display: inline-grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.35rem;
+            padding: 0.35rem;
+            border-radius: 999px;
+            background: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            box-shadow: var(--shadow-1);
+        }
+
+        .primary-view-btn {
+            border: none;
+            background: transparent;
+            color: var(--md-sys-color-on-surface-variant);
+            border-radius: 999px;
+            padding: 0.75rem 1.15rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .primary-view-btn.active {
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            box-shadow: var(--shadow-1);
+        }
+
+        .overview-shell {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 2rem;
+        }
+
+        .overview-placeholder-card {
+            background: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-l);
+            box-shadow: var(--shadow-2);
+            padding: 2rem;
+        }
+
+        .overview-placeholder-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: var(--md-sys-color-primary);
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .overview-placeholder-card h2 {
+            font-size: 1.55rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .overview-placeholder-card p {
+            color: var(--md-sys-color-on-surface-variant);
+            line-height: 1.6;
+        }
+
+        .overview-placeholder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .overview-placeholder-panel {
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 1rem;
+        }
+
+        .overview-placeholder-panel h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .overview-placeholder-note {
+            margin-top: 1.25rem;
+            font-size: 0.92rem;
+        }
+
+        .overview-workspace-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .overview-workspace-layout {
+            display: grid;
+            gap: 1.25rem;
+            align-items: start;
+        }
+
+        .overview-primary-card,
+        .overview-secondary-card {
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            overflow: hidden;
+        }
+
+        .overview-primary-card {
+            padding: 1rem;
+        }
+
+        .overview-primary-card-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.85fr);
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .overview-map-panel,
+        .overview-detail-panel {
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            overflow: hidden;
+        }
+
+        .overview-map-panel {
+            position: relative;
+        }
+
+        .overview-map-frame {
+            height: 440px;
+        }
+
+        .overview-map-panel .leaflet-container {
+            background: #eef3f6;
+        }
+
+        .overview-map-panel .leaflet-control-attribution {
+            background: rgba(255, 255, 255, 0.84);
+            backdrop-filter: blur(6px);
+            font-size: 0.7rem;
+        }
+
+        .overview-detail-panel {
+            padding: 1rem;
+            display: grid;
+            gap: 1rem;
+            align-content: start;
+            height: 100%;
+        }
+
+        .overview-secondary-card {
+            padding: 1rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .overview-secondary-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .overview-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        .overview-related-link {
+            margin-left: auto;
+        }
+
+        .reference-related-card {
+            margin-top: 1rem;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .reference-related-card p {
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .site-footer {
+            margin-top: auto;
+            padding: 1.5rem 2rem 2rem;
+        }
+
+        .site-footer-card {
+            width: min(1400px, 100%);
+            margin: 0 auto;
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-m);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.85rem;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .site-footer-meta {
+            display: grid;
+            gap: 0.25rem;
+        }
+
+        .site-footer-meta strong {
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .overview-year-range-card {
+            background: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 0.85rem 1rem 0.95rem;
+            display: grid;
+            gap: 0.65rem;
+        }
+
+        .overview-year-range-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .overview-year-range-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--md-sys-color-primary);
+        }
+
+        .overview-year-range-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .overview-year-range-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border-radius: 999px;
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-primary);
+            padding: 0.38rem 0.72rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .overview-year-range-shell {
+            position: relative;
+            padding: 0.4rem 0;
+        }
+
+        .overview-year-range-track,
+        .overview-year-range-active {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 6px;
+            border-radius: 999px;
+            transform: translateY(-50%);
+        }
+
+        .overview-year-range-track {
+            background: rgba(139, 0, 0, 0.12);
+        }
+
+        .overview-year-range-active {
+            background: linear-gradient(90deg, rgba(255, 140, 0, 0.92) 0%, rgba(139, 0, 0, 0.95) 100%);
+            pointer-events: none;
+        }
+
+        .overview-year-range-inputs {
+            position: relative;
+            height: 30px;
+        }
+
+        .overview-year-range-inputs input[type="range"] {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            margin: 0;
+            transform: translateY(-50%);
+            background: transparent;
+            pointer-events: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .overview-year-range-inputs input[type="range"]::-webkit-slider-runnable-track {
+            height: 6px;
+            background: transparent;
+        }
+
+        .overview-year-range-inputs input[type="range"]::-moz-range-track {
+            height: 6px;
+            background: transparent;
+        }
+
+        .overview-year-range-inputs input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--md-sys-color-surface);
+            border: 3px solid var(--md-sys-color-primary);
+            box-shadow: var(--shadow-1);
+            pointer-events: auto;
+            cursor: pointer;
+            margin-top: -7px;
+        }
+
+        .overview-year-range-inputs input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--md-sys-color-surface);
+            border: 3px solid var(--md-sys-color-primary);
+            box-shadow: var(--shadow-1);
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .overview-year-range-labels {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            font-size: 0.82rem;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .overview-year-range-labels strong {
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .overview-filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            border-radius: 999px;
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-primary);
+            padding: 0.42rem 0.75rem;
+            font-size: 0.83rem;
+            font-weight: 700;
+        }
+
+        .overview-filter-summary {
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: 0.92rem;
+        }
+
+        .overview-panel-block {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .overview-panel-block h3 {
+            font-size: 1rem;
+            color: var(--md-sys-color-primary);
+        }
+
+        .overview-panel-block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .overview-panel-block-header h3 {
+            margin: 0;
+        }
+
+        .overview-clear-filters {
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+            color: var(--md-sys-color-primary);
+            border-radius: 999px;
+            padding: 0.42rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .overview-clear-filters:disabled {
+            opacity: 0.45;
+            cursor: default;
+        }
+
+        .overview-chart-blocks {
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .overview-chart-card {
+            background: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 0.9rem;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .overview-chart-card h4 {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--md-sys-color-primary);
+        }
+
+        .overview-chart-card p {
+            margin: 0;
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: 0.84rem;
+            line-height: 1.45;
+        }
+
+        .overview-chart-grid {
+            display: grid;
+            grid-template-columns: 30px minmax(0, 1fr);
+            gap: 0.45rem;
+            align-items: stretch;
+        }
+
+        .overview-chart-y-axis {
+            display: grid;
+            align-content: space-between;
+            justify-items: end;
+            padding: 0.1rem 0 1.55rem;
+            font-size: 0.7rem;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .overview-chart-frame {
+            display: grid;
+            gap: 0.45rem;
+            min-width: 0;
+        }
+
+        .overview-chart-plot {
+            position: relative;
+            min-height: 184px;
+            border-left: 1px solid rgba(139, 0, 0, 0.18);
+            border-bottom: 1px solid rgba(139, 0, 0, 0.18);
+            padding: 0.35rem 0.25rem 0;
+            display: grid;
+            align-items: end;
+            overflow: hidden;
+        }
+
+        .overview-chart-plot::before,
+        .overview-chart-plot::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            border-top: 1px dashed rgba(139, 0, 0, 0.12);
+            pointer-events: none;
+        }
+
+        .overview-chart-plot::before {
+            top: 33%;
+        }
+
+        .overview-chart-plot::after {
+            top: 66%;
+        }
+
+        .overview-chart-series {
+            display: grid;
+            gap: 0.45rem;
+            align-items: end;
+            min-height: 100%;
+            min-width: 0;
+        }
+
+        .overview-chart-bar {
+            border: none;
+            background: transparent;
+            padding: 0;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            min-height: 100%;
+            min-width: 0;
+        }
+
+        .overview-chart-bar:hover {
+            transform: translateY(-2px);
+        }
+
+        .overview-chart-bar:disabled {
+            cursor: default;
+            opacity: 0.45;
+            transform: none;
+        }
+
+        .overview-chart-bar.active {
+            opacity: 1;
+        }
+
+        .overview-chart-bar.is-dimmed {
+            opacity: 0.48;
+        }
+
+        .overview-chart-track {
+            position: relative;
+            height: 132px;
+            width: 100%;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+        }
+
+        .overview-chart-fill {
+            width: min(100%, 34px);
+            min-height: 6px;
+            border-radius: 8px 8px 0 0;
+            background: var(--bar-color, #b63b17);
+            transition: height 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+
+        .overview-chart-bar.active .overview-chart-fill {
+            background: var(--bar-color, var(--md-sys-color-primary));
+            box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.14);
+        }
+
+        .overview-chart-x-axis {
+            display: grid;
+            gap: 0.45rem;
+            min-width: 0;
+        }
+
+        .overview-chart-x-groups {
+            display: grid;
+            gap: 0.45rem;
+            min-width: 0;
+        }
+
+        .overview-chart-x-group {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--md-sys-color-on-surface-variant);
+            text-align: center;
+            padding-bottom: 0.1rem;
+            border-bottom: 1px solid rgba(139, 0, 0, 0.12);
+        }
+
+        .overview-chart-x-ticks {
+            display: grid;
+            gap: 0.45rem;
+            min-width: 0;
+        }
+
+        .overview-chart-x-tick {
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--md-sys-color-on-surface);
+            text-align: center;
+            line-height: 1.15;
+            overflow-wrap: anywhere;
+        }
+
+        .overview-chart-x-tick.active {
+            color: var(--md-sys-color-primary);
+        }
+
+        .overview-selected-card {
+            background: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 1rem;
+        }
+
+        .overview-selected-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            color: var(--md-sys-color-primary);
+            margin-bottom: 0.55rem;
+        }
+
+        .overview-selected-kicker .material-symbols-outlined {
+            font-size: 1rem;
+        }
+
+        .overview-selected-card h4 {
+            font-size: 1.08rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .overview-selected-meta {
+            color: var(--md-sys-color-outline);
+            font-size: 0.9rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .overview-selected-summary {
+            line-height: 1.55;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .overview-selected-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-top: 0.9rem;
+        }
+
+        .overview-map-toolbar {
+            position: absolute;
+            top: 0.9rem;
+            right: 0.9rem;
+            z-index: 500;
+            pointer-events: none;
+        }
+
+        .overview-map-reset-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.42rem;
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--md-sys-color-primary);
+            border-radius: 999px;
+            padding: 0.5rem 0.85rem;
+            font-size: 0.84rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+            box-shadow: var(--shadow-1);
+            backdrop-filter: blur(8px);
+            pointer-events: auto;
+        }
+
+        .overview-map-reset-btn:hover,
+        .overview-map-reset-btn:focus-visible {
+            border-color: rgba(139, 0, 0, 0.35);
+            background: rgba(139, 0, 0, 0.05);
+            outline: none;
+        }
+
+        .overview-map-reset-btn .material-symbols-outlined {
+            font-size: 1rem;
+        }
+
+        .overview-distance-line-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 72px;
+            padding: 0.24rem 0.55rem;
+            border-radius: 999px;
+            border: 1px solid rgba(13, 71, 161, 0.24);
+            background: rgba(255, 255, 255, 0.94);
+            color: #0d47a1;
+            font-size: 0.77rem;
+            font-weight: 700;
+            line-height: 1;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
+            backdrop-filter: blur(8px);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .overview-distance-line-label-marker {
+            background: transparent;
+            border: none;
+        }
+
+        .overview-distance-panel-card {
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+            border-radius: var(--radius-l);
+            box-shadow: var(--shadow-1);
+            padding: 1rem 1.05rem;
+        }
+
+        .overview-distance-panel-toggle {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.85rem;
+            border: none;
+            background: transparent;
+            color: var(--md-sys-color-on-surface);
+            padding: 0;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .overview-distance-panel-toggle-text strong {
+            display: block;
+            font-size: 0.98rem;
+            margin-bottom: 0.18rem;
+        }
+
+        .overview-distance-panel-toggle-text span {
+            font-size: 0.84rem;
+            color: var(--md-sys-color-on-surface-variant);
+            line-height: 1.45;
+        }
+
+        .overview-distance-panel-toggle .material-symbols-outlined {
+            color: var(--md-sys-color-primary);
+            transition: transform 0.2s ease;
+        }
+
+        .overview-distance-panel-card[data-open="true"] .overview-distance-panel-toggle .material-symbols-outlined {
+            transform: rotate(180deg);
+        }
+
+        .overview-distance-panel-content {
+            display: grid;
+            gap: 0.8rem;
+            margin-top: 0.95rem;
+            padding-top: 0.95rem;
+            border-top: 1px solid rgba(139, 0, 0, 0.12);
+        }
+
+        .overview-distance-panel-content[hidden] {
+            display: none;
+        }
+
+        .overview-location-actions,
+        .overview-distance-mode-switch {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+        }
+
+        .overview-location-btn,
+        .overview-distance-mode-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.42rem;
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+            color: var(--md-sys-color-primary);
+            border-radius: 999px;
+            padding: 0.48rem 0.82rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .overview-location-btn .material-symbols-outlined,
+        .overview-distance-mode-btn .material-symbols-outlined {
+            font-size: 1rem;
+        }
+
+        .overview-location-btn:hover,
+        .overview-location-btn:focus-visible,
+        .overview-distance-mode-btn:hover,
+        .overview-distance-mode-btn:focus-visible {
+            border-color: rgba(139, 0, 0, 0.35);
+            background: rgba(139, 0, 0, 0.05);
+            outline: none;
+        }
+
+        .overview-location-btn.is-active,
+        .overview-distance-mode-btn.active {
+            background: var(--md-sys-color-primary);
+            border-color: var(--md-sys-color-primary);
+            color: #fff;
+            box-shadow: var(--shadow-1);
+        }
+
+        .overview-location-status {
+            margin: 0;
+            font-size: 0.84rem;
+            color: var(--md-sys-color-on-surface-variant);
+            line-height: 1.45;
+        }
+
+        .overview-distance-results {
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        .overview-distance-card {
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: rgba(139, 0, 0, 0.03);
+            border-radius: var(--radius-m);
+            padding: 0.85rem 0.9rem;
+        }
+
+        .overview-distance-card strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .overview-distance-list {
+            display: grid;
+            gap: 0.45rem;
+            max-height: 240px;
+            overflow-y: auto;
+            padding-right: 0.15rem;
+        }
+
+        .overview-distance-list-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.55rem 0.65rem;
+            border-radius: var(--radius-s);
+            background: rgba(139, 0, 0, 0.04);
+            font-size: 0.84rem;
+        }
+
+        .overview-distance-list-item strong {
+            display: block;
+            margin-bottom: 0.15rem;
+        }
+
+        .overview-list-shell {
+            position: relative;
+        }
+
+        .overview-list {
+            display: grid;
+            gap: 0.65rem;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 0.2rem;
+            padding-bottom: 3rem;
+        }
+
+        .overview-list-more {
+            position: sticky;
+            bottom: 0;
+            margin-top: -2.6rem;
+            padding: 1.2rem 0 0.15rem;
+            display: flex;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(255, 251, 247, 0) 0%, rgba(255, 251, 247, 0.94) 46%, rgba(255, 251, 247, 1) 100%);
+            pointer-events: none;
+        }
+
+        .overview-list-more-badge {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 18px 18px 10px 10px;
+            color: var(--md-sys-color-primary);
+            background: linear-gradient(180deg, rgba(139, 0, 0, 0.03), rgba(139, 0, 0, 0.12));
+            border: 1px solid rgba(139, 0, 0, 0.14);
+            box-shadow: var(--shadow-1);
+        }
+
+        .overview-list-more-badge .material-symbols-outlined {
+            font-size: 1.45rem;
+            line-height: 1;
+        }
+
+        .overview-list-more[hidden] {
+            display: none;
+        }
+
+        .overview-list-item {
+            width: 100%;
+            text-align: left;
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+            border-radius: var(--radius-m);
+            padding: 0.85rem 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .overview-list-item:hover,
+        .overview-list-item:focus-visible {
+            border-color: rgba(139, 0, 0, 0.35);
+            box-shadow: var(--shadow-1);
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .overview-list-item.active {
+            border-color: var(--md-sys-color-primary);
+            box-shadow: inset 0 0 0 1px rgba(139, 0, 0, 0.18);
+            background: rgba(139, 0, 0, 0.04);
+        }
+
+        .overview-list-topline {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .overview-list-year {
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+        }
+
+        .overview-list-title {
+            font-weight: 700;
+            line-height: 1.35;
+            margin-bottom: 0.3rem;
+        }
+
+        .overview-list-location {
+            font-size: 0.88rem;
+            color: var(--md-sys-color-outline);
+        }
+
+        .overview-empty-state {
+            background: var(--md-sys-color-surface);
+            border: 1px dashed var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 1rem;
+            color: var(--md-sys-color-on-surface-variant);
         }
 
         .controls {
@@ -144,6 +1129,45 @@
             box-shadow: var(--shadow-1);
         }
 
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.7rem 1rem;
+            border-radius: 999px;
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+            color: var(--md-sys-color-primary);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .project-link:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-2);
+            background: var(--md-sys-color-primary-container);
+        }
+
+        .project-link .material-symbols-outlined {
+            font-size: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        .drawer-project-link {
+            display: none;
+            justify-content: center;
+            width: 100%;
+        }
+
         .search-box {
             position: relative;
             display: flex;
@@ -166,6 +1190,79 @@
             color: var(--md-sys-color-outline);
         }
 
+        .drawer-mode-section {
+            display: none;
+        }
+
+        .drawer-mode-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--md-sys-color-primary);
+            margin-bottom: 0.55rem;
+        }
+
+        .drawer-primary-view-switch {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.35rem;
+            padding: 0.35rem;
+            border-radius: 20px;
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+        }
+
+        .drawer-primary-view-btn {
+            border: none;
+            background: transparent;
+            color: var(--md-sys-color-on-surface-variant);
+            border-radius: 16px;
+            padding: 0.75rem 0.8rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .drawer-primary-view-btn.active {
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            box-shadow: var(--shadow-1);
+        }
+
+        .back-to-top-btn {
+            position: fixed;
+            right: 1rem;
+            bottom: 1rem;
+            z-index: 1250;
+            width: 52px;
+            height: 52px;
+            border: none;
+            border-radius: 50%;
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            box-shadow: var(--shadow-2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .back-to-top-btn.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+        }
+
+        .back-to-top-btn:hover,
+        .back-to-top-btn:focus-visible {
+            box-shadow: var(--shadow-3);
+            transform: translateY(-1px);
+            outline: none;
+        }
+
         .app-container {
             display: flex;
             flex: 1;
@@ -173,6 +1270,10 @@
             width: 100%;
             margin: 0 auto;
             position: relative;
+        }
+
+        #historicalView .app-container {
+            margin-top: 0.85rem;
         }
 
         /* Timeline Navigation Sidebar */
@@ -469,6 +1570,12 @@
             padding: 4px 10px;
             border-radius: 12px;
             font-weight: 500;
+        }
+
+        .tag--severity {
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
         }
 
         .mini-grid {
@@ -1094,6 +2201,7 @@
                 align-items: stretch;
                 justify-content: flex-start;
                 gap: 1rem;
+                overflow-y: auto;
             }
 
             body.drawer-open .controls {
@@ -1126,8 +2234,23 @@
 
             .search-box,
             .search-box input,
-            .lang-selector {
+            .lang-selector,
+            .drawer-mode-section,
+            .drawer-project-link {
                 width: 100%;
+            }
+
+            .drawer-project-link {
+                display: inline-flex;
+            }
+
+            .footer-links {
+                justify-content: stretch;
+                flex-direction: column;
+            }
+
+            .drawer-mode-section {
+                display: block;
             }
 
             .lang-selector {
@@ -1137,6 +2260,20 @@
             .lang-btn {
                 flex: 1 1 0;
                 text-align: center;
+            }
+
+            .overview-related-link {
+                margin-left: 0;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .site-footer {
+                padding: 1.25rem 1rem 1.5rem;
+            }
+
+            .site-footer-card {
+                align-items: stretch;
             }
 
             .app-container {
@@ -1215,6 +2352,58 @@
 
             .content-area {
                 padding: 1.25rem;
+            }
+
+            .primary-view-shell {
+                padding: 0.55rem 1rem 0.5rem;
+            }
+
+            .primary-view-shell::before {
+                border-bottom-left-radius: 16px;
+                border-bottom-right-radius: 16px;
+            }
+
+            .primary-view-switch {
+                display: grid;
+                width: 100%;
+            }
+
+            .back-to-top-btn {
+                right: 0.9rem;
+                bottom: 0.9rem;
+                width: 48px;
+                height: 48px;
+            }
+
+            .overview-shell {
+                padding: 1.25rem 1rem 1.5rem;
+            }
+
+            .overview-placeholder-card {
+                padding: 1.35rem;
+                border-radius: 22px;
+            }
+
+            .overview-workspace-layout {
+                gap: 1rem;
+            }
+
+            .overview-primary-card,
+            .overview-secondary-card {
+                padding: 0.95rem;
+            }
+
+            .overview-primary-card-layout,
+            .overview-secondary-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .overview-map-frame {
+                height: 360px;
+            }
+
+            .overview-list {
+                max-height: none;
             }
 
             .event-card {
@@ -1361,6 +2550,73 @@
                 padding: 0.9rem;
             }
 
+            .primary-view-shell {
+                padding: 0.7rem 0.8rem 0.65rem;
+            }
+
+            .primary-view-btn {
+                padding: 0.7rem 0.85rem;
+                font-size: 0.86rem;
+            }
+
+            .overview-shell {
+                padding: 0.95rem 0.8rem 1.25rem;
+            }
+
+            .overview-placeholder-card {
+                padding: 1rem;
+                border-radius: 18px;
+            }
+
+            .overview-placeholder-card h2 {
+                font-size: 1.18rem;
+            }
+
+            .overview-placeholder-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .overview-map-frame {
+                height: 300px;
+            }
+
+            .overview-detail-panel {
+                padding: 0.9rem;
+            }
+
+            .overview-chart-grid {
+                grid-template-columns: 24px minmax(0, 1fr);
+            }
+
+            .overview-chart-series,
+            .overview-chart-x-axis,
+            .overview-chart-x-groups,
+            .overview-chart-x-ticks {
+                gap: 0.35rem;
+            }
+
+            .overview-chart-plot {
+                min-height: 168px;
+                padding: 0.3rem 0.2rem 0;
+            }
+
+            .overview-chart-track {
+                height: 108px;
+            }
+
+            .overview-chart-x-group {
+                font-size: 0.56rem;
+            }
+
+            .overview-chart-x-tick {
+                font-size: 0.68rem;
+            }
+
+            .overview-list-topline {
+                flex-direction: column;
+                gap: 0.2rem;
+            }
+
             .event-card {
                 padding: 1rem;
                 border-radius: 18px;
@@ -1481,6 +2737,13 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
+            <div class="drawer-mode-section">
+                <div class="drawer-mode-label" id="drawerPrimaryViewLabel">Modo de página</div>
+                <div class="drawer-primary-view-switch" role="tablist" aria-label="Drawer primary page mode switch">
+                    <button class="drawer-primary-view-btn active" id="drawerViewModeHistoricalBtn" type="button" role="tab" aria-selected="true" onclick="setPrimaryView('historical'); toggleMobileDrawer(false)">Cronología histórica</button>
+                    <button class="drawer-primary-view-btn" id="drawerViewModeOverviewBtn" type="button" role="tab" aria-selected="false" onclick="setPrimaryView('overview'); toggleMobileDrawer(false)">Vista general</button>
+                </div>
+            </div>
             <div class="search-box">
                 <span class="material-symbols-outlined">search</span>
                 <input type="text" id="searchInput" placeholder="Buscar / Search..." onkeyup="filterEvents()">
@@ -1490,10 +2753,25 @@
                 <button class="lang-btn" onclick="setLanguage('en'); toggleMobileDrawer(false)">EN</button>
                 <button class="lang-btn" onclick="setLanguage('de'); toggleMobileDrawer(false)">DE</button>
             </div>
+            <a class="project-link drawer-project-link" id="drawerDashboardLink" href="https://codemazesolver.github.io/usgs-geo-dashboard/" target="_blank" rel="noreferrer noopener">
+                <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+                <span id="drawerDashboardLinkText">Abrir Earthquake Dashboard</span>
+            </a>
         </div>
     </header>
     <button class="drawer-scrim" id="drawerScrim" type="button" aria-label="Close menu" onclick="toggleMobileDrawer(false)"></button>
+    <button class="back-to-top-btn hidden" id="backToTopBtn" type="button" aria-label="Volver arriba" onclick="scrollActiveViewToTop()">
+        <span class="material-symbols-outlined">arrow_upward</span>
+    </button>
 
+    <section class="primary-view-shell" aria-label="Primary page mode switch">
+        <div class="primary-view-switch" role="tablist" aria-label="Primary page mode switch">
+            <button class="primary-view-btn active" id="viewModeHistoricalBtn" type="button" role="tab" aria-selected="true" onclick="setPrimaryView('historical')">Cronología histórica</button>
+            <button class="primary-view-btn" id="viewModeOverviewBtn" type="button" role="tab" aria-selected="false" onclick="setPrimaryView('overview')">Vista general</button>
+        </div>
+    </section>
+
+    <section id="historicalView">
     <div class="app-container">
         <!-- Sidebar Navigation -->
         <nav class="timeline-sidebar">
@@ -1563,9 +2841,148 @@
             </div>
         </main>
     </div>
+    </section>
+
+    <section class="overview-shell hidden" id="overviewView" aria-label="Exploratory overview workspace">
+        <div class="overview-placeholder-card">
+            <div class="overview-workspace-header">
+                <div class="overview-placeholder-kicker"><span class="material-symbols-outlined">dashboard</span><span id="overviewPlaceholderKicker">Vista general</span></div>
+                <h2 id="overviewPlaceholderTitle">Vista general exploratoria</h2>
+                <p id="overviewPlaceholderIntro">Esta vista secundaria muestra los terremotos históricos en un mapa común y permite cambiar el contexto exploratorio sin tocar la tarjeta educativa del modo histórico.</p>
+                <div class="overview-toolbar">
+                    <span class="overview-filter-chip"><span class="material-symbols-outlined">filter_alt</span><span id="overviewFilterChipLabel">Filtro activo</span></span>
+                    <span class="overview-filter-summary" id="overviewFilterSummary">Usa la búsqueda superior para filtrar inmediatamente el mapa y la lista enlazada.</span>
+                    <a class="project-link overview-related-link" id="overviewDashboardLink" href="https://codemazesolver.github.io/usgs-geo-dashboard/" target="_blank" rel="noreferrer noopener">
+                        <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+                        <span id="overviewDashboardLinkText">Ver Earthquake Dashboard relacionado</span>
+                    </a>
+                </div>
+            </div>
+            <div class="overview-workspace-layout">
+                <section class="overview-primary-card" aria-label="Overview map and selected earthquake">
+                    <div class="overview-primary-card-layout">
+                        <div class="overview-map-panel">
+                            <div id="overviewMap" class="overview-map-frame" aria-label="Overview earthquake map"></div>
+                            <div class="overview-map-toolbar">
+                                <button class="overview-map-reset-btn" id="overviewResetMapBtn" type="button" onclick="resetOverviewMapView()">
+                                    <span class="material-symbols-outlined" aria-hidden="true">center_focus_strong</span>
+                                    <span id="overviewResetMapBtnText">Reiniciar mapa</span>
+                                </button>
+                            </div>
+                        </div>
+                        <aside class="overview-detail-panel">
+                            <div class="overview-panel-block">
+                                <div id="overviewSelectedEvent"></div>
+                            </div>
+                        </aside>
+                    </div>
+                </section>
+                <section class="overview-distance-panel-card" id="overviewDistancePanelCard" aria-label="Overview distance tools">
+                    <button class="overview-distance-panel-toggle" id="overviewDistancePanelToggle" type="button" aria-expanded="false" onclick="toggleOverviewDistancePanel()">
+                        <span class="overview-distance-panel-toggle-text">
+                            <strong id="overviewDistancePanelTitle">Herramientas de distancia</strong>
+                            <span id="overviewDistancePanelSummary"></span>
+                        </span>
+                        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="overview-distance-panel-content" id="overviewDistancePanelContent" hidden>
+                        <div class="overview-location-actions">
+                            <button class="overview-location-btn" id="overviewUseMyLocationBtn" type="button" onclick="requestOverviewUserLocation()"><span class="material-symbols-outlined" aria-hidden="true">my_location</span><span>Usar mi ubicación</span></button>
+                            <button class="overview-location-btn" id="overviewPickLocationBtn" type="button" aria-pressed="false" onclick="armOverviewMapLocationPicker()"><span class="material-symbols-outlined" aria-hidden="true">edit_location_alt</span><span>Elegir en el mapa</span></button>
+                            <button class="overview-location-btn" id="overviewClearLocationBtn" type="button" onclick="clearOverviewUserLocation()"><span class="material-symbols-outlined" aria-hidden="true">location_off</span><span>Limpiar ubicación</span></button>
+                        </div>
+                        <div class="overview-distance-mode-switch" role="tablist" aria-label="Overview distance mode switch">
+                            <button class="overview-distance-mode-btn active" id="overviewDistanceSelectedBtn" type="button" onclick="setOverviewDistanceMode('selected')">Distancia al evento resaltado</button>
+                            <button class="overview-distance-mode-btn" id="overviewDistanceAllBtn" type="button" onclick="setOverviewDistanceMode('all')">Distancia a todos</button>
+                        </div>
+                        <p class="overview-location-status" id="overviewLocationStatus">Coloca tu ubicación con el botón o haz clic en el mapa.</p>
+                        <div id="overviewDistanceResults" class="overview-distance-results"></div>
+                    </div>
+                </section>
+                <section class="overview-secondary-card" aria-label="Overview charts and filtered event list">
+                    <div class="overview-year-range-card">
+                        <div class="overview-year-range-header">
+                            <h3 id="overviewYearRangeTitle">Ventana temporal</h3>
+                            <div class="overview-year-range-actions">
+                                <button class="overview-clear-filters" id="overviewClearFiltersBtn" type="button" onclick="clearOverviewChartFilters()">Limpiar filtros</button>
+                                <span class="overview-year-range-pill" id="overviewYearRangePill">1868–2026</span>
+                            </div>
+                        </div>
+                        <div class="overview-year-range-shell">
+                            <div class="overview-year-range-track"></div>
+                            <div class="overview-year-range-active" id="overviewYearRangeActive"></div>
+                            <div class="overview-year-range-inputs">
+                                <input id="overviewYearMinInput" type="range" min="1868" max="2026" value="1868" step="1" oninput="setOverviewYearRange('min', this.value)">
+                                <input id="overviewYearMaxInput" type="range" min="1868" max="2026" value="2026" step="1" oninput="setOverviewYearRange('max', this.value)">
+                            </div>
+                        </div>
+                        <div class="overview-year-range-labels">
+                            <span id="overviewYearMinLabel">Desde <strong>1868</strong></span>
+                            <span id="overviewYearMaxLabel">Hasta <strong>2026</strong></span>
+                        </div>
+                    </div>
+                    <div class="overview-secondary-layout">
+                        <div class="overview-panel-block">
+                            <div class="overview-panel-block-header">
+                                <h3 id="overviewChartsHeading">Filtros analíticos</h3>
+                            </div>
+                            <div class="overview-chart-blocks">
+                                <section class="overview-chart-card" aria-labelledby="overviewDecadeChartTitle">
+                                    <div>
+                                        <h4 id="overviewDecadeChartTitle">Eventos por década</h4>
+                                        <p id="overviewDecadeChartNote">Selecciona una década para filtrar la exploración actual.</p>
+                                    </div>
+                                    <div id="overviewDecadeChart" class="overview-chart-grid"></div>
+                                </section>
+                                <section class="overview-chart-card" aria-labelledby="overviewMagnitudeChartTitle">
+                                    <div>
+                                        <h4 id="overviewMagnitudeChartTitle">Distribución por magnitud</h4>
+                                        <p id="overviewMagnitudeChartNote">Selecciona un rango de magnitud para filtrar el mapa y la lista.</p>
+                                    </div>
+                                    <div id="overviewMagnitudeChart" class="overview-chart-grid"></div>
+                                </section>
+                            </div>
+                        </div>
+                        <div class="overview-panel-block">
+                            <h3 id="overviewListHeading">Eventos filtrados</h3>
+                            <div class="overview-list-shell">
+                                <div id="overviewFilteredList" class="overview-list"></div>
+                                <div id="overviewListMore" class="overview-list-more" hidden aria-hidden="true">
+                                    <span class="overview-list-more-badge">
+                                        <span class="material-symbols-outlined">expand_more</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="site-footer-card">
+            <div class="site-footer-meta">
+                <strong id="footerGithubLabel">Proyectos relacionados y código del proyecto</strong>
+            </div>
+            <div class="footer-links">
+                <a class="project-link" id="footerDashboardLink" href="https://codemazesolver.github.io/usgs-geo-dashboard/" target="_blank" rel="noreferrer noopener">
+                    <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+                    <span id="footerDashboardLinkText">Abrir Earthquake Dashboard</span>
+                </a>
+                <a class="project-link" id="footerGithubLink" href="https://github.com/CodeMazeSolver/colombian-earthquakes" target="_blank" rel="noreferrer noopener">
+                    <span class="material-symbols-outlined" aria-hidden="true">code</span>
+                    <span id="footerGithubLinkText">Abrir GitHub</span>
+                </a>
+            </div>
+        </div>
+    </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
+        const EARTHQUAKE_DASHBOARD_URL = 'https://codemazesolver.github.io/usgs-geo-dashboard/';
+        const REPOSITORY_URL = 'https://github.com/CodeMazeSolver/colombian-earthquakes';
+
         const sources = {
             1: {
                 title: "Wikipedia - List of earthquakes in Colombia",
@@ -1730,6 +3147,14 @@
         let eventMap = null;
         let eventMarker = null;
         let eventMapDefaultBounds = null;
+        let overviewMap = null;
+        let overviewMapDefaultBounds = null;
+        let overviewDynamicLayer = null;
+        let overviewUserLocation = null;
+        let overviewLocationPlacementMode = false;
+        let overviewDistanceMode = 'selected';
+        let overviewDistancePanelOpen = false;
+        let overviewLocationStatusKey = 'idle';
 
         const eqData = [
             {
@@ -2386,8 +3811,8 @@
                 magnitude: 7.4,
                 depth: "110.3 km",
                 mmi: "VII",
-                deaths: "111+",
-                injured: { es: "87+", en: "87+", de: "87+" },
+                deaths: "164+",
+                injured: { es: "885+", en: "885+", de: "885+" },
                 location: {
                     es: "Chocó / San José del Palmar",
                     en: "Chocó / San José del Palmar",
@@ -2405,9 +3830,9 @@
                     de: "Erdbeben von Chocó 2026"
                 },
                 impact: {
-                    es: "El fuerte sismo de 2026 en Chocó produjo víctimas mortales, decenas de personas heridas y daños extensos en distintas zonas del país. Se incorpora como el caso colombiano más reciente de gran magnitud y como referencia contemporánea para el occidente andino y pacífico.",
-                    en: "The strong 2026 earthquake in Chocó caused fatalities, dozens of injuries, and extensive damage in different parts of the country. It is included as the most recent major Colombian case and as a contemporary reference point for the western Andean and Pacific region.",
-                    de: "Das starke Erdbeben von 2026 in Chocó verursachte Todesopfer, Dutzende Verletzte und erhebliche Schäden in verschiedenen Teilen des Landes. Es wird als jüngster großer Fall Kolumbiens und als aktueller Referenzpunkt für den westlichen Anden- und Pazifikraum aufgenommen."
+                    es: "El fuerte sismo de 2026 en Chocó produjo al menos 164 muertes, más de 880 personas heridas y daños extensos en distintas zonas del país. Se incorpora como el caso colombiano más reciente de gran magnitud y como referencia contemporánea para el occidente andino y pacífico.",
+                    en: "The strong 2026 earthquake in Chocó caused at least 164 deaths, injured more than 880 people, and caused extensive damage in different parts of the country. It is included as the most recent major Colombian case and as a contemporary reference point for the western Andean and Pacific region.",
+                    de: "Das starke Erdbeben von 2026 in Chocó verursachte mindestens 164 Todesopfer, verletzte mehr als 880 Menschen und richtete in verschiedenen Teilen des Landes erhebliche Schäden an. Es wird als jüngster großer Fall Kolumbiens und als aktueller Referenzpunkt für den westlichen Anden- und Pazifikraum aufgenommen."
                 },
                 significance: {
                     es: "Actualiza la cronología con un gran evento reciente ya documentado por múltiples fuentes públicas.",
@@ -2542,7 +3967,63 @@
                 sourceHeader: "Fuentes enlazadas del reporte",
                 sourceNote: "La lista prioriza las referencias más útiles para comprobar la narrativa principal del reporte y cada tarjeta enlaza sus fuentes más relevantes.",
                 roadmapHeader: "Próximas funciones y mejoras",
+                drawerPrimaryViewLabel: "Modo de página",
+                backToTopLabel: "Volver arriba",
+                dashboardDrawerLink: "Abrir Earthquake Dashboard",
+                dashboardOverviewLink: "Ver Earthquake Dashboard relacionado",
+                dashboardReferenceTitle: "Proyecto relacionado: Earthquake Dashboard",
+                footerDashboardLink: "Abrir Earthquake Dashboard",
+                footerGithubLabel: "Proyectos relacionados y código del proyecto",
+                footerGithubLink: "Abrir GitHub",
                 searchPlaceholder: "Buscar evento o región...",
+                viewHistorical: "Cronología histórica",
+                viewOverview: "Vista general",
+                overviewShellTitle: "Vista general exploratoria",
+                overviewShellIntro: "Esta vista secundaria muestra los terremotos históricos en un mapa común y permite cambiar el contexto exploratorio sin tocar la tarjeta educativa del modo histórico.",
+                overviewFilterChipLabel: "Filtro activo",
+                overviewFilterSummary: "Usa la búsqueda superior para filtrar inmediatamente el mapa y la lista enlazada.",
+                overviewFilterSummaryWithQuery: "Filtrando mapa y lista por:",
+                overviewFilterSummaryWithCharts: "Mapa y lista filtrados por:",
+                overviewYearRangeTitle: "Ventana temporal",
+                overviewYearRangeNote: "Arrastra ambos extremos para limitar el rango de años usado en la exploración.",
+                overviewYearRangeTag: "Años",
+                overviewYearRangeFrom: "Desde",
+                overviewYearRangeTo: "Hasta",
+                overviewSelectedHeading: "Evento resaltado",
+                overviewChartsHeading: "Filtros analíticos",
+                overviewClearCharts: "Limpiar filtros",
+                overviewDecadeTitle: "Eventos por década",
+                overviewDecadeNote: "Selecciona una década para filtrar la exploración actual.",
+                overviewMagnitudeTitle: "Distribución por magnitud",
+                overviewMagnitudeNote: "Selecciona un rango de magnitud para filtrar el mapa y la lista.",
+                overviewDecadeTag: "Década",
+                overviewMagnitudeTag: "Magnitud",
+                overviewListHeading: "Eventos filtrados",
+                overviewDistancePanelTitle: "Herramientas de distancia",
+                overviewDistancePanelClosed: "Abre este bloque para usar herramientas de ubicación y distancia.",
+                overviewDistancePanelOpenSummary: "Calcula distancias desde tu ubicación al evento resaltado o a toda la lista filtrada.",
+                overviewLocationUse: "Usar mi ubicación",
+                overviewLocationPick: "Elegir en el mapa",
+                overviewLocationClear: "Limpiar ubicación",
+                overviewResetMap: "Reiniciar mapa",
+                overviewDistanceSelectedMode: "Distancia al evento resaltado",
+                overviewDistanceAllMode: "Distancia a todos",
+                overviewLocationIdle: "Coloca tu ubicación con el botón o haz clic en el mapa.",
+                overviewLocationPicking: "Haz clic en el mapa para colocar tu ubicación.",
+                overviewLocationReady: "Ubicación activa: {source}. Puedes reemplazarla con el botón o con otro clic en el mapa.",
+                overviewLocationGeolocating: "Solicitando tu ubicación del navegador...",
+                overviewLocationUnavailable: "La geolocalización no está disponible en este navegador.",
+                overviewLocationError: "No se pudo obtener tu ubicación del navegador.",
+                overviewLocationSourceBrowser: "ubicación del navegador",
+                overviewLocationSourceMap: "punto elegido en el mapa",
+                overviewDistanceSelectedTitle: "Distancia al evento resaltado",
+                overviewDistanceSelectedBody: "Tu ubicación está a {distance} km de {event}.",
+                overviewDistanceSelectedLine: "La línea en el mapa conecta tu ubicación con el evento activo.",
+                overviewDistanceAllTitle: "Distancias ordenadas a todos los eventos",
+                overviewDistanceAllEmpty: "Coloca una ubicación para ordenar los terremotos por proximidad.",
+                overviewEmpty: "No hay terremotos que coincidan con este filtro. Ajusta la búsqueda para volver a poblar el mapa general.",
+                overviewMapAria: "Mapa general de terremotos",
+                overviewOpenInHistorical: "Abrir tarjeta histórica",
                 magnitudeLabel: "Magnitud",
                 eventSources: "Fuentes de este evento",
                 chronologyYear: "Año",
@@ -2600,7 +4081,63 @@
                 sourceHeader: "Linked report sources",
                 sourceNote: "This list prioritizes the references most useful for checking the main narrative, and each event card links its most relevant sources.",
                 roadmapHeader: "Planned features and improvements",
+                drawerPrimaryViewLabel: "Page mode",
+                backToTopLabel: "Back to top",
+                dashboardDrawerLink: "Open Earthquake Dashboard",
+                dashboardOverviewLink: "Open related Earthquake Dashboard",
+                dashboardReferenceTitle: "Related project: Earthquake Dashboard",
+                footerDashboardLink: "Open Earthquake Dashboard",
+                footerGithubLabel: "Related projects and project code",
+                footerGithubLink: "Open GitHub",
                 searchPlaceholder: "Search event or region...",
+                viewHistorical: "Historical timeline",
+                viewOverview: "Overview",
+                overviewShellTitle: "Exploratory overview",
+                overviewShellIntro: "This secondary view places the historical earthquakes on one shared map and lets readers change the exploratory context without touching the educational card in historical mode.",
+                overviewFilterChipLabel: "Active filter",
+                overviewFilterSummary: "Use the top search field to filter the map and linked list immediately.",
+                overviewFilterSummaryWithQuery: "Filtering map and list by:",
+                overviewFilterSummaryWithCharts: "Map and list filtered by:",
+                overviewYearRangeTitle: "Time window",
+                overviewYearRangeNote: "Drag both handles to limit the year range used in the exploration.",
+                overviewYearRangeTag: "Years",
+                overviewYearRangeFrom: "From",
+                overviewYearRangeTo: "To",
+                overviewSelectedHeading: "Highlighted event",
+                overviewChartsHeading: "Analytical filters",
+                overviewClearCharts: "Clear filters",
+                overviewDecadeTitle: "Events by decade",
+                overviewDecadeNote: "Select a decade to filter the current exploration state.",
+                overviewMagnitudeTitle: "Magnitude distribution",
+                overviewMagnitudeNote: "Select a magnitude range to filter the map and list.",
+                overviewDecadeTag: "Decade",
+                overviewMagnitudeTag: "Magnitude",
+                overviewListHeading: "Filtered events",
+                overviewDistancePanelTitle: "Distance tools",
+                overviewDistancePanelClosed: "Open this panel to use location and distance tools.",
+                overviewDistancePanelOpenSummary: "Calculate distances from your location to the highlighted event or the full filtered list.",
+                overviewLocationUse: "Use my location",
+                overviewLocationPick: "Pick on map",
+                overviewLocationClear: "Clear location",
+                overviewResetMap: "Reset map",
+                overviewDistanceSelectedMode: "Distance to highlighted event",
+                overviewDistanceAllMode: "Distance to all",
+                overviewLocationIdle: "Place your location with the button or click directly on the map.",
+                overviewLocationPicking: "Click on the map to place your location.",
+                overviewLocationReady: "Active location: {source}. You can replace it with the button or another map click.",
+                overviewLocationGeolocating: "Requesting your browser location...",
+                overviewLocationUnavailable: "Geolocation is not available in this browser.",
+                overviewLocationError: "Your browser location could not be retrieved.",
+                overviewLocationSourceBrowser: "browser location",
+                overviewLocationSourceMap: "map-picked point",
+                overviewDistanceSelectedTitle: "Distance to highlighted event",
+                overviewDistanceSelectedBody: "Your location is {distance} km from {event}.",
+                overviewDistanceSelectedLine: "The line on the map connects your location to the active event.",
+                overviewDistanceAllTitle: "Sorted distances to all events",
+                overviewDistanceAllEmpty: "Place a location to sort earthquakes by proximity.",
+                overviewEmpty: "No earthquakes match this filter. Adjust the search to repopulate the overview map.",
+                overviewMapAria: "Overview earthquake map",
+                overviewOpenInHistorical: "Open historical card",
                 magnitudeLabel: "Magnitude",
                 eventSources: "Sources for this event",
                 chronologyYear: "Year",
@@ -2658,7 +4195,63 @@
                 sourceHeader: "Verlinkte Quellen aus dem Bericht",
                 sourceNote: "Die Liste priorisiert die Quellen, mit denen sich die Hauptaussagen des Berichts am besten prüfen lassen; jede Ereigniskarte verlinkt zusätzlich ihre wichtigsten Belege.",
                 roadmapHeader: "Geplante Funktionen und Verbesserungen",
+                drawerPrimaryViewLabel: "Seitenmodus",
+                backToTopLabel: "Nach oben",
+                dashboardDrawerLink: "Earthquake Dashboard öffnen",
+                dashboardOverviewLink: "Zugehöriges Earthquake Dashboard öffnen",
+                dashboardReferenceTitle: "Verwandtes Projekt: Earthquake Dashboard",
+                footerDashboardLink: "Earthquake Dashboard öffnen",
+                footerGithubLabel: "Verwandte Projekte und Projektcode",
+                footerGithubLink: "GitHub öffnen",
                 searchPlaceholder: "Ereignis oder Region suchen...",
+                viewHistorical: "Historische Chronologie",
+                viewOverview: "Überblick",
+                overviewShellTitle: "Erkundender Überblick",
+                overviewShellIntro: "Diese Sekundäransicht zeigt die historischen Erdbeben auf einer gemeinsamen Karte und erlaubt einen explorativen Kontextwechsel, ohne die Bildungskarte des historischen Modus zu verändern.",
+                overviewFilterChipLabel: "Aktiver Filter",
+                overviewFilterSummary: "Nutzen Sie die Suche oben, um Karte und verknüpfte Liste sofort zu filtern.",
+                overviewFilterSummaryWithQuery: "Karte und Liste werden gefiltert nach:",
+                overviewFilterSummaryWithCharts: "Karte und Liste gefiltert nach:",
+                overviewYearRangeTitle: "Zeitfenster",
+                overviewYearRangeNote: "Ziehen Sie beide Regler, um den für die Exploration verwendeten Jahresbereich zu begrenzen.",
+                overviewYearRangeTag: "Jahre",
+                overviewYearRangeFrom: "Von",
+                overviewYearRangeTo: "Bis",
+                overviewSelectedHeading: "Hervorgehobenes Ereignis",
+                overviewChartsHeading: "Analytische Filter",
+                overviewClearCharts: "Filter zurücksetzen",
+                overviewDecadeTitle: "Ereignisse nach Jahrzehnt",
+                overviewDecadeNote: "Wählen Sie ein Jahrzehnt, um die aktuelle Exploration zu filtern.",
+                overviewMagnitudeTitle: "Magnitudenverteilung",
+                overviewMagnitudeNote: "Wählen Sie einen Magnitudenbereich, um Karte und Liste zu filtern.",
+                overviewDecadeTag: "Jahrzehnt",
+                overviewMagnitudeTag: "Magnitude",
+                overviewListHeading: "Gefilterte Ereignisse",
+                overviewDistancePanelTitle: "Distanzwerkzeuge",
+                overviewDistancePanelClosed: "Öffnen Sie diesen Bereich für Standort- und Distanzwerkzeuge.",
+                overviewDistancePanelOpenSummary: "Berechnet Distanzen von Ihrem Standort zum markierten Ereignis oder zur gesamten gefilterten Liste.",
+                overviewLocationUse: "Meinen Standort nutzen",
+                overviewLocationPick: "Auf der Karte wählen",
+                overviewLocationClear: "Standort löschen",
+                overviewResetMap: "Karte zurücksetzen",
+                overviewDistanceSelectedMode: "Distanz zum markierten Ereignis",
+                overviewDistanceAllMode: "Distanz zu allen",
+                overviewLocationIdle: "Platzieren Sie Ihren Standort mit der Taste oder per Klick direkt auf der Karte.",
+                overviewLocationPicking: "Klicken Sie auf die Karte, um Ihren Standort zu setzen.",
+                overviewLocationReady: "Aktiver Standort: {source}. Sie können ihn per Taste oder erneutem Kartenklick ersetzen.",
+                overviewLocationGeolocating: "Browser-Standort wird angefragt...",
+                overviewLocationUnavailable: "Geolokalisierung ist in diesem Browser nicht verfügbar.",
+                overviewLocationError: "Der Browser-Standort konnte nicht ermittelt werden.",
+                overviewLocationSourceBrowser: "Browser-Standort",
+                overviewLocationSourceMap: "auf der Karte gewählter Punkt",
+                overviewDistanceSelectedTitle: "Distanz zum markierten Ereignis",
+                overviewDistanceSelectedBody: "Ihr Standort liegt {distance} km von {event} entfernt.",
+                overviewDistanceSelectedLine: "Die Linie auf der Karte verbindet Ihren Standort mit dem aktiven Ereignis.",
+                overviewDistanceAllTitle: "Sortierte Distanzen zu allen Ereignissen",
+                overviewDistanceAllEmpty: "Platzieren Sie einen Standort, um Erdbeben nach Nähe zu sortieren.",
+                overviewEmpty: "Keine Erdbeben entsprechen diesem Filter. Passen Sie die Suche an, um die Übersichtskarte wieder zu füllen.",
+                overviewMapAria: "Übersichtskarte der Erdbeben",
+                overviewOpenInHistorical: "Historische Karte öffnen",
                 magnitudeLabel: "Magnitude",
                 eventSources: "Quellen zu diesem Ereignis",
                 chronologyYear: "Jahr",
@@ -3465,10 +5058,85 @@
             }
         };
 
+        const LANGUAGE_STORAGE_KEY = 'preferredLanguage';
+        const SUPPORTED_LANGUAGES = ['es', 'en', 'de'];
         let currentLang = 'es';
         let activeIndex = 0;
         let activeReferenceTab = 'measurement';
         let activeTermKey = null;
+        let currentPrimaryView = 'historical';
+        const overviewYearDomain = eqData.reduce((acc, eq) => {
+            const year = Number(eq.year);
+            return {
+                min: Math.min(acc.min, year),
+                max: Math.max(acc.max, year)
+            };
+        }, { min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY });
+        let overviewYearRange = {
+            min: overviewYearDomain.min,
+            max: overviewYearDomain.max
+        };
+        let overviewChartFilters = {
+            decade: null,
+            magnitude: null
+        };
+        let lastScrollTop = 0;
+        let primaryViewTabsHidden = false;
+
+        function getActiveScrollContainer() {
+            if (currentPrimaryView === 'historical' && window.innerWidth > 900) {
+                const historicalContentArea = document.querySelector('#historicalView .content-area');
+                if (historicalContentArea && historicalContentArea.scrollHeight > historicalContentArea.clientHeight + 4) {
+                    return historicalContentArea;
+                }
+            }
+            return window;
+        }
+
+        function getActiveScrollTop() {
+            const container = getActiveScrollContainer();
+            return container === window
+                ? window.scrollY || document.documentElement.scrollTop || 0
+                : container.scrollTop || 0;
+        }
+
+        function syncStickyChrome(forceReveal = false) {
+            const tabsShell = document.querySelector('.primary-view-shell');
+            const backToTopBtn = document.getElementById('backToTopBtn');
+            if (!tabsShell || !backToTopBtn) return;
+
+            const scrollTop = getActiveScrollTop();
+            const delta = scrollTop - lastScrollTop;
+            if (forceReveal || scrollTop < 24) {
+                primaryViewTabsHidden = false;
+            } else if (delta > 8 && scrollTop > 140) {
+                primaryViewTabsHidden = true;
+            } else if (delta < -8) {
+                primaryViewTabsHidden = false;
+            }
+
+            tabsShell.classList.toggle('is-hidden', primaryViewTabsHidden);
+            backToTopBtn.classList.toggle('hidden', scrollTop < 280);
+            lastScrollTop = Math.max(scrollTop, 0);
+        }
+
+        function scrollActiveViewToTop() {
+            const container = getActiveScrollContainer();
+            if (container === window) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                container.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            primaryViewTabsHidden = false;
+            window.setTimeout(() => syncStickyChrome(true), 80);
+        }
+
+        function updateHeaderMetrics() {
+            const header = document.querySelector('header');
+            if (!header) return;
+            document.documentElement.style.setProperty('--header-height', `${header.offsetHeight}px`);
+        }
 
         function toggleMobileDrawer(forceState) {
             const shouldOpen = typeof forceState === 'boolean'
@@ -3793,6 +5461,19 @@
             `;
         }
 
+        function renderDashboardReferenceCard(bundle) {
+            const ui = reportContent[currentLang];
+            return `
+                <section class="reference-source-card reference-related-card">
+                    <h3>${escapeHtml(ui.dashboardReferenceTitle)}</h3>
+                    <a class="project-link" href="${escapeHtml(EARTHQUAKE_DASHBOARD_URL)}" target="_blank" rel="noreferrer noopener">
+                        <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+                        <span>${escapeHtml(ui.dashboardOverviewLink)}</span>
+                    </a>
+                </section>
+            `;
+        }
+
         function renderReferenceMediaFigure(tab) {
             const figure = tab.mediaFigure;
             if (!figure) return '';
@@ -3900,6 +5581,10 @@
                 `;
             }
 
+            if (activeReferenceTab === 'sources') {
+                bodyContent += renderDashboardReferenceCard(bundle);
+            }
+
             document.getElementById('referenceTabContent').innerHTML = bodyContent;
             window.requestAnimationFrame(updateReferenceTabScrollHint);
 
@@ -3978,21 +5663,648 @@
             eventMap.fitBounds(eventMapDefaultBounds);
         }
 
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.documentElement.lang = lang;
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.innerText.toLowerCase() === lang);
+        function setPrimaryView(mode) {
+            currentPrimaryView = mode === 'overview' ? 'overview' : 'historical';
+
+            const historicalView = document.getElementById('historicalView');
+            const overviewView = document.getElementById('overviewView');
+            const historicalBtn = document.getElementById('viewModeHistoricalBtn');
+            const overviewBtn = document.getElementById('viewModeOverviewBtn');
+            const drawerHistoricalBtn = document.getElementById('drawerViewModeHistoricalBtn');
+            const drawerOverviewBtn = document.getElementById('drawerViewModeOverviewBtn');
+
+            historicalView?.classList.toggle('hidden', currentPrimaryView !== 'historical');
+            overviewView?.classList.toggle('hidden', currentPrimaryView !== 'overview');
+
+            historicalBtn?.classList.toggle('active', currentPrimaryView === 'historical');
+            overviewBtn?.classList.toggle('active', currentPrimaryView === 'overview');
+            historicalBtn?.setAttribute('aria-selected', String(currentPrimaryView === 'historical'));
+            overviewBtn?.setAttribute('aria-selected', String(currentPrimaryView === 'overview'));
+            drawerHistoricalBtn?.classList.toggle('active', currentPrimaryView === 'historical');
+            drawerOverviewBtn?.classList.toggle('active', currentPrimaryView === 'overview');
+            drawerHistoricalBtn?.setAttribute('aria-selected', String(currentPrimaryView === 'historical'));
+            drawerOverviewBtn?.setAttribute('aria-selected', String(currentPrimaryView === 'overview'));
+
+            if (currentPrimaryView === 'historical') {
+                renderEventDetail(activeIndex);
+                window.requestAnimationFrame(() => {
+                    if (eventMap) {
+                        eventMap.invalidateSize();
+                        if (eventMapDefaultBounds) {
+                            eventMap.fitBounds(eventMapDefaultBounds);
+                        }
+                    }
+                    updateTimelineScrollHint();
+                    updateReferenceTabScrollHint();
+                    syncStickyChrome(true);
+                });
+            } else {
+                renderOverviewPlaceholder();
+                window.requestAnimationFrame(() => {
+                    if (overviewMap) {
+                        overviewMap.invalidateSize();
+                    }
+                    syncStickyChrome(true);
+                });
+            }
+        }
+
+        function getSearchFilteredEventEntries(filterText = '') {
+            const query = (filterText || '').trim().toLowerCase();
+            return eqData
+                .map((eq, index) => ({ eq, index }))
+                .filter(({ eq }) => {
+                    if (!query) return true;
+                    const title = eq.title[currentLang].toLowerCase();
+                    const loc = eq.location[currentLang].toLowerCase();
+                    return title.includes(query) || loc.includes(query) || eq.year.includes(query);
+                });
+        }
+
+        function getMagnitudeBucketKey(magnitude) {
+            if (magnitude < 6) return '5.0–5.9';
+            if (magnitude < 7) return '6.0–6.9';
+            if (magnitude < 8) return '7.0–7.9';
+            return '8.0+';
+        }
+
+        function getMagnitudeBucketColor(bucketLabel) {
+            if (bucketLabel === '8.0+') return 'var(--severity-extreme)';
+            if (bucketLabel === '7.0–7.9') return 'var(--severity-high)';
+            if (bucketLabel === '6.0–6.9') return 'var(--severity-moderate)';
+            return 'var(--severity-low)';
+        }
+
+        function formatDistanceKm(distanceKm) {
+            return new Intl.NumberFormat(currentLang === 'de' ? 'de-DE' : currentLang === 'es' ? 'es-CO' : 'en-US', {
+                maximumFractionDigits: distanceKm >= 100 ? 0 : 1,
+                minimumFractionDigits: distanceKm >= 100 ? 0 : 1
+            }).format(distanceKm);
+        }
+
+        function calculateDistanceKm(lat1, lon1, lat2, lon2) {
+            const toRad = value => (value * Math.PI) / 180;
+            const earthRadiusKm = 6371;
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+            const a = Math.sin(dLat / 2) ** 2
+                + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+            return earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        }
+
+        function getMidpointLatLng(lat1, lon1, lat2, lon2) {
+            return [(lat1 + lat2) / 2, (lon1 + lon2) / 2];
+        }
+
+        function setOverviewDistanceMode(mode) {
+            overviewDistanceMode = mode === 'all' ? 'all' : 'selected';
+            renderOverviewPlaceholder();
+        }
+
+        function toggleOverviewDistancePanel() {
+            overviewDistancePanelOpen = !overviewDistancePanelOpen;
+            renderOverviewPlaceholder();
+        }
+
+        function armOverviewMapLocationPicker() {
+            overviewLocationPlacementMode = !overviewLocationPlacementMode;
+            overviewLocationStatusKey = overviewLocationPlacementMode ? 'picking' : overviewUserLocation ? 'ready' : 'idle';
+            renderOverviewPlaceholder();
+        }
+
+        function clearOverviewUserLocation() {
+            overviewUserLocation = null;
+            overviewLocationPlacementMode = false;
+            overviewLocationStatusKey = 'idle';
+            renderOverviewPlaceholder();
+        }
+
+        function resetOverviewMapView() {
+            if (!overviewMap || !overviewMapDefaultBounds) return;
+            overviewMap.fitBounds(overviewMapDefaultBounds);
+        }
+
+        function requestOverviewUserLocation() {
+            const ui = reportContent[currentLang];
+            if (!navigator.geolocation) {
+                overviewLocationStatusKey = 'unavailable';
+                renderOverviewPlaceholder();
+                return;
+            }
+            overviewLocationPlacementMode = false;
+            overviewLocationStatusKey = 'geolocating';
+            renderOverviewPlaceholder();
+            navigator.geolocation.getCurrentPosition(
+                ({ coords }) => {
+                    overviewUserLocation = { lat: coords.latitude, lng: coords.longitude, source: 'browser' };
+                    overviewLocationStatusKey = 'ready';
+                    renderOverviewPlaceholder();
+                },
+                () => {
+                    overviewLocationStatusKey = 'error';
+                    renderOverviewPlaceholder();
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+            );
+        }
+
+        function getOverviewLocationStatusText(ui) {
+            if (overviewLocationStatusKey === 'picking') return ui.overviewLocationPicking;
+            if (overviewLocationStatusKey === 'geolocating') return ui.overviewLocationGeolocating;
+            if (overviewLocationStatusKey === 'unavailable') return ui.overviewLocationUnavailable;
+            if (overviewLocationStatusKey === 'error') return ui.overviewLocationError;
+            if (overviewUserLocation) {
+                const source = overviewUserLocation.source === 'browser'
+                    ? ui.overviewLocationSourceBrowser
+                    : ui.overviewLocationSourceMap;
+                return ui.overviewLocationReady.replace('{source}', source);
+            }
+            return ui.overviewLocationIdle;
+        }
+
+        function setOverviewYearRange(boundary, rawValue) {
+            const value = Number(rawValue);
+            if (boundary === 'min') {
+                overviewYearRange.min = Math.min(value, overviewYearRange.max);
+            } else {
+                overviewYearRange.max = Math.max(value, overviewYearRange.min);
+            }
+            renderOverviewPlaceholder();
+        }
+
+        function syncOverviewYearRangeUi() {
+            const ui = reportContent[currentLang];
+            const minInput = document.getElementById('overviewYearMinInput');
+            const maxInput = document.getElementById('overviewYearMaxInput');
+            const activeBar = document.getElementById('overviewYearRangeActive');
+            const pill = document.getElementById('overviewYearRangePill');
+            const minLabel = document.getElementById('overviewYearMinLabel');
+            const maxLabel = document.getElementById('overviewYearMaxLabel');
+            if (!minInput || !maxInput || !activeBar || !pill || !minLabel || !maxLabel) return;
+
+            minInput.min = String(overviewYearDomain.min);
+            minInput.max = String(overviewYearDomain.max);
+            maxInput.min = String(overviewYearDomain.min);
+            maxInput.max = String(overviewYearDomain.max);
+            minInput.value = String(overviewYearRange.min);
+            maxInput.value = String(overviewYearRange.max);
+
+            const span = Math.max(1, overviewYearDomain.max - overviewYearDomain.min);
+            const leftPercent = ((overviewYearRange.min - overviewYearDomain.min) / span) * 100;
+            const rightPercent = ((overviewYearRange.max - overviewYearDomain.min) / span) * 100;
+            activeBar.style.left = `${leftPercent}%`;
+            activeBar.style.right = `${100 - rightPercent}%`;
+            pill.textContent = `${overviewYearRange.min}–${overviewYearRange.max}`;
+            minLabel.innerHTML = `${ui.overviewYearRangeFrom} <strong>${overviewYearRange.min}</strong>`;
+            maxLabel.innerHTML = `${ui.overviewYearRangeTo} <strong>${overviewYearRange.max}</strong>`;
+        }
+
+        function getOverviewFilteredEventEntries(filterText = '') {
+            return getSearchFilteredEventEntries(filterText).filter(({ eq }) => {
+                const year = Number(eq.year);
+                const matchesYearRange = year >= overviewYearRange.min && year <= overviewYearRange.max;
+                const matchesDecade = !overviewChartFilters.decade || `${Math.floor(Number(eq.year) / 10) * 10}s` === overviewChartFilters.decade;
+                const matchesMagnitude = !overviewChartFilters.magnitude || getMagnitudeBucketKey(eq.magnitude) === overviewChartFilters.magnitude;
+                return matchesYearRange && matchesDecade && matchesMagnitude;
+            });
+        }
+
+        function toggleOverviewChartFilter(type, value) {
+            if (!overviewChartFilters.hasOwnProperty(type)) return;
+            overviewChartFilters[type] = overviewChartFilters[type] === value ? null : value;
+            renderOverviewPlaceholder();
+        }
+
+        function clearOverviewChartFilters() {
+            overviewChartFilters = { decade: null, magnitude: null };
+            overviewYearRange = { min: overviewYearDomain.min, max: overviewYearDomain.max };
+            renderOverviewPlaceholder();
+        }
+
+        function renderOverviewCharts(baseEntries) {
+            const ui = reportContent[currentLang];
+            const decadeContainer = document.getElementById('overviewDecadeChart');
+            const magnitudeContainer = document.getElementById('overviewMagnitudeChart');
+            const clearBtn = document.getElementById('overviewClearFiltersBtn');
+            if (!decadeContainer || !magnitudeContainer || !clearBtn) return;
+
+            const decadeCounts = new Map();
+            const magnitudeOrder = ['5.0–5.9', '6.0–6.9', '7.0–7.9', '8.0+'];
+            const magnitudeCounts = new Map(magnitudeOrder.map(key => [key, 0]));
+
+            baseEntries.forEach(({ eq }) => {
+                const decadeKey = `${Math.floor(Number(eq.year) / 10) * 10}s`;
+                decadeCounts.set(decadeKey, (decadeCounts.get(decadeKey) || 0) + 1);
+                const magnitudeKey = getMagnitudeBucketKey(eq.magnitude);
+                magnitudeCounts.set(magnitudeKey, (magnitudeCounts.get(magnitudeKey) || 0) + 1);
             });
 
-            const ui = reportContent[lang];
+            const decadeSeries = [...decadeCounts.entries()]
+                .sort((a, b) => Number(a[0]) - Number(b[0]))
+                .map(([label, count]) => ({ label, count, type: 'decade' }));
+            const magnitudeSeries = magnitudeOrder.map(label => ({ label, count: magnitudeCounts.get(label) || 0, type: 'magnitude' }));
+
+            const renderSeries = (container, series, activeValue) => {
+                const maxCount = Math.max(1, ...series.map(item => item.count));
+                const axisMax = maxCount <= 2 ? maxCount : Math.ceil(maxCount / 2) * 2;
+                const axisTicks = [axisMax, axisMax / 2, 0];
+                const bars = series.map(item => {
+                    const isActive = activeValue === item.label;
+                    const isDimmed = activeValue && activeValue !== item.label;
+                    const height = item.count > 0 ? Math.max(10, Math.round((item.count / axisMax) * 100)) : 6;
+                    const disabled = item.count === 0 ? 'disabled' : '';
+                    return `
+                        <button class="overview-chart-bar ${isActive ? 'active' : ''} ${isDimmed ? 'is-dimmed' : ''}" type="button" ${disabled} aria-label="${item.label}: ${item.count}" aria-pressed="${isActive}" onclick="toggleOverviewChartFilter('${item.type}', '${item.label}')">
+                            <div class="overview-chart-track">
+                                <div class="overview-chart-fill" style="height:${height}%; --bar-color:${item.type === 'magnitude' ? getMagnitudeBucketColor(item.label) : 'var(--md-sys-color-primary)'}"></div>
+                            </div>
+                        </button>
+                    `;
+                }).join('');
+                const ticks = series.map(item => {
+                    const isActive = activeValue === item.label;
+                    const shortLabel = item.type === 'decade'
+                        ? `${String(item.label).slice(2, 4)}s`
+                        : item.label;
+                    return `<div class="overview-chart-x-tick ${isActive ? 'active' : ''}">${shortLabel}</div>`;
+                }).join('');
+                const groupMarkup = series[0]?.type === 'decade'
+                    ? (() => {
+                        const groups = [];
+                        let groupStart = 0;
+                        while (groupStart < series.length) {
+                            const centuryLabel = `${String(series[groupStart].label).slice(0, 2)}00s`;
+                            let span = 1;
+                            while (groupStart + span < series.length && String(series[groupStart + span].label).slice(0, 2) === String(series[groupStart].label).slice(0, 2)) {
+                                span += 1;
+                            }
+                            groups.push(`<div class="overview-chart-x-group" style="grid-column: span ${span};">${centuryLabel}</div>`);
+                            groupStart += span;
+                        }
+                        return `<div class="overview-chart-x-groups" style="grid-template-columns: repeat(${Math.max(series.length, 1)}, minmax(0, 1fr));">${groups.join('')}</div>`;
+                    })()
+                    : '';
+
+                container.innerHTML = `
+                    <div class="overview-chart-y-axis" aria-hidden="true">
+                        ${axisTicks.map(tick => `<span>${tick}</span>`).join('')}
+                    </div>
+                    <div class="overview-chart-frame">
+                        <div class="overview-chart-plot">
+                            <div class="overview-chart-series" style="grid-template-columns: repeat(${Math.max(series.length, 1)}, minmax(0, 1fr));">
+                                ${bars}
+                            </div>
+                        </div>
+                        <div class="overview-chart-x-axis">
+                            ${groupMarkup}
+                            <div class="overview-chart-x-ticks" style="grid-template-columns: repeat(${Math.max(series.length, 1)}, minmax(0, 1fr));">
+                                ${ticks}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            };
+
+            renderSeries(decadeContainer, decadeSeries, overviewChartFilters.decade);
+            renderSeries(magnitudeContainer, magnitudeSeries, overviewChartFilters.magnitude);
+            clearBtn.disabled = !overviewChartFilters.decade
+                && !overviewChartFilters.magnitude
+                && overviewYearRange.min === overviewYearDomain.min
+                && overviewYearRange.max === overviewYearDomain.max;
+            clearBtn.textContent = ui.overviewClearCharts;
+        }
+
+        function renderOverviewMap(entries, selectedIndex, selectedEntry = null) {
+            const mapEl = document.getElementById('overviewMap');
+            if (!mapEl) return;
+
+            if (!overviewMap) {
+                overviewMap = L.map('overviewMap', { zoomControl: true });
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    subdomains: 'abcd',
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+                }).addTo(overviewMap);
+                overviewMap.on('click', event => {
+                    if (!overviewLocationPlacementMode) return;
+                    overviewUserLocation = { lat: event.latlng.lat, lng: event.latlng.lng, source: 'map' };
+                    overviewLocationPlacementMode = false;
+                    overviewLocationStatusKey = 'ready';
+                    renderOverviewPlaceholder();
+                });
+            }
+
+            if (overviewDynamicLayer) {
+                overviewDynamicLayer.remove();
+            }
+            overviewDynamicLayer = L.layerGroup().addTo(overviewMap);
+
+            const borderLayer = L.geoJSON(colombiaBorderGeoJson, {
+                style: {
+                    color: '#8b0000',
+                    weight: 2,
+                    fillColor: '#f4d9d9',
+                    fillOpacity: 0.18
+                }
+            }).addTo(overviewDynamicLayer);
+
+            const boundsParts = [borderLayer.getBounds()];
+
+            entries.forEach(({ eq, index }) => {
+                const [lat, lng] = eq.coordinates.split(',').map(Number);
+                const isSelected = index === selectedIndex;
+                const marker = L.circleMarker([lat, lng], {
+                    radius: isSelected ? 12 : Math.max(6, Math.min(11, eq.magnitude + 1)),
+                    color: isSelected ? '#4a0000' : getSeverityColor(eq.magnitude),
+                    weight: isSelected ? 3 : 2,
+                    fillColor: getSeverityColor(eq.magnitude),
+                    fillOpacity: isSelected ? 0.92 : 0.72
+                }).addTo(overviewDynamicLayer);
+
+                marker.bindTooltip(`${eq.year} · ${eq.title[currentLang]} · M ${eq.magnitude}`);
+                marker.on('click', () => {
+                    activeIndex = index;
+                    renderTimeline(document.getElementById('searchInput').value.toLowerCase());
+                    renderOverviewPlaceholder();
+                });
+
+                boundsParts.push(L.latLngBounds([marker.getLatLng()]));
+            });
+
+            if (overviewUserLocation) {
+                const userLatLng = [overviewUserLocation.lat, overviewUserLocation.lng];
+                const userMarker = L.circleMarker(userLatLng, {
+                    radius: 9,
+                    color: '#0d47a1',
+                    weight: 3,
+                    fillColor: '#42a5f5',
+                    fillOpacity: 0.95
+                }).addTo(overviewDynamicLayer);
+                userMarker.bindTooltip(currentLang === 'es'
+                    ? 'Tu ubicación'
+                    : currentLang === 'de'
+                        ? 'Ihr Standort'
+                        : 'Your location');
+                boundsParts.push(L.latLngBounds([userMarker.getLatLng()]));
+
+                if (overviewDistanceMode === 'selected' && selectedEntry) {
+                    const [selectedLat, selectedLng] = selectedEntry.eq.coordinates.split(',').map(Number);
+                    const line = L.polyline([userLatLng, [selectedLat, selectedLng]], {
+                        color: '#0d47a1',
+                        weight: 3,
+                        opacity: 0.8,
+                        dashArray: '8 8'
+                    }).addTo(overviewDynamicLayer);
+                    const midpoint = getMidpointLatLng(overviewUserLocation.lat, overviewUserLocation.lng, selectedLat, selectedLng);
+                    const lineDistanceKm = calculateDistanceKm(overviewUserLocation.lat, overviewUserLocation.lng, selectedLat, selectedLng);
+                    L.marker(midpoint, {
+                        interactive: false,
+                        icon: L.divIcon({
+                            className: 'overview-distance-line-label-marker',
+                            html: `<span class="overview-distance-line-label">${formatDistanceKm(lineDistanceKm)} km</span>`
+                        })
+                    }).addTo(overviewDynamicLayer);
+                    boundsParts.push(line.getBounds());
+                }
+            }
+
+            const mergedBounds = boundsParts.reduce((acc, next) => acc.extend(next), boundsParts[0]).pad(0.08);
+            overviewMapDefaultBounds = mergedBounds;
+            window.requestAnimationFrame(() => {
+                overviewMap.invalidateSize();
+                overviewMap.fitBounds(mergedBounds);
+            });
+        }
+
+        function renderOverviewPlaceholder() {
+            const ui = reportContent[currentLang];
+            const rawQuery = document.getElementById('searchInput').value.trim();
+            const query = rawQuery.toLowerCase();
+            const baseEntries = getSearchFilteredEventEntries(query).filter(({ eq }) => {
+                const year = Number(eq.year);
+                return year >= overviewYearRange.min && year <= overviewYearRange.max;
+            });
+            const entries = baseEntries.filter(({ eq }) => {
+                const matchesDecade = !overviewChartFilters.decade || `${Math.floor(Number(eq.year) / 10) * 10}s` === overviewChartFilters.decade;
+                const matchesMagnitude = !overviewChartFilters.magnitude || getMagnitudeBucketKey(eq.magnitude) === overviewChartFilters.magnitude;
+                return matchesDecade && matchesMagnitude;
+            });
+            const selectedEntry = entries.find(entry => entry.index === activeIndex) || entries[0] || null;
+            const activeFilterParts = [];
+
+            if (rawQuery) {
+                activeFilterParts.push(`“${rawQuery}”`);
+            }
+            if (overviewYearRange.min !== overviewYearDomain.min || overviewYearRange.max !== overviewYearDomain.max) {
+                activeFilterParts.push(`${ui.overviewYearRangeTag}: ${overviewYearRange.min}–${overviewYearRange.max}`);
+            }
+            if (overviewChartFilters.decade) {
+                activeFilterParts.push(`${ui.overviewDecadeTag}: ${overviewChartFilters.decade}`);
+            }
+            if (overviewChartFilters.magnitude) {
+                activeFilterParts.push(`${ui.overviewMagnitudeTag}: ${overviewChartFilters.magnitude}`);
+            }
+
+            if (selectedEntry) {
+                activeIndex = selectedEntry.index;
+            }
+
+            document.getElementById('overviewPlaceholderKicker').innerText = ui.viewOverview;
+            document.getElementById('overviewPlaceholderTitle').innerText = ui.overviewShellTitle;
+            document.getElementById('overviewPlaceholderIntro').innerText = ui.overviewShellIntro;
+            document.getElementById('overviewFilterChipLabel').innerText = ui.overviewFilterChipLabel;
+            document.getElementById('overviewYearRangeTitle').innerText = ui.overviewYearRangeTitle;
+            document.getElementById('overviewFilterSummary').innerText = activeFilterParts.length
+                ? `${rawQuery ? ui.overviewFilterSummaryWithQuery : ui.overviewFilterSummaryWithCharts} ${activeFilterParts.join(' · ')}`
+                : ui.overviewFilterSummary;
+            document.getElementById('overviewChartsHeading').innerText = ui.overviewChartsHeading;
+            document.getElementById('overviewDecadeChartTitle').innerText = ui.overviewDecadeTitle;
+            document.getElementById('overviewDecadeChartNote').innerText = ui.overviewDecadeNote;
+            document.getElementById('overviewMagnitudeChartTitle').innerText = ui.overviewMagnitudeTitle;
+            document.getElementById('overviewMagnitudeChartNote').innerText = ui.overviewMagnitudeNote;
+            document.getElementById('overviewClearFiltersBtn').innerText = ui.overviewClearCharts;
+            document.getElementById('overviewListHeading').innerText = `${ui.overviewListHeading} (${entries.length})`;
+            document.getElementById('overviewDistancePanelTitle').innerText = ui.overviewDistancePanelTitle;
+            document.getElementById('overviewDistancePanelSummary').innerText = overviewDistancePanelOpen
+                ? ui.overviewDistancePanelOpenSummary
+                : ui.overviewDistancePanelClosed;
+            document.getElementById('overviewDistancePanelToggle').setAttribute('aria-expanded', String(overviewDistancePanelOpen));
+            document.getElementById('overviewDistancePanelCard').dataset.open = String(overviewDistancePanelOpen);
+            document.getElementById('overviewDistancePanelContent').hidden = !overviewDistancePanelOpen;
+            document.getElementById('overviewResetMapBtnText').innerText = ui.overviewResetMap;
+            document.getElementById('overviewUseMyLocationBtn').innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">my_location</span><span>${ui.overviewLocationUse}</span>`;
+            document.getElementById('overviewPickLocationBtn').innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">${overviewLocationPlacementMode ? 'location_searching' : 'edit_location_alt'}</span><span>${ui.overviewLocationPick}</span>`;
+            document.getElementById('overviewClearLocationBtn').innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">location_off</span><span>${ui.overviewLocationClear}</span>`;
+            document.getElementById('overviewPickLocationBtn').classList.toggle('is-active', overviewLocationPlacementMode);
+            document.getElementById('overviewPickLocationBtn').setAttribute('aria-pressed', String(overviewLocationPlacementMode));
+            document.getElementById('overviewDistanceSelectedBtn').innerText = ui.overviewDistanceSelectedMode;
+            document.getElementById('overviewDistanceAllBtn').innerText = ui.overviewDistanceAllMode;
+            document.getElementById('overviewDistanceSelectedBtn').classList.toggle('active', overviewDistanceMode === 'selected');
+            document.getElementById('overviewDistanceAllBtn').classList.toggle('active', overviewDistanceMode === 'all');
+            document.getElementById('overviewLocationStatus').innerText = getOverviewLocationStatusText(ui);
+            document.getElementById('overviewMap').setAttribute('aria-label', ui.overviewMapAria);
+
+            syncOverviewYearRangeUi();
+            renderOverviewCharts(baseEntries);
+
+            const selectedContainer = document.getElementById('overviewSelectedEvent');
+            const listContainer = document.getElementById('overviewFilteredList');
+            const listMore = document.getElementById('overviewListMore');
+            const distanceResultsContainer = document.getElementById('overviewDistanceResults');
+
+            if (listMore) {
+                listMore.hidden = entries.length <= 4;
+            }
+
+            if (!selectedEntry) {
+                selectedContainer.innerHTML = `<div class="overview-empty-state">${ui.overviewEmpty}</div>`;
+                distanceResultsContainer.innerHTML = '';
+                listContainer.innerHTML = `<div class="overview-empty-state">${ui.overviewEmpty}</div>`;
+                renderOverviewMap([], null, null);
+                return;
+            }
+
+            const eq = selectedEntry.eq;
+            const eqSeverityColor = getSeverityColor(eq.magnitude);
+            const mmiValue = typeof eq.mmi === 'object' ? eq.mmi[currentLang] : eq.mmi;
+            const distanceResults = overviewUserLocation
+                ? entries.map(({ eq, index }) => {
+                    const [lat, lng] = eq.coordinates.split(',').map(Number);
+                    return {
+                        eq,
+                        index,
+                        distanceKm: calculateDistanceKm(overviewUserLocation.lat, overviewUserLocation.lng, lat, lng)
+                    };
+                }).sort((a, b) => a.distanceKm - b.distanceKm)
+                : [];
+            selectedContainer.innerHTML = `
+                <article class="overview-selected-card">
+                    <div class="overview-selected-kicker"><span class="material-symbols-outlined">info</span><span>${ui.overviewSelectedHeading}</span></div>
+                    <h4>${eq.title[currentLang]}</h4>
+                    <div class="overview-selected-meta">${eq.year} · ${eq.location[currentLang]}</div>
+                    <div class="overview-selected-summary">${eq.impact[currentLang]}</div>
+                    <div class="overview-selected-tags">
+                        <span class="tag tag--severity" style="background:${eqSeverityColor}">Mw ${eq.magnitude}</span>
+                        <span class="tag">${ui.depth}: ${eq.depth}</span>
+                        <span class="tag">MMI ${mmiValue}</span>
+                    </div>
+                </article>
+            `;
+
+            if (!overviewUserLocation) {
+                distanceResultsContainer.innerHTML = `<div class="overview-distance-card">${ui.overviewDistanceAllEmpty}</div>`;
+            } else if (overviewDistanceMode === 'selected') {
+                const selectedDistance = distanceResults.find(item => item.index === selectedEntry.index);
+                distanceResultsContainer.innerHTML = `
+                    <div class="overview-distance-card">
+                        <strong>${ui.overviewDistanceSelectedTitle}</strong>
+                        <div>${ui.overviewDistanceSelectedBody
+                            .replace('{distance}', formatDistanceKm(selectedDistance?.distanceKm || 0))
+                            .replace('{event}', eq.title[currentLang])}</div>
+                        <div class="overview-location-status">${ui.overviewDistanceSelectedLine}</div>
+                    </div>
+                `;
+            } else {
+                distanceResultsContainer.innerHTML = `
+                    <div class="overview-distance-card">
+                        <strong>${ui.overviewDistanceAllTitle}</strong>
+                        <div class="overview-distance-list">
+                            ${distanceResults.map(item => `
+                                <div class="overview-distance-list-item">
+                                    <div>
+                                        <strong>${item.eq.year} · ${item.eq.title[currentLang]}</strong>
+                                        <span>${item.eq.location[currentLang]}</span>
+                                    </div>
+                                    <span>${formatDistanceKm(item.distanceKm)} km</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            listContainer.innerHTML = entries.map(({ eq, index }) => {
+                const selectedClass = index === activeIndex ? 'active' : '';
+                return `
+                    <button class="overview-list-item ${selectedClass}" type="button" onclick="activeIndex=${index}; renderTimeline(document.getElementById('searchInput').value.toLowerCase()); renderOverviewPlaceholder();">
+                        <div class="overview-list-topline">
+                            <span class="overview-list-year">${eq.year}</span>
+                            <span class="tag tag--severity" style="background:${getSeverityColor(eq.magnitude)}">M ${eq.magnitude}</span>
+                        </div>
+                        <div class="overview-list-title">${eq.title[currentLang]}</div>
+                        <div class="overview-list-location">${eq.location[currentLang]}</div>
+                    </button>
+                `;
+            }).join('');
+
+            renderOverviewMap(entries, activeIndex, selectedEntry);
+        }
+
+        function getStoredLanguagePreference() {
+            try {
+                const stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+                return SUPPORTED_LANGUAGES.includes(stored) ? stored : null;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function resolveBrowserLanguage() {
+            const browserLanguages = Array.isArray(navigator.languages) && navigator.languages.length
+                ? navigator.languages
+                : [navigator.language];
+            const normalized = browserLanguages
+                .filter(Boolean)
+                .map(lang => String(lang).toLowerCase());
+
+            if (normalized.some(lang => lang.startsWith('en'))) return 'en';
+            if (normalized.some(lang => lang.startsWith('de'))) return 'de';
+            if (normalized.some(lang => lang.startsWith('es'))) return 'es';
+            return 'es';
+        }
+
+        function getInitialLanguage() {
+            return getStoredLanguagePreference() || resolveBrowserLanguage();
+        }
+
+        function setLanguage(lang, persistPreference = true) {
+            currentLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : 'es';
+            document.documentElement.lang = currentLang;
+            if (persistPreference) {
+                try {
+                    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, currentLang);
+                } catch (error) {
+                    // Ignore storage failures and continue with in-memory language state.
+                }
+            }
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText.toLowerCase() === currentLang);
+            });
+
+            const ui = reportContent[currentLang];
             document.getElementById('ui-title').innerText = ui.title;
             document.getElementById('ui-subtitle').innerText = ui.subtitle;
+            document.getElementById('drawerPrimaryViewLabel').innerText = ui.drawerPrimaryViewLabel;
+            document.getElementById('backToTopBtn').setAttribute('aria-label', ui.backToTopLabel);
+            document.getElementById('drawerDashboardLinkText').innerText = ui.dashboardDrawerLink;
+            document.getElementById('overviewDashboardLinkText').innerText = ui.dashboardOverviewLink;
+            document.getElementById('footerDashboardLinkText').innerText = ui.footerDashboardLink;
+            document.getElementById('footerGithubLabel').innerText = ui.footerGithubLabel;
+            document.getElementById('footerGithubLinkText').innerText = ui.footerGithubLink;
+            document.getElementById('drawerDashboardLink').href = EARTHQUAKE_DASHBOARD_URL;
+            document.getElementById('overviewDashboardLink').href = EARTHQUAKE_DASHBOARD_URL;
+            document.getElementById('footerDashboardLink').href = EARTHQUAKE_DASHBOARD_URL;
+            document.getElementById('footerGithubLink').href = REPOSITORY_URL;
             document.getElementById('searchInput').placeholder = ui.searchPlaceholder;
+            document.getElementById('viewModeHistoricalBtn').innerText = ui.viewHistorical;
+            document.getElementById('viewModeOverviewBtn').innerText = ui.viewOverview;
+            document.getElementById('drawerViewModeHistoricalBtn').innerText = ui.viewHistorical;
+            document.getElementById('drawerViewModeOverviewBtn').innerText = ui.viewOverview;
 
             renderTimeline(document.getElementById('searchInput').value.toLowerCase());
             renderEventDetail(activeIndex);
             renderReferenceCenter();
+            renderOverviewPlaceholder();
             updateTimelineScrollHint();
         }
 
@@ -4000,14 +6312,9 @@
             const container = document.getElementById('timelineNodes');
             container.innerHTML = '';
 
-            eqData.forEach((eq, index) => {
+            getSearchFilteredEventEntries(filterText).forEach(({ eq, index }) => {
                 const title = eq.title[currentLang];
-                const loc = eq.location[currentLang];
                 const query = filterText.trim();
-
-                if (query && !title.toLowerCase().includes(query) && !loc.toLowerCase().includes(query) && !eq.year.includes(query)) {
-                    return;
-                }
 
                 const node = document.createElement('div');
                 node.className = `timeline-node ${index === activeIndex ? 'active' : ''}`;
@@ -4138,10 +6445,14 @@
         function filterEvents() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             renderTimeline(query);
+            renderOverviewPlaceholder();
         }
 
         window.onload = () => {
-            setLanguage('es');
+            setLanguage(getInitialLanguage(), false);
+            setPrimaryView('historical');
+            updateHeaderMetrics();
+            syncStickyChrome(true);
 
             const timelineNodes = document.getElementById('timelineNodes');
             timelineNodes?.addEventListener('scroll', updateTimelineScrollHint, { passive: true });
@@ -4149,8 +6460,15 @@
             const referenceTabsScroll = document.getElementById('referenceTabsScroll');
             referenceTabsScroll?.addEventListener('scroll', updateReferenceTabScrollHint, { passive: true });
 
-            window.addEventListener('resize', updateTimelineScrollHint);
-            window.addEventListener('resize', updateReferenceTabScrollHint);
+            const historicalContentArea = document.querySelector('#historicalView .content-area');
+            historicalContentArea?.addEventListener('scroll', () => syncStickyChrome(), { passive: true });
+            window.addEventListener('scroll', () => syncStickyChrome(), { passive: true });
+            window.addEventListener('resize', () => {
+                updateHeaderMetrics();
+                updateTimelineScrollHint();
+                updateReferenceTabScrollHint();
+                syncStickyChrome(true);
+            });
             window.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape') {
                     closeReferenceFigureLightbox();
