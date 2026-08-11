@@ -56,6 +56,10 @@
             overflow: hidden;
         }
 
+        .hidden {
+            display: none !important;
+        }
+
         header {
             background-color: var(--md-sys-color-surface);
             border-bottom: 1px solid var(--md-sys-color-surface-variant);
@@ -81,6 +85,106 @@
         .header-title-box p {
             font-size: 0.85rem;
             color: var(--md-sys-color-outline);
+        }
+
+        .primary-view-shell {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem 0;
+        }
+
+        .primary-view-switch {
+            display: inline-grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.35rem;
+            padding: 0.35rem;
+            border-radius: 999px;
+            background: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            box-shadow: var(--shadow-1);
+        }
+
+        .primary-view-btn {
+            border: none;
+            background: transparent;
+            color: var(--md-sys-color-on-surface-variant);
+            border-radius: 999px;
+            padding: 0.75rem 1.15rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .primary-view-btn.active {
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            box-shadow: var(--shadow-1);
+        }
+
+        .overview-shell {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 2rem;
+        }
+
+        .overview-placeholder-card {
+            background: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-l);
+            box-shadow: var(--shadow-2);
+            padding: 2rem;
+        }
+
+        .overview-placeholder-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: var(--md-sys-color-primary);
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .overview-placeholder-card h2 {
+            font-size: 1.55rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .overview-placeholder-card p {
+            color: var(--md-sys-color-on-surface-variant);
+            line-height: 1.6;
+        }
+
+        .overview-placeholder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .overview-placeholder-panel {
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 1rem;
+        }
+
+        .overview-placeholder-panel h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .overview-placeholder-note {
+            margin-top: 1.25rem;
+            font-size: 0.92rem;
         }
 
         .controls {
@@ -1217,6 +1321,24 @@
                 padding: 1.25rem;
             }
 
+            .primary-view-shell {
+                padding: 0.8rem 1rem 0;
+            }
+
+            .primary-view-switch {
+                display: grid;
+                width: 100%;
+            }
+
+            .overview-shell {
+                padding: 1.25rem 1rem 1.5rem;
+            }
+
+            .overview-placeholder-card {
+                padding: 1.35rem;
+                border-radius: 22px;
+            }
+
             .event-card {
                 padding: 1.35rem;
                 border-radius: 22px;
@@ -1361,6 +1483,32 @@
                 padding: 0.9rem;
             }
 
+            .primary-view-shell {
+                padding: 0.7rem 0.8rem 0;
+            }
+
+            .primary-view-btn {
+                padding: 0.7rem 0.85rem;
+                font-size: 0.86rem;
+            }
+
+            .overview-shell {
+                padding: 0.95rem 0.8rem 1.25rem;
+            }
+
+            .overview-placeholder-card {
+                padding: 1rem;
+                border-radius: 18px;
+            }
+
+            .overview-placeholder-card h2 {
+                font-size: 1.18rem;
+            }
+
+            .overview-placeholder-grid {
+                grid-template-columns: 1fr;
+            }
+
             .event-card {
                 padding: 1rem;
                 border-radius: 18px;
@@ -1494,6 +1642,14 @@
     </header>
     <button class="drawer-scrim" id="drawerScrim" type="button" aria-label="Close menu" onclick="toggleMobileDrawer(false)"></button>
 
+    <section class="primary-view-shell" aria-label="Primary page mode switch">
+        <div class="primary-view-switch" role="tablist" aria-label="Primary page mode switch">
+            <button class="primary-view-btn active" id="viewModeHistoricalBtn" type="button" role="tab" aria-selected="true" onclick="setPrimaryView('historical')">Cronología histórica</button>
+            <button class="primary-view-btn" id="viewModeOverviewBtn" type="button" role="tab" aria-selected="false" onclick="setPrimaryView('overview')">Vista general</button>
+        </div>
+    </section>
+
+    <section id="historicalView">
     <div class="app-container">
         <!-- Sidebar Navigation -->
         <nav class="timeline-sidebar">
@@ -1563,6 +1719,30 @@
             </div>
         </main>
     </div>
+    </section>
+
+    <section class="overview-shell hidden" id="overviewView" aria-label="Exploratory overview workspace">
+        <div class="overview-placeholder-card">
+            <div class="overview-placeholder-kicker"><span class="material-symbols-outlined">dashboard</span><span id="overviewPlaceholderKicker">Vista general</span></div>
+            <h2 id="overviewPlaceholderTitle">Próxima vista exploratoria</h2>
+            <p id="overviewPlaceholderIntro">Esta nueva vista principal reemplazará la cronología por un espacio de exploración con mapa, gráficos y herramientas de distancia, separado del centro de referencia.</p>
+            <div class="overview-placeholder-grid">
+                <div class="overview-placeholder-panel">
+                    <h3><span class="material-symbols-outlined">map</span><span id="overviewPanelMapTitle">Mapa general</span></h3>
+                    <p id="overviewPanelMapText">Mostrará todos los terremotos históricos en una sola vista y permitirá resaltar un evento sin abandonar el modo de exploración.</p>
+                </div>
+                <div class="overview-placeholder-panel">
+                    <h3><span class="material-symbols-outlined">bar_chart</span><span id="overviewPanelChartTitle">Gráficos interactivos</span></h3>
+                    <p id="overviewPanelChartText">Aquí se integrarán los gráficos de eventos por década y distribución de magnitudes para filtrar el conjunto histórico.</p>
+                </div>
+                <div class="overview-placeholder-panel">
+                    <h3><span class="material-symbols-outlined">near_me</span><span id="overviewPanelDistanceTitle">Herramientas de distancia</span></h3>
+                    <p id="overviewPanelDistanceText">También se añadirá un punto de usuario por clic o geolocalización para comparar distancias con un evento seleccionado o con toda la lista.</p>
+                </div>
+            </div>
+            <p class="overview-placeholder-note" id="overviewPlaceholderNote">Esta estructura crea el segundo modo principal solicitado y deja el centro de referencia reservado para el contexto educativo.</p>
+        </div>
+    </section>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
@@ -2543,6 +2723,17 @@
                 sourceNote: "La lista prioriza las referencias más útiles para comprobar la narrativa principal del reporte y cada tarjeta enlaza sus fuentes más relevantes.",
                 roadmapHeader: "Próximas funciones y mejoras",
                 searchPlaceholder: "Buscar evento o región...",
+                viewHistorical: "Cronología histórica",
+                viewOverview: "Vista general",
+                overviewShellTitle: "Próxima vista exploratoria",
+                overviewShellIntro: "Esta nueva vista principal reemplazará la cronología por un espacio de exploración con mapa, gráficos y herramientas de distancia, separado del centro de referencia.",
+                overviewShellNote: "Esta estructura crea el segundo modo principal solicitado y deja el centro de referencia reservado para el contexto educativo.",
+                overviewMapTitle: "Mapa general",
+                overviewMapText: "Mostrará todos los terremotos históricos en una sola vista y permitirá resaltar un evento sin abandonar el modo de exploración.",
+                overviewChartsTitle: "Gráficos interactivos",
+                overviewChartsText: "Aquí se integrarán los gráficos de eventos por década y distribución de magnitudes para filtrar el conjunto histórico.",
+                overviewDistanceTitle: "Herramientas de distancia",
+                overviewDistanceText: "También se añadirá un punto de usuario por clic o geolocalización para comparar distancias con un evento seleccionado o con toda la lista.",
                 magnitudeLabel: "Magnitud",
                 eventSources: "Fuentes de este evento",
                 chronologyYear: "Año",
@@ -2601,6 +2792,17 @@
                 sourceNote: "This list prioritizes the references most useful for checking the main narrative, and each event card links its most relevant sources.",
                 roadmapHeader: "Planned features and improvements",
                 searchPlaceholder: "Search event or region...",
+                viewHistorical: "Historical timeline",
+                viewOverview: "Overview",
+                overviewShellTitle: "Upcoming exploratory view",
+                overviewShellIntro: "This new primary view will replace the timeline with an exploratory workspace for maps, charts, and distance tools, separate from the reference center.",
+                overviewShellNote: "This shell establishes the requested second primary mode while keeping the reference center reserved for educational context.",
+                overviewMapTitle: "Overview map",
+                overviewMapText: "It will show all historical earthquakes in one place and let readers highlight an event without leaving exploration mode.",
+                overviewChartsTitle: "Interactive charts",
+                overviewChartsText: "This space will host the decade and magnitude-distribution charts used to filter the historical dataset.",
+                overviewDistanceTitle: "Distance tools",
+                overviewDistanceText: "A user location marker from click or geolocation will later support distance comparisons to one event or the full event set.",
                 magnitudeLabel: "Magnitude",
                 eventSources: "Sources for this event",
                 chronologyYear: "Year",
@@ -2659,6 +2861,17 @@
                 sourceNote: "Die Liste priorisiert die Quellen, mit denen sich die Hauptaussagen des Berichts am besten prüfen lassen; jede Ereigniskarte verlinkt zusätzlich ihre wichtigsten Belege.",
                 roadmapHeader: "Geplante Funktionen und Verbesserungen",
                 searchPlaceholder: "Ereignis oder Region suchen...",
+                viewHistorical: "Historische Chronologie",
+                viewOverview: "Überblick",
+                overviewShellTitle: "Kommende Erkundungsansicht",
+                overviewShellIntro: "Diese neue Hauptansicht ersetzt die Chronologie durch einen Erkundungsbereich mit Karte, Diagrammen und Distanzwerkzeugen, getrennt vom Referenzzentrum.",
+                overviewShellNote: "Diese Struktur etabliert den gewünschten zweiten Hauptmodus und reserviert das Referenzzentrum weiterhin für den Bildungskontext.",
+                overviewMapTitle: "Übersichtskarte",
+                overviewMapText: "Sie wird alle historischen Erdbeben in einer Ansicht zeigen und das Hervorheben eines Ereignisses ermöglichen, ohne den Erkundungsmodus zu verlassen.",
+                overviewChartsTitle: "Interaktive Diagramme",
+                overviewChartsText: "Hier entstehen später die Diagramme nach Jahrzehnten und Magnitudenverteilung, um den historischen Datensatz zu filtern.",
+                overviewDistanceTitle: "Distanzwerkzeuge",
+                overviewDistanceText: "Ein Nutzerpunkt per Klick oder Geolokalisierung wird später Distanzvergleiche zu einem einzelnen Ereignis oder zum gesamten Datensatz ermöglichen.",
                 magnitudeLabel: "Magnitude",
                 eventSources: "Quellen zu diesem Ereignis",
                 chronologyYear: "Jahr",
@@ -3469,6 +3682,7 @@
         let activeIndex = 0;
         let activeReferenceTab = 'measurement';
         let activeTermKey = null;
+        let currentPrimaryView = 'historical';
 
         function toggleMobileDrawer(forceState) {
             const shouldOpen = typeof forceState === 'boolean'
@@ -3978,6 +4192,42 @@
             eventMap.fitBounds(eventMapDefaultBounds);
         }
 
+        function setPrimaryView(mode) {
+            currentPrimaryView = mode === 'overview' ? 'overview' : 'historical';
+
+            const historicalView = document.getElementById('historicalView');
+            const overviewView = document.getElementById('overviewView');
+            const historicalBtn = document.getElementById('viewModeHistoricalBtn');
+            const overviewBtn = document.getElementById('viewModeOverviewBtn');
+
+            historicalView?.classList.toggle('hidden', currentPrimaryView !== 'historical');
+            overviewView?.classList.toggle('hidden', currentPrimaryView !== 'overview');
+
+            historicalBtn?.classList.toggle('active', currentPrimaryView === 'historical');
+            overviewBtn?.classList.toggle('active', currentPrimaryView === 'overview');
+            historicalBtn?.setAttribute('aria-selected', String(currentPrimaryView === 'historical'));
+            overviewBtn?.setAttribute('aria-selected', String(currentPrimaryView === 'overview'));
+
+            if (currentPrimaryView === 'historical') {
+                window.requestAnimationFrame(updateTimelineScrollHint);
+                window.requestAnimationFrame(updateReferenceTabScrollHint);
+            }
+        }
+
+        function renderOverviewPlaceholder() {
+            const ui = reportContent[currentLang];
+            document.getElementById('overviewPlaceholderKicker').innerText = ui.viewOverview;
+            document.getElementById('overviewPlaceholderTitle').innerText = ui.overviewShellTitle;
+            document.getElementById('overviewPlaceholderIntro').innerText = ui.overviewShellIntro;
+            document.getElementById('overviewPanelMapTitle').innerText = ui.overviewMapTitle;
+            document.getElementById('overviewPanelMapText').innerText = ui.overviewMapText;
+            document.getElementById('overviewPanelChartTitle').innerText = ui.overviewChartsTitle;
+            document.getElementById('overviewPanelChartText').innerText = ui.overviewChartsText;
+            document.getElementById('overviewPanelDistanceTitle').innerText = ui.overviewDistanceTitle;
+            document.getElementById('overviewPanelDistanceText').innerText = ui.overviewDistanceText;
+            document.getElementById('overviewPlaceholderNote').innerText = ui.overviewShellNote;
+        }
+
         function setLanguage(lang) {
             currentLang = lang;
             document.documentElement.lang = lang;
@@ -3989,10 +4239,13 @@
             document.getElementById('ui-title').innerText = ui.title;
             document.getElementById('ui-subtitle').innerText = ui.subtitle;
             document.getElementById('searchInput').placeholder = ui.searchPlaceholder;
+            document.getElementById('viewModeHistoricalBtn').innerText = ui.viewHistorical;
+            document.getElementById('viewModeOverviewBtn').innerText = ui.viewOverview;
 
             renderTimeline(document.getElementById('searchInput').value.toLowerCase());
             renderEventDetail(activeIndex);
             renderReferenceCenter();
+            renderOverviewPlaceholder();
             updateTimelineScrollHint();
         }
 
@@ -4142,6 +4395,7 @@
 
         window.onload = () => {
             setLanguage('es');
+            setPrimaryView('historical');
 
             const timelineNodes = document.getElementById('timelineNodes');
             timelineNodes?.addEventListener('scroll', updateTimelineScrollHint, { passive: true });
