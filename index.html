@@ -91,7 +91,8 @@
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 1rem 2rem 0;
+            padding: 1rem 2rem 0.75rem;
+            text-align: center;
         }
 
         .primary-view-switch {
@@ -445,6 +446,10 @@
             width: 100%;
             margin: 0 auto;
             position: relative;
+        }
+
+        #historicalView .app-container {
+            margin-top: 0.85rem;
         }
 
         /* Timeline Navigation Sidebar */
@@ -1490,7 +1495,7 @@
             }
 
             .primary-view-shell {
-                padding: 0.8rem 1rem 0;
+                padding: 0.8rem 1rem 0.7rem;
             }
 
             .primary-view-switch {
@@ -1664,7 +1669,7 @@
             }
 
             .primary-view-shell {
-                padding: 0.7rem 0.8rem 0;
+                padding: 0.7rem 0.8rem 0.65rem;
             }
 
             .primary-view-btn {
@@ -4417,10 +4422,24 @@
             overviewBtn?.setAttribute('aria-selected', String(currentPrimaryView === 'overview'));
 
             if (currentPrimaryView === 'historical') {
-                window.requestAnimationFrame(updateTimelineScrollHint);
-                window.requestAnimationFrame(updateReferenceTabScrollHint);
+                renderEventDetail(activeIndex);
+                window.requestAnimationFrame(() => {
+                    if (eventMap) {
+                        eventMap.invalidateSize();
+                        if (eventMapDefaultBounds) {
+                            eventMap.fitBounds(eventMapDefaultBounds);
+                        }
+                    }
+                    updateTimelineScrollHint();
+                    updateReferenceTabScrollHint();
+                });
             } else {
                 renderOverviewPlaceholder();
+                window.requestAnimationFrame(() => {
+                    if (overviewMap) {
+                        overviewMap.invalidateSize();
+                    }
+                });
             }
         }
 
@@ -4480,16 +4499,17 @@
                 marker.on('click', () => {
                     activeIndex = index;
                     renderTimeline(document.getElementById('searchInput').value.toLowerCase());
-                    renderEventDetail(activeIndex);
                     renderOverviewPlaceholder();
                 });
 
                 boundsParts.push(L.latLngBounds([marker.getLatLng()]));
             });
 
-            const mergedBounds = boundsParts.reduce((acc, next) => acc.extend(next), boundsParts[0]);
-            overviewMap.fitBounds(mergedBounds.pad(0.08));
-            window.requestAnimationFrame(() => overviewMap.invalidateSize());
+            const mergedBounds = boundsParts.reduce((acc, next) => acc.extend(next), boundsParts[0]).pad(0.08);
+            window.requestAnimationFrame(() => {
+                overviewMap.invalidateSize();
+                overviewMap.fitBounds(mergedBounds);
+            });
         }
 
         function renderOverviewPlaceholder() {
@@ -4542,7 +4562,7 @@
             listContainer.innerHTML = entries.map(({ eq, index }) => {
                 const selectedClass = index === activeIndex ? 'active' : '';
                 return `
-                    <button class="overview-list-item ${selectedClass}" type="button" onclick="activeIndex=${index}; renderTimeline(document.getElementById('searchInput').value.toLowerCase()); renderEventDetail(activeIndex); renderOverviewPlaceholder();">
+                    <button class="overview-list-item ${selectedClass}" type="button" onclick="activeIndex=${index}; renderTimeline(document.getElementById('searchInput').value.toLowerCase()); renderOverviewPlaceholder();">
                         <div class="overview-list-topline">
                             <span class="overview-list-year">${eq.year}</span>
                             <span class="tag">M ${eq.magnitude}</span>
