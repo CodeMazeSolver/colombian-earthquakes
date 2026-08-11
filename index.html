@@ -547,9 +547,8 @@
 
         .overview-chart-track {
             position: relative;
-            height: 100%;
+            height: 132px;
             width: 100%;
-            min-height: 132px;
             display: flex;
             align-items: end;
             justify-content: center;
@@ -569,6 +568,29 @@
         }
 
         .overview-chart-x-axis {
+            display: grid;
+            gap: 0.45rem;
+            min-width: 0;
+        }
+
+        .overview-chart-x-groups {
+            display: grid;
+            gap: 0.45rem;
+            min-width: 0;
+        }
+
+        .overview-chart-x-group {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--md-sys-color-on-surface-variant);
+            text-align: center;
+            padding-bottom: 0.1rem;
+            border-bottom: 1px solid rgba(139, 0, 0, 0.12);
+        }
+
+        .overview-chart-x-ticks {
             display: grid;
             gap: 0.45rem;
             min-width: 0;
@@ -2032,7 +2054,9 @@
             }
 
             .overview-chart-series,
-            .overview-chart-x-axis {
+            .overview-chart-x-axis,
+            .overview-chart-x-groups,
+            .overview-chart-x-ticks {
                 gap: 0.35rem;
             }
 
@@ -2042,7 +2066,11 @@
             }
 
             .overview-chart-track {
-                min-height: 108px;
+                height: 108px;
+            }
+
+            .overview-chart-x-group {
+                font-size: 0.56rem;
             }
 
             .overview-chart-x-tick {
@@ -5009,8 +5037,27 @@
                 }).join('');
                 const ticks = series.map(item => {
                     const isActive = activeValue === item.label;
-                    return `<div class="overview-chart-x-tick ${isActive ? 'active' : ''}">${item.label}</div>`;
+                    const shortLabel = item.type === 'decade'
+                        ? `${String(item.label).slice(2, 4)}s`
+                        : item.label;
+                    return `<div class="overview-chart-x-tick ${isActive ? 'active' : ''}">${shortLabel}</div>`;
                 }).join('');
+                const groupMarkup = series[0]?.type === 'decade'
+                    ? (() => {
+                        const groups = [];
+                        let groupStart = 0;
+                        while (groupStart < series.length) {
+                            const centuryLabel = `${String(series[groupStart].label).slice(0, 2)}00s`;
+                            let span = 1;
+                            while (groupStart + span < series.length && String(series[groupStart + span].label).slice(0, 2) === String(series[groupStart].label).slice(0, 2)) {
+                                span += 1;
+                            }
+                            groups.push(`<div class="overview-chart-x-group" style="grid-column: span ${span};">${centuryLabel}</div>`);
+                            groupStart += span;
+                        }
+                        return `<div class="overview-chart-x-groups" style="grid-template-columns: repeat(${Math.max(series.length, 1)}, minmax(0, 1fr));">${groups.join('')}</div>`;
+                    })()
+                    : '';
 
                 container.innerHTML = `
                     <div class="overview-chart-y-axis" aria-hidden="true">
@@ -5022,8 +5069,11 @@
                                 ${bars}
                             </div>
                         </div>
-                        <div class="overview-chart-x-axis" style="grid-template-columns: repeat(${Math.max(series.length, 1)}, minmax(0, 1fr));">
-                            ${ticks}
+                        <div class="overview-chart-x-axis">
+                            ${groupMarkup}
+                            <div class="overview-chart-x-ticks" style="grid-template-columns: repeat(${Math.max(series.length, 1)}, minmax(0, 1fr));">
+                                ${ticks}
+                            </div>
                         </div>
                     </div>
                 `;
