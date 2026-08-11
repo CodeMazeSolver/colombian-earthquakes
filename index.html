@@ -457,8 +457,8 @@
 
         .overview-chart-grid {
             display: grid;
-            grid-template-columns: 44px minmax(0, 1fr);
-            gap: 0.75rem;
+            grid-template-columns: 30px minmax(0, 1fr);
+            gap: 0.45rem;
             align-items: stretch;
         }
 
@@ -466,19 +466,26 @@
             display: grid;
             align-content: space-between;
             justify-items: end;
-            padding: 0.1rem 0 2.2rem;
-            font-size: 0.74rem;
+            padding: 0.1rem 0 1.55rem;
+            font-size: 0.7rem;
             color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .overview-chart-frame {
+            display: grid;
+            gap: 0.45rem;
+            min-width: 0;
         }
 
         .overview-chart-plot {
             position: relative;
-            min-height: 224px;
+            min-height: 184px;
             border-left: 1px solid rgba(139, 0, 0, 0.18);
             border-bottom: 1px solid rgba(139, 0, 0, 0.18);
-            padding: 0.5rem 0.4rem 2.2rem;
+            padding: 0.35rem 0.25rem 0;
             display: grid;
             align-items: end;
+            overflow: hidden;
         }
 
         .overview-chart-plot::before,
@@ -501,24 +508,23 @@
 
         .overview-chart-series {
             display: grid;
-            grid-auto-flow: column;
-            grid-auto-columns: minmax(54px, 1fr);
-            gap: 0.55rem;
+            gap: 0.45rem;
             align-items: end;
             min-height: 100%;
+            min-width: 0;
         }
 
         .overview-chart-bar {
             border: none;
             background: transparent;
             padding: 0;
-            display: grid;
-            grid-template-rows: auto minmax(132px, 1fr) auto auto;
-            gap: 0.45rem;
+            display: flex;
+            align-items: end;
+            justify-content: center;
             cursor: pointer;
             transition: transform 0.2s ease, opacity 0.2s ease;
             min-height: 100%;
-            align-items: end;
+            min-width: 0;
         }
 
         .overview-chart-bar:hover {
@@ -539,23 +545,10 @@
             opacity: 0.48;
         }
 
-        .overview-chart-bar-topline {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.3rem;
-            font-size: 0.72rem;
-            color: var(--md-sys-color-on-surface-variant);
-        }
-
-        .overview-chart-count {
-            font-weight: 700;
-            color: var(--md-sys-color-primary);
-        }
-
         .overview-chart-track {
             position: relative;
             height: 100%;
+            width: 100%;
             min-height: 132px;
             display: flex;
             align-items: end;
@@ -563,30 +556,35 @@
         }
 
         .overview-chart-fill {
-            width: min(100%, 56px);
+            width: min(100%, 34px);
             min-height: 6px;
-            border-radius: 14px 14px 6px 6px;
-            background: linear-gradient(180deg, rgba(255, 140, 0, 0.98) 0%, rgba(139, 0, 0, 0.96) 100%);
-            transition: height 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.18);
+            border-radius: 8px 8px 0 0;
+            background: #b63b17;
+            transition: height 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .overview-chart-bar.active .overview-chart-fill {
-            box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.18), inset 0 -1px 0 rgba(255, 255, 255, 0.18);
-            filter: saturate(1.05) contrast(1.02);
+            background: var(--md-sys-color-primary);
+            box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.14);
         }
 
-        .overview-chart-label {
-            font-size: 0.79rem;
+        .overview-chart-x-axis {
+            display: grid;
+            gap: 0.45rem;
+            min-width: 0;
+        }
+
+        .overview-chart-x-tick {
+            font-size: 0.76rem;
             font-weight: 700;
             color: var(--md-sys-color-on-surface);
             text-align: center;
+            line-height: 1.15;
+            overflow-wrap: anywhere;
         }
 
-        .overview-chart-caption {
-            font-size: 0.73rem;
-            color: var(--md-sys-color-on-surface-variant);
-            text-align: center;
+        .overview-chart-x-tick.active {
+            color: var(--md-sys-color-primary);
         }
 
         .overview-selected-card {
@@ -2030,28 +2028,24 @@
             }
 
             .overview-chart-grid {
-                grid-template-columns: 36px minmax(0, 1fr);
+                grid-template-columns: 24px minmax(0, 1fr);
             }
 
-            .overview-chart-series {
-                grid-auto-columns: minmax(46px, 1fr);
-                gap: 0.45rem;
+            .overview-chart-series,
+            .overview-chart-x-axis {
+                gap: 0.35rem;
             }
 
             .overview-chart-plot {
-                min-height: 204px;
-                padding: 0.45rem 0.3rem 2rem;
+                min-height: 168px;
+                padding: 0.3rem 0.2rem 0;
             }
 
             .overview-chart-track {
-                min-height: 118px;
+                min-height: 108px;
             }
 
-            .overview-chart-label {
-                font-size: 0.74rem;
-            }
-
-            .overview-chart-caption {
+            .overview-chart-x-tick {
                 font-size: 0.68rem;
             }
 
@@ -5006,26 +5000,30 @@
                     const height = item.count > 0 ? Math.max(10, Math.round((item.count / maxCount) * 100)) : 6;
                     const disabled = item.count === 0 ? 'disabled' : '';
                     return `
-                        <button class="overview-chart-bar ${isActive ? 'active' : ''} ${isDimmed ? 'is-dimmed' : ''}" type="button" ${disabled} aria-pressed="${isActive}" onclick="toggleOverviewChartFilter('${item.type}', '${item.label}')">
-                            <div class="overview-chart-bar-topline">
-                                <span class="overview-chart-count">${item.count}</span>
-                            </div>
+                        <button class="overview-chart-bar ${isActive ? 'active' : ''} ${isDimmed ? 'is-dimmed' : ''}" type="button" ${disabled} aria-label="${item.label}: ${item.count}" aria-pressed="${isActive}" onclick="toggleOverviewChartFilter('${item.type}', '${item.label}')">
                             <div class="overview-chart-track">
                                 <div class="overview-chart-fill" style="height:${height}%"></div>
                             </div>
-                            <div class="overview-chart-label">${item.label}</div>
-                            <div class="overview-chart-caption">${item.count} / ${baseEntries.length}</div>
                         </button>
                     `;
+                }).join('');
+                const ticks = series.map(item => {
+                    const isActive = activeValue === item.label;
+                    return `<div class="overview-chart-x-tick ${isActive ? 'active' : ''}">${item.label}</div>`;
                 }).join('');
 
                 container.innerHTML = `
                     <div class="overview-chart-y-axis" aria-hidden="true">
                         ${axisTicks.map(tick => `<span>${tick}</span>`).join('')}
                     </div>
-                    <div class="overview-chart-plot">
-                        <div class="overview-chart-series">
-                            ${bars}
+                    <div class="overview-chart-frame">
+                        <div class="overview-chart-plot">
+                            <div class="overview-chart-series" style="grid-template-columns: repeat(${Math.max(series.length, 1)}, minmax(0, 1fr));">
+                                ${bars}
+                            </div>
+                        </div>
+                        <div class="overview-chart-x-axis" style="grid-template-columns: repeat(${Math.max(series.length, 1)}, minmax(0, 1fr));">
+                            ${ticks}
                         </div>
                     </div>
                 `;
