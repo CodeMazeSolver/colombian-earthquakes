@@ -1122,8 +1122,11 @@
             font-size: 1rem;
         }
 
-        .header-project-link {
-            white-space: nowrap;
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 0.75rem;
         }
 
         .drawer-project-link {
@@ -2202,8 +2205,9 @@
                 display: inline-flex;
             }
 
-            .header-project-link {
-                display: none;
+            .footer-links {
+                justify-content: stretch;
+                flex-direction: column;
             }
 
             .drawer-mode-section {
@@ -2687,10 +2691,6 @@
             <h1><span class="material-symbols-outlined">analytics</span> <span id="ui-title">Sismos Históricos de Colombia</span></h1>
             <p id="ui-subtitle">Plataforma Informativa e Histórica de Amenaza Sísmica</p>
         </div>
-        <a class="project-link header-project-link" id="headerDashboardLink" href="https://codemazesolver.github.io/usgs-geo-dashboard/" target="_blank" rel="noreferrer noopener">
-            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
-            <span id="headerDashboardLinkText">Earthquake Dashboard</span>
-        </a>
         <div class="controls" id="mobileDrawer">
             <div class="drawer-header">
                 <span class="drawer-title">Menu</span>
@@ -2698,10 +2698,6 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
-            <a class="project-link drawer-project-link" id="drawerDashboardLink" href="https://codemazesolver.github.io/usgs-geo-dashboard/" target="_blank" rel="noreferrer noopener">
-                <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
-                <span id="drawerDashboardLinkText">Abrir Earthquake Dashboard</span>
-            </a>
             <div class="drawer-mode-section">
                 <div class="drawer-mode-label" id="drawerPrimaryViewLabel">Modo de página</div>
                 <div class="drawer-primary-view-switch" role="tablist" aria-label="Drawer primary page mode switch">
@@ -2718,6 +2714,10 @@
                 <button class="lang-btn" onclick="setLanguage('en'); toggleMobileDrawer(false)">EN</button>
                 <button class="lang-btn" onclick="setLanguage('de'); toggleMobileDrawer(false)">DE</button>
             </div>
+            <a class="project-link drawer-project-link" id="drawerDashboardLink" href="https://codemazesolver.github.io/usgs-geo-dashboard/" target="_blank" rel="noreferrer noopener">
+                <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+                <span id="drawerDashboardLinkText">Abrir Earthquake Dashboard</span>
+            </a>
         </div>
     </header>
     <button class="drawer-scrim" id="drawerScrim" type="button" aria-label="Close menu" onclick="toggleMobileDrawer(false)"></button>
@@ -2927,10 +2927,16 @@
                 <strong id="footerGithubLabel">Código del proyecto</strong>
                 <span id="footerGithubNote">Repositorio estático de esta experiencia histórica.</span>
             </div>
-            <a class="project-link" id="footerGithubLink" href="https://github.com/CodeMazeSolver/colombian-earthquakes" target="_blank" rel="noreferrer noopener">
-                <span class="material-symbols-outlined" aria-hidden="true">code</span>
-                <span id="footerGithubLinkText">Abrir GitHub</span>
-            </a>
+            <div class="footer-links">
+                <a class="project-link" id="footerDashboardLink" href="https://codemazesolver.github.io/usgs-geo-dashboard/" target="_blank" rel="noreferrer noopener">
+                    <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+                    <span id="footerDashboardLinkText">Abrir Earthquake Dashboard</span>
+                </a>
+                <a class="project-link" id="footerGithubLink" href="https://github.com/CodeMazeSolver/colombian-earthquakes" target="_blank" rel="noreferrer noopener">
+                    <span class="material-symbols-outlined" aria-hidden="true">code</span>
+                    <span id="footerGithubLinkText">Abrir GitHub</span>
+                </a>
+            </div>
         </div>
     </footer>
 
@@ -3925,11 +3931,11 @@
                 roadmapHeader: "Próximas funciones y mejoras",
                 drawerPrimaryViewLabel: "Modo de página",
                 backToTopLabel: "Volver arriba",
-                dashboardHeaderLink: "Earthquake Dashboard",
                 dashboardDrawerLink: "Abrir Earthquake Dashboard",
                 dashboardOverviewLink: "Ver Earthquake Dashboard relacionado",
                 dashboardReferenceTitle: "Proyecto relacionado: Earthquake Dashboard",
                 dashboardReferenceBody: "Explora el panel externo de sismos recientes por separado. Está enlazado aquí como proyecto complementario y no como feed en vivo integrado en este sitio histórico.",
+                footerDashboardLink: "Abrir Earthquake Dashboard",
                 footerGithubLabel: "Código del proyecto",
                 footerGithubNote: "Repositorio estático de esta experiencia histórica.",
                 footerGithubLink: "Abrir GitHub",
@@ -4041,11 +4047,11 @@
                 roadmapHeader: "Planned features and improvements",
                 drawerPrimaryViewLabel: "Page mode",
                 backToTopLabel: "Back to top",
-                dashboardHeaderLink: "Earthquake Dashboard",
                 dashboardDrawerLink: "Open Earthquake Dashboard",
                 dashboardOverviewLink: "Open related Earthquake Dashboard",
                 dashboardReferenceTitle: "Related project: Earthquake Dashboard",
                 dashboardReferenceBody: "Explore the external recent-earthquakes dashboard separately. It is linked here as a companion project, not as a live feed built into this historical site.",
+                footerDashboardLink: "Open Earthquake Dashboard",
                 footerGithubLabel: "Project code",
                 footerGithubNote: "Static repository for this historical experience.",
                 footerGithubLink: "Open GitHub",
@@ -4157,11 +4163,11 @@
                 roadmapHeader: "Geplante Funktionen und Verbesserungen",
                 drawerPrimaryViewLabel: "Seitenmodus",
                 backToTopLabel: "Nach oben",
-                dashboardHeaderLink: "Earthquake Dashboard",
                 dashboardDrawerLink: "Earthquake Dashboard öffnen",
                 dashboardOverviewLink: "Zugehöriges Earthquake Dashboard öffnen",
                 dashboardReferenceTitle: "Verwandtes Projekt: Earthquake Dashboard",
                 dashboardReferenceBody: "Erkunden Sie das externe Dashboard zu aktuellen Erdbeben separat. Es ist hier als Begleitprojekt verlinkt, nicht als in diese historische Website integrierter Live-Feed.",
+                footerDashboardLink: "Earthquake Dashboard öffnen",
                 footerGithubLabel: "Projektcode",
                 footerGithubNote: "Statisches Repository dieser historischen Anwendung.",
                 footerGithubLink: "GitHub öffnen",
@@ -6228,15 +6234,15 @@
             document.getElementById('ui-subtitle').innerText = ui.subtitle;
             document.getElementById('drawerPrimaryViewLabel').innerText = ui.drawerPrimaryViewLabel;
             document.getElementById('backToTopBtn').setAttribute('aria-label', ui.backToTopLabel);
-            document.getElementById('headerDashboardLinkText').innerText = ui.dashboardHeaderLink;
             document.getElementById('drawerDashboardLinkText').innerText = ui.dashboardDrawerLink;
             document.getElementById('overviewDashboardLinkText').innerText = ui.dashboardOverviewLink;
+            document.getElementById('footerDashboardLinkText').innerText = ui.footerDashboardLink;
             document.getElementById('footerGithubLabel').innerText = ui.footerGithubLabel;
             document.getElementById('footerGithubNote').innerText = ui.footerGithubNote;
             document.getElementById('footerGithubLinkText').innerText = ui.footerGithubLink;
-            document.getElementById('headerDashboardLink').href = EARTHQUAKE_DASHBOARD_URL;
             document.getElementById('drawerDashboardLink').href = EARTHQUAKE_DASHBOARD_URL;
             document.getElementById('overviewDashboardLink').href = EARTHQUAKE_DASHBOARD_URL;
+            document.getElementById('footerDashboardLink').href = EARTHQUAKE_DASHBOARD_URL;
             document.getElementById('footerGithubLink').href = REPOSITORY_URL;
             document.getElementById('searchInput').placeholder = ui.searchPlaceholder;
             document.getElementById('viewModeHistoricalBtn').innerText = ui.viewHistorical;
