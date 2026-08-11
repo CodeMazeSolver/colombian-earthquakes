@@ -295,6 +295,49 @@
             margin-top: 1rem;
         }
 
+        .overview-related-link {
+            margin-left: auto;
+        }
+
+        .reference-related-card {
+            margin-top: 1rem;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .reference-related-card p {
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .site-footer {
+            margin-top: auto;
+            padding: 1.5rem 2rem 2rem;
+        }
+
+        .site-footer-card {
+            width: min(1400px, 100%);
+            margin: 0 auto;
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-m);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.85rem;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .site-footer-meta {
+            display: grid;
+            gap: 0.25rem;
+        }
+
+        .site-footer-meta strong {
+            color: var(--md-sys-color-on-surface);
+        }
+
         .overview-year-range-card {
             background: var(--md-sys-color-surface);
             border: 1px solid var(--md-sys-color-surface-variant);
@@ -1051,6 +1094,42 @@
             background: var(--md-sys-color-primary);
             color: var(--md-sys-color-on-primary);
             box-shadow: var(--shadow-1);
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.7rem 1rem;
+            border-radius: 999px;
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+            color: var(--md-sys-color-primary);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .project-link:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-2);
+            background: var(--md-sys-color-primary-container);
+        }
+
+        .project-link .material-symbols-outlined {
+            font-size: 1rem;
+        }
+
+        .header-project-link {
+            white-space: nowrap;
+        }
+
+        .drawer-project-link {
+            display: none;
+            justify-content: center;
+            width: 100%;
         }
 
         .search-box {
@@ -2114,8 +2193,17 @@
             .search-box,
             .search-box input,
             .lang-selector,
-            .drawer-mode-section {
+            .drawer-mode-section,
+            .drawer-project-link {
                 width: 100%;
+            }
+
+            .drawer-project-link {
+                display: inline-flex;
+            }
+
+            .header-project-link {
+                display: none;
             }
 
             .drawer-mode-section {
@@ -2129,6 +2217,20 @@
             .lang-btn {
                 flex: 1 1 0;
                 text-align: center;
+            }
+
+            .overview-related-link {
+                margin-left: 0;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .site-footer {
+                padding: 1.25rem 1rem 1.5rem;
+            }
+
+            .site-footer-card {
+                align-items: stretch;
             }
 
             .app-container {
@@ -2585,6 +2687,10 @@
             <h1><span class="material-symbols-outlined">analytics</span> <span id="ui-title">Sismos Históricos de Colombia</span></h1>
             <p id="ui-subtitle">Plataforma Informativa e Histórica de Amenaza Sísmica</p>
         </div>
+        <a class="project-link header-project-link" id="headerDashboardLink" href="https://codemazesolver.github.io/usgs-geo-dashboard/" target="_blank" rel="noreferrer noopener">
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+            <span id="headerDashboardLinkText">Earthquake Dashboard</span>
+        </a>
         <div class="controls" id="mobileDrawer">
             <div class="drawer-header">
                 <span class="drawer-title">Menu</span>
@@ -2592,6 +2698,10 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
+            <a class="project-link drawer-project-link" id="drawerDashboardLink" href="https://codemazesolver.github.io/usgs-geo-dashboard/" target="_blank" rel="noreferrer noopener">
+                <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+                <span id="drawerDashboardLinkText">Abrir Earthquake Dashboard</span>
+            </a>
             <div class="drawer-mode-section">
                 <div class="drawer-mode-label" id="drawerPrimaryViewLabel">Modo de página</div>
                 <div class="drawer-primary-view-switch" role="tablist" aria-label="Drawer primary page mode switch">
@@ -2703,6 +2813,10 @@
                 <div class="overview-toolbar">
                     <span class="overview-filter-chip"><span class="material-symbols-outlined">filter_alt</span><span id="overviewFilterChipLabel">Filtro activo</span></span>
                     <span class="overview-filter-summary" id="overviewFilterSummary">Usa la búsqueda superior para filtrar inmediatamente el mapa y la lista enlazada.</span>
+                    <a class="project-link overview-related-link" id="overviewDashboardLink" href="https://codemazesolver.github.io/usgs-geo-dashboard/" target="_blank" rel="noreferrer noopener">
+                        <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+                        <span id="overviewDashboardLinkText">Ver Earthquake Dashboard relacionado</span>
+                    </a>
                 </div>
             </div>
             <div class="overview-workspace-layout">
@@ -2807,8 +2921,24 @@
         </div>
     </section>
 
+    <footer class="site-footer">
+        <div class="site-footer-card">
+            <div class="site-footer-meta">
+                <strong id="footerGithubLabel">Código del proyecto</strong>
+                <span id="footerGithubNote">Repositorio estático de esta experiencia histórica.</span>
+            </div>
+            <a class="project-link" id="footerGithubLink" href="https://github.com/CodeMazeSolver/colombian-earthquakes" target="_blank" rel="noreferrer noopener">
+                <span class="material-symbols-outlined" aria-hidden="true">code</span>
+                <span id="footerGithubLinkText">Abrir GitHub</span>
+            </a>
+        </div>
+    </footer>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
+        const EARTHQUAKE_DASHBOARD_URL = 'https://codemazesolver.github.io/usgs-geo-dashboard/';
+        const REPOSITORY_URL = 'https://github.com/CodeMazeSolver/colombian-earthquakes';
+
         const sources = {
             1: {
                 title: "Wikipedia - List of earthquakes in Colombia",
@@ -3795,6 +3925,14 @@
                 roadmapHeader: "Próximas funciones y mejoras",
                 drawerPrimaryViewLabel: "Modo de página",
                 backToTopLabel: "Volver arriba",
+                dashboardHeaderLink: "Earthquake Dashboard",
+                dashboardDrawerLink: "Abrir Earthquake Dashboard",
+                dashboardOverviewLink: "Ver Earthquake Dashboard relacionado",
+                dashboardReferenceTitle: "Proyecto relacionado: Earthquake Dashboard",
+                dashboardReferenceBody: "Explora el panel externo de sismos recientes por separado. Está enlazado aquí como proyecto complementario y no como feed en vivo integrado en este sitio histórico.",
+                footerGithubLabel: "Código del proyecto",
+                footerGithubNote: "Repositorio estático de esta experiencia histórica.",
+                footerGithubLink: "Abrir GitHub",
                 searchPlaceholder: "Buscar evento o región...",
                 viewHistorical: "Cronología histórica",
                 viewOverview: "Vista general",
@@ -3903,6 +4041,14 @@
                 roadmapHeader: "Planned features and improvements",
                 drawerPrimaryViewLabel: "Page mode",
                 backToTopLabel: "Back to top",
+                dashboardHeaderLink: "Earthquake Dashboard",
+                dashboardDrawerLink: "Open Earthquake Dashboard",
+                dashboardOverviewLink: "Open related Earthquake Dashboard",
+                dashboardReferenceTitle: "Related project: Earthquake Dashboard",
+                dashboardReferenceBody: "Explore the external recent-earthquakes dashboard separately. It is linked here as a companion project, not as a live feed built into this historical site.",
+                footerGithubLabel: "Project code",
+                footerGithubNote: "Static repository for this historical experience.",
+                footerGithubLink: "Open GitHub",
                 searchPlaceholder: "Search event or region...",
                 viewHistorical: "Historical timeline",
                 viewOverview: "Overview",
@@ -4011,6 +4157,14 @@
                 roadmapHeader: "Geplante Funktionen und Verbesserungen",
                 drawerPrimaryViewLabel: "Seitenmodus",
                 backToTopLabel: "Nach oben",
+                dashboardHeaderLink: "Earthquake Dashboard",
+                dashboardDrawerLink: "Earthquake Dashboard öffnen",
+                dashboardOverviewLink: "Zugehöriges Earthquake Dashboard öffnen",
+                dashboardReferenceTitle: "Verwandtes Projekt: Earthquake Dashboard",
+                dashboardReferenceBody: "Erkunden Sie das externe Dashboard zu aktuellen Erdbeben separat. Es ist hier als Begleitprojekt verlinkt, nicht als in diese historische Website integrierter Live-Feed.",
+                footerGithubLabel: "Projektcode",
+                footerGithubNote: "Statisches Repository dieser historischen Anwendung.",
+                footerGithubLink: "GitHub öffnen",
                 searchPlaceholder: "Ereignis oder Region suchen...",
                 viewHistorical: "Historische Chronologie",
                 viewOverview: "Überblick",
@@ -5269,6 +5423,20 @@
             `;
         }
 
+        function renderDashboardReferenceCard(bundle) {
+            const ui = reportContent[currentLang];
+            return `
+                <section class="reference-source-card reference-related-card">
+                    <h3>${escapeHtml(ui.dashboardReferenceTitle)}</h3>
+                    <p>${escapeHtml(ui.dashboardReferenceBody)}</p>
+                    <a class="project-link" href="${escapeHtml(EARTHQUAKE_DASHBOARD_URL)}" target="_blank" rel="noreferrer noopener">
+                        <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+                        <span>${escapeHtml(ui.dashboardOverviewLink)}</span>
+                    </a>
+                </section>
+            `;
+        }
+
         function renderReferenceMediaFigure(tab) {
             const figure = tab.mediaFigure;
             if (!figure) return '';
@@ -5374,6 +5542,10 @@
                         ${renderReferenceLinkList(activeTab.furtherIds)}
                     </section>
                 `;
+            }
+
+            if (activeReferenceTab === 'sources') {
+                bodyContent += renderDashboardReferenceCard(bundle);
             }
 
             document.getElementById('referenceTabContent').innerHTML = bodyContent;
@@ -6056,6 +6228,16 @@
             document.getElementById('ui-subtitle').innerText = ui.subtitle;
             document.getElementById('drawerPrimaryViewLabel').innerText = ui.drawerPrimaryViewLabel;
             document.getElementById('backToTopBtn').setAttribute('aria-label', ui.backToTopLabel);
+            document.getElementById('headerDashboardLinkText').innerText = ui.dashboardHeaderLink;
+            document.getElementById('drawerDashboardLinkText').innerText = ui.dashboardDrawerLink;
+            document.getElementById('overviewDashboardLinkText').innerText = ui.dashboardOverviewLink;
+            document.getElementById('footerGithubLabel').innerText = ui.footerGithubLabel;
+            document.getElementById('footerGithubNote').innerText = ui.footerGithubNote;
+            document.getElementById('footerGithubLinkText').innerText = ui.footerGithubLink;
+            document.getElementById('headerDashboardLink').href = EARTHQUAKE_DASHBOARD_URL;
+            document.getElementById('drawerDashboardLink').href = EARTHQUAKE_DASHBOARD_URL;
+            document.getElementById('overviewDashboardLink').href = EARTHQUAKE_DASHBOARD_URL;
+            document.getElementById('footerGithubLink').href = REPOSITORY_URL;
             document.getElementById('searchInput').placeholder = ui.searchPlaceholder;
             document.getElementById('viewModeHistoricalBtn').innerText = ui.viewHistorical;
             document.getElementById('viewModeOverviewBtn').innerText = ui.viewOverview;
