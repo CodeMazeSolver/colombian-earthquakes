@@ -1710,6 +1710,18 @@
             63: {
                 title: "Wikipedia - 2026 Colombia earthquake",
                 url: "https://en.wikipedia.org/wiki/2026_Colombia_earthquake"
+            },
+            64: {
+                title: "LMU München / Erdbeben in Bayern - Aktuelle Beben",
+                url: "https://erdbeben.geophysik.uni-muenchen.de/"
+            },
+            65: {
+                title: "Schweizerischer Erdbebendienst (SED/ETH Zürich) - Was bedeutet die Intensität gemäss Europäischer Makroseismischer Skala 1998 (EMS-98)?",
+                url: "https://www.seismo.ethz.ch/de/knowledge/faq/what-does-ems-98-mean/index.html"
+            },
+            66: {
+                title: "GFZ Potsdam - Aktuelle Erdbebeninformationen",
+                url: "https://www.gfz.de/presse/aktuelle-erdbebeninformationen"
             }
         };
 
@@ -2934,7 +2946,8 @@
                                 title: 'Cómo usar esta bibliografía completa',
                                 paragraphs: [
                                     'La primera lista reúne todas las referencias numeradas del sitio, desde [1] hasta la última entrada disponible.',
-                                    'La segunda lista consolida toda la lectura adicional sugerida en las demás pestañas para que pueda explorarse como una sola bibliografía de profundización.'
+                                    'La segunda lista consolida toda la lectura adicional sugerida en las demás pestañas para que pueda explorarse como una sola bibliografía de profundización.',
+                                    'Entre las adiciones recientes figuran fuentes institucionales en alemán del LMU München, del Schweizerischer Erdbebendienst (SED/ETH Zürich) y del GFZ Potsdam.'
                                 ]
                             }
                         ],
@@ -2960,6 +2973,7 @@
                                 es: 'Imagen generada por IA'
                             }
                         },
+                        furtherIds: [64, 65, 66],
                         useAllSources: true,
                         useAllFurtherReading: true
                     }
@@ -3180,7 +3194,8 @@
                                 title: 'How to use this full bibliography',
                                 paragraphs: [
                                     'The first list contains every numbered reference used by the site, from [1] through the last available entry.',
-                                    'The second list consolidates all of the further-reading suggestions from the other tabs into one place for deeper follow-up reading.'
+                                    'The second list consolidates all of the further-reading suggestions from the other tabs into one place for deeper follow-up reading.',
+                                    'Recent additions include German-language institutional sources from LMU Munich, the Swiss Seismological Service (SED/ETH Zurich), and GFZ Potsdam.'
                                 ]
                             }
                         ],
@@ -3200,6 +3215,7 @@
                                 de: 'Adaptiertes Bild des Schweizerischen Erdbebendienstes (SED/ETH Zürich): EMS-98-Intensitätsgrafik.'
                             }
                         },
+                        furtherIds: [64, 65, 66],
                         useAllSources: true,
                         useAllFurtherReading: true
                     }
@@ -3420,7 +3436,8 @@
                                 title: 'So nutzt man diese vollständige Bibliografie',
                                 paragraphs: [
                                     'Die erste Liste enthält jede nummerierte Referenz der Website, von [1] bis zum letzten verfügbaren Eintrag.',
-                                    'Die zweite Liste fasst sämtliche Vorschläge zur weiterführenden Lektüre aus den übrigen Tabs an einer Stelle für vertiefende Anschlusslektüre zusammen.'
+                                    'Die zweite Liste fasst sämtliche Vorschläge zur weiterführenden Lektüre aus den übrigen Tabs an einer Stelle für vertiefende Anschlusslektüre zusammen.',
+                                    'Zu den jüngsten Ergänzungen gehören deutschsprachige Institutionenquellen der LMU München, des Schweizerischen Erdbebendienstes (SED/ETH Zürich) und des GFZ Potsdam.'
                                 ]
                             }
                         ],
@@ -3440,6 +3457,7 @@
                                 de: 'Adaptiertes Bild des Schweizerischen Erdbebendienstes (SED/ETH Zürich): Infografik zur Intensitätsskala EMS-98.'
                             }
                         },
+                        furtherIds: [64, 65, 66],
                         useAllSources: true,
                         useAllFurtherReading: true
                     }
@@ -3561,7 +3579,9 @@
         function renderSourceLinks(ids) {
             return ids.map(id => {
                 const source = sources[id];
-                return `<li><a class="source-link" href="${source.url}" target="_blank" rel="noopener noreferrer">[${id}] ${source.title}</a></li>`;
+                const label = getSourceDisplayLabel(id);
+                if (!source || !label) return '';
+                return `<li><a class="source-link" href="${source.url}" target="_blank" rel="noopener noreferrer">[${label}] ${source.title}</a></li>`;
             }).join('');
         }
 
@@ -3596,9 +3616,33 @@
         }
 
         function getAllReferenceSourceIds() {
-            return Object.keys(sources)
-                .map(id => Number(id))
+            const ids = new Set();
+
+            eqData.forEach(eq => {
+                (eq.sources || []).forEach(id => ids.add(id));
+            });
+
+            Object.values(referenceContent).forEach(bundle => {
+                Object.values(bundle.tabs).forEach(tab => {
+                    (tab.sourceIds || []).forEach(id => ids.add(id));
+                    (tab.furtherIds || []).forEach(id => ids.add(id));
+                });
+            });
+
+            return Array.from(ids)
+                .filter(id => sources[id])
                 .sort((a, b) => a - b);
+        }
+
+        function getSourceLabelMap() {
+            return getAllReferenceSourceIds().reduce((acc, id, index) => {
+                acc[id] = index + 1;
+                return acc;
+            }, {});
+        }
+
+        function getSourceDisplayLabel(id) {
+            return getSourceLabelMap()[id] || null;
         }
 
         function getAllFurtherReadingIds(bundle) {
@@ -3611,8 +3655,8 @@
 
         function getFullReferenceHeading(bundle) {
             const sourceIds = getAllReferenceSourceIds();
-            const maxId = sourceIds[sourceIds.length - 1];
-            return `${bundle.ui.fullReferenceList} [1]–[${maxId}]`;
+            const maxLabel = sourceIds.length;
+            return `${bundle.ui.fullReferenceList} [1]–[${maxLabel}]`;
         }
 
         function getReferenceFigureUiText() {
