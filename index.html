@@ -23,6 +23,7 @@
             --md-sys-color-on-surface-variant: #534343;
             --md-sys-color-outline: #857373;
             --md-sys-color-bg: #fffbfb;
+            --header-height: 73px;
             
             --severity-extreme: #b71c1c;
             --severity-high: #e65100;
@@ -88,11 +89,33 @@
         }
 
         .primary-view-shell {
+            position: sticky;
+            top: var(--header-height);
+            z-index: 1200;
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
             padding: 1rem 2rem 0.75rem;
             text-align: center;
+            transition: transform 0.24s ease, opacity 0.24s ease;
+        }
+
+        .primary-view-shell::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255, 251, 251, 0.96), rgba(255, 251, 251, 0.88));
+            backdrop-filter: blur(8px);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .primary-view-shell.is-hidden {
+            transform: translateY(calc(-100% - 0.45rem));
+            opacity: 0;
+            pointer-events: none;
         }
 
         .primary-view-switch {
@@ -683,6 +706,38 @@
             margin-top: 0.9rem;
         }
 
+        .overview-map-toolbar {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .overview-map-reset-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.42rem;
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+            color: var(--md-sys-color-primary);
+            border-radius: 999px;
+            padding: 0.5rem 0.85rem;
+            font-size: 0.84rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .overview-map-reset-btn:hover,
+        .overview-map-reset-btn:focus-visible {
+            border-color: rgba(139, 0, 0, 0.35);
+            background: rgba(139, 0, 0, 0.05);
+            outline: none;
+        }
+
+        .overview-map-reset-btn .material-symbols-outlined {
+            font-size: 1rem;
+        }
+
         .overview-distance-panel-card {
             border: 1px solid var(--md-sys-color-surface-variant);
             background: var(--md-sys-color-surface);
@@ -747,6 +802,10 @@
 
         .overview-location-btn,
         .overview-distance-mode-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.42rem;
             border: 1px solid var(--md-sys-color-surface-variant);
             background: var(--md-sys-color-surface);
             color: var(--md-sys-color-primary);
@@ -755,7 +814,12 @@
             font-size: 0.82rem;
             font-weight: 700;
             cursor: pointer;
-            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .overview-location-btn .material-symbols-outlined,
+        .overview-distance-mode-btn .material-symbols-outlined {
+            font-size: 1rem;
         }
 
         .overview-location-btn:hover,
@@ -767,10 +831,12 @@
             outline: none;
         }
 
+        .overview-location-btn.is-active,
         .overview-distance-mode-btn.active {
             background: var(--md-sys-color-primary);
             border-color: var(--md-sys-color-primary);
             color: #fff;
+            box-shadow: var(--shadow-1);
         }
 
         .overview-location-status {
@@ -987,6 +1053,79 @@
             left: 10px;
             font-size: 1.1rem;
             color: var(--md-sys-color-outline);
+        }
+
+        .drawer-mode-section {
+            display: none;
+        }
+
+        .drawer-mode-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--md-sys-color-primary);
+            margin-bottom: 0.55rem;
+        }
+
+        .drawer-primary-view-switch {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.35rem;
+            padding: 0.35rem;
+            border-radius: 20px;
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+        }
+
+        .drawer-primary-view-btn {
+            border: none;
+            background: transparent;
+            color: var(--md-sys-color-on-surface-variant);
+            border-radius: 16px;
+            padding: 0.75rem 0.8rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .drawer-primary-view-btn.active {
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            box-shadow: var(--shadow-1);
+        }
+
+        .back-to-top-btn {
+            position: fixed;
+            right: 1rem;
+            bottom: 1rem;
+            z-index: 1250;
+            width: 52px;
+            height: 52px;
+            border: none;
+            border-radius: 50%;
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            box-shadow: var(--shadow-2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .back-to-top-btn.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+        }
+
+        .back-to-top-btn:hover,
+        .back-to-top-btn:focus-visible {
+            box-shadow: var(--shadow-3);
+            transform: translateY(-1px);
+            outline: none;
         }
 
         .app-container {
@@ -1921,6 +2060,7 @@
                 align-items: stretch;
                 justify-content: flex-start;
                 gap: 1rem;
+                overflow-y: auto;
             }
 
             body.drawer-open .controls {
@@ -1953,8 +2093,13 @@
 
             .search-box,
             .search-box input,
-            .lang-selector {
+            .lang-selector,
+            .drawer-mode-section {
                 width: 100%;
+            }
+
+            .drawer-mode-section {
+                display: block;
             }
 
             .lang-selector {
@@ -2045,12 +2190,24 @@
             }
 
             .primary-view-shell {
-                padding: 0.8rem 1rem 0.7rem;
+                padding: 0.55rem 1rem 0.5rem;
+            }
+
+            .primary-view-shell::before {
+                border-bottom-left-radius: 16px;
+                border-bottom-right-radius: 16px;
             }
 
             .primary-view-switch {
                 display: grid;
                 width: 100%;
+            }
+
+            .back-to-top-btn {
+                right: 0.9rem;
+                bottom: 0.9rem;
+                width: 48px;
+                height: 48px;
             }
 
             .overview-shell {
@@ -2415,6 +2572,13 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
+            <div class="drawer-mode-section">
+                <div class="drawer-mode-label" id="drawerPrimaryViewLabel">Modo de página</div>
+                <div class="drawer-primary-view-switch" role="tablist" aria-label="Drawer primary page mode switch">
+                    <button class="drawer-primary-view-btn active" id="drawerViewModeHistoricalBtn" type="button" role="tab" aria-selected="true" onclick="setPrimaryView('historical'); toggleMobileDrawer(false)">Cronología histórica</button>
+                    <button class="drawer-primary-view-btn" id="drawerViewModeOverviewBtn" type="button" role="tab" aria-selected="false" onclick="setPrimaryView('overview'); toggleMobileDrawer(false)">Vista general</button>
+                </div>
+            </div>
             <div class="search-box">
                 <span class="material-symbols-outlined">search</span>
                 <input type="text" id="searchInput" placeholder="Buscar / Search..." onkeyup="filterEvents()">
@@ -2427,6 +2591,9 @@
         </div>
     </header>
     <button class="drawer-scrim" id="drawerScrim" type="button" aria-label="Close menu" onclick="toggleMobileDrawer(false)"></button>
+    <button class="back-to-top-btn hidden" id="backToTopBtn" type="button" aria-label="Volver arriba" onclick="scrollActiveViewToTop()">
+        <span class="material-symbols-outlined">arrow_upward</span>
+    </button>
 
     <section class="primary-view-shell" aria-label="Primary page mode switch">
         <div class="primary-view-switch" role="tablist" aria-label="Primary page mode switch">
@@ -2522,6 +2689,12 @@
                 <section class="overview-primary-card" aria-label="Overview map and selected earthquake">
                     <div class="overview-primary-card-layout">
                         <div class="overview-map-panel">
+                            <div class="overview-map-toolbar">
+                                <button class="overview-map-reset-btn" id="overviewResetMapBtn" type="button" onclick="resetOverviewMapView()">
+                                    <span class="material-symbols-outlined" aria-hidden="true">center_focus_strong</span>
+                                    <span id="overviewResetMapBtnText">Reiniciar mapa</span>
+                                </button>
+                            </div>
                             <div id="overviewMap" class="overview-map-frame" aria-label="Overview earthquake map"></div>
                         </div>
                         <aside class="overview-detail-panel">
@@ -2535,15 +2708,15 @@
                     <button class="overview-distance-panel-toggle" id="overviewDistancePanelToggle" type="button" aria-expanded="false" onclick="toggleOverviewDistancePanel()">
                         <span class="overview-distance-panel-toggle-text">
                             <strong id="overviewDistancePanelTitle">Herramientas de distancia</strong>
-                            <span id="overviewDistancePanelSummary">Oculto por defecto. Ábrelo para calcular distancias desde tu ubicación.</span>
+                            <span id="overviewDistancePanelSummary"></span>
                         </span>
                         <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
                     </button>
                     <div class="overview-distance-panel-content" id="overviewDistancePanelContent" hidden>
                         <div class="overview-location-actions">
-                            <button class="overview-location-btn" id="overviewUseMyLocationBtn" type="button" onclick="requestOverviewUserLocation()">Usar mi ubicación</button>
-                            <button class="overview-location-btn" id="overviewPickLocationBtn" type="button" onclick="armOverviewMapLocationPicker()">Elegir en el mapa</button>
-                            <button class="overview-location-btn" id="overviewClearLocationBtn" type="button" onclick="clearOverviewUserLocation()">Limpiar ubicación</button>
+                            <button class="overview-location-btn" id="overviewUseMyLocationBtn" type="button" onclick="requestOverviewUserLocation()"><span class="material-symbols-outlined" aria-hidden="true">my_location</span><span>Usar mi ubicación</span></button>
+                            <button class="overview-location-btn" id="overviewPickLocationBtn" type="button" aria-pressed="false" onclick="armOverviewMapLocationPicker()"><span class="material-symbols-outlined" aria-hidden="true">edit_location_alt</span><span>Elegir en el mapa</span></button>
+                            <button class="overview-location-btn" id="overviewClearLocationBtn" type="button" onclick="clearOverviewUserLocation()"><span class="material-symbols-outlined" aria-hidden="true">location_off</span><span>Limpiar ubicación</span></button>
                         </div>
                         <div class="overview-distance-mode-switch" role="tablist" aria-label="Overview distance mode switch">
                             <button class="overview-distance-mode-btn active" id="overviewDistanceSelectedBtn" type="button" onclick="setOverviewDistanceMode('selected')">Distancia al evento resaltado</button>
@@ -2777,6 +2950,7 @@
         let eventMarker = null;
         let eventMapDefaultBounds = null;
         let overviewMap = null;
+        let overviewMapDefaultBounds = null;
         let overviewDynamicLayer = null;
         let overviewUserLocation = null;
         let overviewLocationPlacementMode = false;
@@ -3595,6 +3769,8 @@
                 sourceHeader: "Fuentes enlazadas del reporte",
                 sourceNote: "La lista prioriza las referencias más útiles para comprobar la narrativa principal del reporte y cada tarjeta enlaza sus fuentes más relevantes.",
                 roadmapHeader: "Próximas funciones y mejoras",
+                drawerPrimaryViewLabel: "Modo de página",
+                backToTopLabel: "Volver arriba",
                 searchPlaceholder: "Buscar evento o región...",
                 viewHistorical: "Cronología histórica",
                 viewOverview: "Vista general",
@@ -3621,11 +3797,12 @@
                 overviewListHeading: "Eventos filtrados",
                 overviewListMore: "Desplázate para ver los {count} eventos filtrados",
                 overviewDistancePanelTitle: "Herramientas de distancia",
-                overviewDistancePanelClosed: "Oculto por defecto. Ábrelo para calcular distancias desde tu ubicación.",
+                overviewDistancePanelClosed: "Abre este bloque para usar herramientas de ubicación y distancia.",
                 overviewDistancePanelOpenSummary: "Calcula distancias desde tu ubicación al evento resaltado o a toda la lista filtrada.",
                 overviewLocationUse: "Usar mi ubicación",
                 overviewLocationPick: "Elegir en el mapa",
                 overviewLocationClear: "Limpiar ubicación",
+                overviewResetMap: "Reiniciar mapa",
                 overviewDistanceSelectedMode: "Distancia al evento resaltado",
                 overviewDistanceAllMode: "Distancia a todos",
                 overviewLocationIdle: "Coloca tu ubicación con el botón o haz clic en el mapa.",
@@ -3701,6 +3878,8 @@
                 sourceHeader: "Linked report sources",
                 sourceNote: "This list prioritizes the references most useful for checking the main narrative, and each event card links its most relevant sources.",
                 roadmapHeader: "Planned features and improvements",
+                drawerPrimaryViewLabel: "Page mode",
+                backToTopLabel: "Back to top",
                 searchPlaceholder: "Search event or region...",
                 viewHistorical: "Historical timeline",
                 viewOverview: "Overview",
@@ -3727,11 +3906,12 @@
                 overviewListHeading: "Filtered events",
                 overviewListMore: "Scroll to explore all {count} filtered events",
                 overviewDistancePanelTitle: "Distance tools",
-                overviewDistancePanelClosed: "Hidden by default. Open it to calculate distances from your location.",
+                overviewDistancePanelClosed: "Open this panel to use location and distance tools.",
                 overviewDistancePanelOpenSummary: "Calculate distances from your location to the highlighted event or the full filtered list.",
                 overviewLocationUse: "Use my location",
                 overviewLocationPick: "Pick on map",
                 overviewLocationClear: "Clear location",
+                overviewResetMap: "Reset map",
                 overviewDistanceSelectedMode: "Distance to highlighted event",
                 overviewDistanceAllMode: "Distance to all",
                 overviewLocationIdle: "Place your location with the button or click directly on the map.",
@@ -3807,6 +3987,8 @@
                 sourceHeader: "Verlinkte Quellen aus dem Bericht",
                 sourceNote: "Die Liste priorisiert die Quellen, mit denen sich die Hauptaussagen des Berichts am besten prüfen lassen; jede Ereigniskarte verlinkt zusätzlich ihre wichtigsten Belege.",
                 roadmapHeader: "Geplante Funktionen und Verbesserungen",
+                drawerPrimaryViewLabel: "Seitenmodus",
+                backToTopLabel: "Nach oben",
                 searchPlaceholder: "Ereignis oder Region suchen...",
                 viewHistorical: "Historische Chronologie",
                 viewOverview: "Überblick",
@@ -3833,11 +4015,12 @@
                 overviewListHeading: "Gefilterte Ereignisse",
                 overviewListMore: "Scrollen Sie, um alle {count} gefilterten Ereignisse zu sehen",
                 overviewDistancePanelTitle: "Distanzwerkzeuge",
-                overviewDistancePanelClosed: "Standardmäßig verborgen. Öffnen Sie den Bereich, um Distanzen von Ihrem Standort zu berechnen.",
+                overviewDistancePanelClosed: "Öffnen Sie diesen Bereich für Standort- und Distanzwerkzeuge.",
                 overviewDistancePanelOpenSummary: "Berechnet Distanzen von Ihrem Standort zum markierten Ereignis oder zur gesamten gefilterten Liste.",
                 overviewLocationUse: "Meinen Standort nutzen",
                 overviewLocationPick: "Auf der Karte wählen",
                 overviewLocationClear: "Standort löschen",
+                overviewResetMap: "Karte zurücksetzen",
                 overviewDistanceSelectedMode: "Distanz zum markierten Ereignis",
                 overviewDistanceAllMode: "Distanz zu allen",
                 overviewLocationIdle: "Platzieren Sie Ihren Standort mit der Taste oder per Klick direkt auf der Karte.",
@@ -4682,6 +4865,60 @@
             decade: null,
             magnitude: null
         };
+        let lastScrollTop = 0;
+        let primaryViewTabsHidden = false;
+
+        function getActiveScrollContainer() {
+            if (currentPrimaryView === 'historical' && window.innerWidth > 900) {
+                return document.querySelector('#historicalView .content-area') || window;
+            }
+            return window;
+        }
+
+        function getActiveScrollTop() {
+            const container = getActiveScrollContainer();
+            return container === window
+                ? window.scrollY || document.documentElement.scrollTop || 0
+                : container.scrollTop || 0;
+        }
+
+        function syncStickyChrome(forceReveal = false) {
+            const tabsShell = document.querySelector('.primary-view-shell');
+            const backToTopBtn = document.getElementById('backToTopBtn');
+            if (!tabsShell || !backToTopBtn) return;
+
+            const scrollTop = getActiveScrollTop();
+            const delta = scrollTop - lastScrollTop;
+            if (forceReveal || scrollTop < 24) {
+                primaryViewTabsHidden = false;
+            } else if (delta > 8 && scrollTop > 140) {
+                primaryViewTabsHidden = true;
+            } else if (delta < -8) {
+                primaryViewTabsHidden = false;
+            }
+
+            tabsShell.classList.toggle('is-hidden', primaryViewTabsHidden);
+            backToTopBtn.classList.toggle('hidden', scrollTop < 280);
+            lastScrollTop = Math.max(scrollTop, 0);
+        }
+
+        function scrollActiveViewToTop() {
+            const container = getActiveScrollContainer();
+            if (container === window) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                container.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            primaryViewTabsHidden = false;
+            window.setTimeout(() => syncStickyChrome(true), 80);
+        }
+
+        function updateHeaderMetrics() {
+            const header = document.querySelector('header');
+            if (!header) return;
+            document.documentElement.style.setProperty('--header-height', `${header.offsetHeight}px`);
+        }
 
         function toggleMobileDrawer(forceState) {
             const shouldOpen = typeof forceState === 'boolean'
@@ -5198,6 +5435,8 @@
             const overviewView = document.getElementById('overviewView');
             const historicalBtn = document.getElementById('viewModeHistoricalBtn');
             const overviewBtn = document.getElementById('viewModeOverviewBtn');
+            const drawerHistoricalBtn = document.getElementById('drawerViewModeHistoricalBtn');
+            const drawerOverviewBtn = document.getElementById('drawerViewModeOverviewBtn');
 
             historicalView?.classList.toggle('hidden', currentPrimaryView !== 'historical');
             overviewView?.classList.toggle('hidden', currentPrimaryView !== 'overview');
@@ -5206,6 +5445,10 @@
             overviewBtn?.classList.toggle('active', currentPrimaryView === 'overview');
             historicalBtn?.setAttribute('aria-selected', String(currentPrimaryView === 'historical'));
             overviewBtn?.setAttribute('aria-selected', String(currentPrimaryView === 'overview'));
+            drawerHistoricalBtn?.classList.toggle('active', currentPrimaryView === 'historical');
+            drawerOverviewBtn?.classList.toggle('active', currentPrimaryView === 'overview');
+            drawerHistoricalBtn?.setAttribute('aria-selected', String(currentPrimaryView === 'historical'));
+            drawerOverviewBtn?.setAttribute('aria-selected', String(currentPrimaryView === 'overview'));
 
             if (currentPrimaryView === 'historical') {
                 renderEventDetail(activeIndex);
@@ -5218,6 +5461,7 @@
                     }
                     updateTimelineScrollHint();
                     updateReferenceTabScrollHint();
+                    syncStickyChrome(true);
                 });
             } else {
                 renderOverviewPlaceholder();
@@ -5225,6 +5469,7 @@
                     if (overviewMap) {
                         overviewMap.invalidateSize();
                     }
+                    syncStickyChrome(true);
                 });
             }
         }
@@ -5276,8 +5521,8 @@
         }
 
         function armOverviewMapLocationPicker() {
-            overviewLocationPlacementMode = true;
-            overviewLocationStatusKey = 'picking';
+            overviewLocationPlacementMode = !overviewLocationPlacementMode;
+            overviewLocationStatusKey = overviewLocationPlacementMode ? 'picking' : overviewUserLocation ? 'ready' : 'idle';
             renderOverviewPlaceholder();
         }
 
@@ -5286,6 +5531,11 @@
             overviewLocationPlacementMode = false;
             overviewLocationStatusKey = 'idle';
             renderOverviewPlaceholder();
+        }
+
+        function resetOverviewMapView() {
+            if (!overviewMap || !overviewMapDefaultBounds) return;
+            overviewMap.fitBounds(overviewMapDefaultBounds);
         }
 
         function requestOverviewUserLocation() {
@@ -5564,6 +5814,7 @@
             }
 
             const mergedBounds = boundsParts.reduce((acc, next) => acc.extend(next), boundsParts[0]).pad(0.08);
+            overviewMapDefaultBounds = mergedBounds;
             window.requestAnimationFrame(() => {
                 overviewMap.invalidateSize();
                 overviewMap.fitBounds(mergedBounds);
@@ -5625,9 +5876,12 @@
             document.getElementById('overviewDistancePanelToggle').setAttribute('aria-expanded', String(overviewDistancePanelOpen));
             document.getElementById('overviewDistancePanelCard').dataset.open = String(overviewDistancePanelOpen);
             document.getElementById('overviewDistancePanelContent').hidden = !overviewDistancePanelOpen;
-            document.getElementById('overviewUseMyLocationBtn').innerText = ui.overviewLocationUse;
-            document.getElementById('overviewPickLocationBtn').innerText = ui.overviewLocationPick;
-            document.getElementById('overviewClearLocationBtn').innerText = ui.overviewLocationClear;
+            document.getElementById('overviewResetMapBtnText').innerText = ui.overviewResetMap;
+            document.getElementById('overviewUseMyLocationBtn').innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">my_location</span><span>${ui.overviewLocationUse}</span>`;
+            document.getElementById('overviewPickLocationBtn').innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">${overviewLocationPlacementMode ? 'location_searching' : 'edit_location_alt'}</span><span>${ui.overviewLocationPick}</span>`;
+            document.getElementById('overviewClearLocationBtn').innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">location_off</span><span>${ui.overviewLocationClear}</span>`;
+            document.getElementById('overviewPickLocationBtn').classList.toggle('is-active', overviewLocationPlacementMode);
+            document.getElementById('overviewPickLocationBtn').setAttribute('aria-pressed', String(overviewLocationPlacementMode));
             document.getElementById('overviewDistanceSelectedBtn').innerText = ui.overviewDistanceSelectedMode;
             document.getElementById('overviewDistanceAllBtn').innerText = ui.overviewDistanceAllMode;
             document.getElementById('overviewDistanceSelectedBtn').classList.toggle('active', overviewDistanceMode === 'selected');
@@ -5741,9 +5995,13 @@
             const ui = reportContent[lang];
             document.getElementById('ui-title').innerText = ui.title;
             document.getElementById('ui-subtitle').innerText = ui.subtitle;
+            document.getElementById('drawerPrimaryViewLabel').innerText = ui.drawerPrimaryViewLabel;
+            document.getElementById('backToTopBtn').setAttribute('aria-label', ui.backToTopLabel);
             document.getElementById('searchInput').placeholder = ui.searchPlaceholder;
             document.getElementById('viewModeHistoricalBtn').innerText = ui.viewHistorical;
             document.getElementById('viewModeOverviewBtn').innerText = ui.viewOverview;
+            document.getElementById('drawerViewModeHistoricalBtn').innerText = ui.viewHistorical;
+            document.getElementById('drawerViewModeOverviewBtn').innerText = ui.viewOverview;
 
             renderTimeline(document.getElementById('searchInput').value.toLowerCase());
             renderEventDetail(activeIndex);
@@ -5895,6 +6153,8 @@
         window.onload = () => {
             setLanguage('es');
             setPrimaryView('historical');
+            updateHeaderMetrics();
+            syncStickyChrome(true);
 
             const timelineNodes = document.getElementById('timelineNodes');
             timelineNodes?.addEventListener('scroll', updateTimelineScrollHint, { passive: true });
@@ -5902,8 +6162,15 @@
             const referenceTabsScroll = document.getElementById('referenceTabsScroll');
             referenceTabsScroll?.addEventListener('scroll', updateReferenceTabScrollHint, { passive: true });
 
-            window.addEventListener('resize', updateTimelineScrollHint);
-            window.addEventListener('resize', updateReferenceTabScrollHint);
+            const historicalContentArea = document.querySelector('#historicalView .content-area');
+            historicalContentArea?.addEventListener('scroll', () => syncStickyChrome(), { passive: true });
+            window.addEventListener('scroll', () => syncStickyChrome(), { passive: true });
+            window.addEventListener('resize', () => {
+                updateHeaderMetrics();
+                updateTimelineScrollHint();
+                updateReferenceTabScrollHint();
+                syncStickyChrome(true);
+            });
             window.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape') {
                     closeReferenceFigureLightbox();
