@@ -187,6 +187,174 @@
             font-size: 0.92rem;
         }
 
+        .overview-workspace-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .overview-workspace-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(300px, 0.9fr);
+            gap: 1.25rem;
+            align-items: start;
+        }
+
+        .overview-map-panel,
+        .overview-detail-panel {
+            background: var(--md-sys-color-bg);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            overflow: hidden;
+        }
+
+        .overview-map-frame {
+            height: 440px;
+        }
+
+        .overview-map-panel .leaflet-container {
+            background: #eef3f6;
+        }
+
+        .overview-map-panel .leaflet-control-attribution {
+            background: rgba(255, 255, 255, 0.84);
+            backdrop-filter: blur(6px);
+            font-size: 0.7rem;
+        }
+
+        .overview-detail-panel {
+            padding: 1rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .overview-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        .overview-filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            border-radius: 999px;
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-primary);
+            padding: 0.42rem 0.75rem;
+            font-size: 0.83rem;
+            font-weight: 700;
+        }
+
+        .overview-filter-summary {
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: 0.92rem;
+        }
+
+        .overview-panel-block {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .overview-panel-block h3 {
+            font-size: 1rem;
+            color: var(--md-sys-color-primary);
+        }
+
+        .overview-selected-card {
+            background: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 1rem;
+        }
+
+        .overview-selected-card h4 {
+            font-size: 1.08rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .overview-selected-meta {
+            color: var(--md-sys-color-outline);
+            font-size: 0.9rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .overview-selected-summary {
+            line-height: 1.55;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .overview-selected-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-top: 0.9rem;
+        }
+
+        .overview-list {
+            display: grid;
+            gap: 0.65rem;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 0.2rem;
+        }
+
+        .overview-list-item {
+            width: 100%;
+            text-align: left;
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+            border-radius: var(--radius-m);
+            padding: 0.85rem 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .overview-list-item:hover,
+        .overview-list-item:focus-visible {
+            border-color: rgba(139, 0, 0, 0.35);
+            box-shadow: var(--shadow-1);
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .overview-list-item.active {
+            border-color: var(--md-sys-color-primary);
+            box-shadow: inset 0 0 0 1px rgba(139, 0, 0, 0.18);
+            background: rgba(139, 0, 0, 0.04);
+        }
+
+        .overview-list-topline {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .overview-list-year {
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+        }
+
+        .overview-list-title {
+            font-weight: 700;
+            line-height: 1.35;
+            margin-bottom: 0.3rem;
+        }
+
+        .overview-list-location {
+            font-size: 0.88rem;
+            color: var(--md-sys-color-outline);
+        }
+
+        .overview-empty-state {
+            background: var(--md-sys-color-surface);
+            border: 1px dashed var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 1rem;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
         .controls {
             display: flex;
             align-items: center;
@@ -1339,6 +1507,18 @@
                 border-radius: 22px;
             }
 
+            .overview-workspace-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .overview-map-frame {
+                height: 360px;
+            }
+
+            .overview-list {
+                max-height: none;
+            }
+
             .event-card {
                 padding: 1.35rem;
                 border-radius: 22px;
@@ -1507,6 +1687,19 @@
 
             .overview-placeholder-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .overview-map-frame {
+                height: 300px;
+            }
+
+            .overview-detail-panel {
+                padding: 0.9rem;
+            }
+
+            .overview-list-topline {
+                flex-direction: column;
+                gap: 0.2rem;
             }
 
             .event-card {
@@ -1723,24 +1916,31 @@
 
     <section class="overview-shell hidden" id="overviewView" aria-label="Exploratory overview workspace">
         <div class="overview-placeholder-card">
-            <div class="overview-placeholder-kicker"><span class="material-symbols-outlined">dashboard</span><span id="overviewPlaceholderKicker">Vista general</span></div>
-            <h2 id="overviewPlaceholderTitle">Próxima vista exploratoria</h2>
-            <p id="overviewPlaceholderIntro">Esta nueva vista principal reemplazará la cronología por un espacio de exploración con mapa, gráficos y herramientas de distancia, separado del centro de referencia.</p>
-            <div class="overview-placeholder-grid">
-                <div class="overview-placeholder-panel">
-                    <h3><span class="material-symbols-outlined">map</span><span id="overviewPanelMapTitle">Mapa general</span></h3>
-                    <p id="overviewPanelMapText">Mostrará todos los terremotos históricos en una sola vista y permitirá resaltar un evento sin abandonar el modo de exploración.</p>
-                </div>
-                <div class="overview-placeholder-panel">
-                    <h3><span class="material-symbols-outlined">bar_chart</span><span id="overviewPanelChartTitle">Gráficos interactivos</span></h3>
-                    <p id="overviewPanelChartText">Aquí se integrarán los gráficos de eventos por década y distribución de magnitudes para filtrar el conjunto histórico.</p>
-                </div>
-                <div class="overview-placeholder-panel">
-                    <h3><span class="material-symbols-outlined">near_me</span><span id="overviewPanelDistanceTitle">Herramientas de distancia</span></h3>
-                    <p id="overviewPanelDistanceText">También se añadirá un punto de usuario por clic o geolocalización para comparar distancias con un evento seleccionado o con toda la lista.</p>
+            <div class="overview-workspace-header">
+                <div class="overview-placeholder-kicker"><span class="material-symbols-outlined">dashboard</span><span id="overviewPlaceholderKicker">Vista general</span></div>
+                <h2 id="overviewPlaceholderTitle">Vista general exploratoria</h2>
+                <p id="overviewPlaceholderIntro">Esta vista secundaria muestra los terremotos históricos en un mapa común y permite cambiar el contexto exploratorio sin tocar la tarjeta educativa del modo histórico.</p>
+                <div class="overview-toolbar">
+                    <span class="overview-filter-chip"><span class="material-symbols-outlined">filter_alt</span><span id="overviewFilterChipLabel">Filtro activo</span></span>
+                    <span class="overview-filter-summary" id="overviewFilterSummary">Usa la búsqueda superior para filtrar inmediatamente el mapa y la lista enlazada.</span>
                 </div>
             </div>
-            <p class="overview-placeholder-note" id="overviewPlaceholderNote">Esta estructura crea el segundo modo principal solicitado y deja el centro de referencia reservado para el contexto educativo.</p>
+            <div class="overview-workspace-layout">
+                <div class="overview-map-panel">
+                    <div id="overviewMap" class="overview-map-frame" aria-label="Overview earthquake map"></div>
+                </div>
+                <aside class="overview-detail-panel">
+                    <div class="overview-panel-block">
+                        <h3 id="overviewSelectedHeading">Evento resaltado</h3>
+                        <div id="overviewSelectedEvent"></div>
+                    </div>
+                    <div class="overview-panel-block">
+                        <h3 id="overviewListHeading">Eventos filtrados</h3>
+                        <div id="overviewFilteredList" class="overview-list"></div>
+                    </div>
+                </aside>
+            </div>
+            <p class="overview-placeholder-note" id="overviewPlaceholderNote">El mapa por evento del modo histórico permanece sin cambios; esta vista sirve solo para exploración comparativa.</p>
         </div>
     </section>
 
@@ -1910,6 +2110,8 @@
         let eventMap = null;
         let eventMarker = null;
         let eventMapDefaultBounds = null;
+        let overviewMap = null;
+        let overviewDynamicLayer = null;
 
         const eqData = [
             {
@@ -2725,15 +2927,17 @@
                 searchPlaceholder: "Buscar evento o región...",
                 viewHistorical: "Cronología histórica",
                 viewOverview: "Vista general",
-                overviewShellTitle: "Próxima vista exploratoria",
-                overviewShellIntro: "Esta nueva vista principal reemplazará la cronología por un espacio de exploración con mapa, gráficos y herramientas de distancia, separado del centro de referencia.",
-                overviewShellNote: "Esta estructura crea el segundo modo principal solicitado y deja el centro de referencia reservado para el contexto educativo.",
-                overviewMapTitle: "Mapa general",
-                overviewMapText: "Mostrará todos los terremotos históricos en una sola vista y permitirá resaltar un evento sin abandonar el modo de exploración.",
-                overviewChartsTitle: "Gráficos interactivos",
-                overviewChartsText: "Aquí se integrarán los gráficos de eventos por década y distribución de magnitudes para filtrar el conjunto histórico.",
-                overviewDistanceTitle: "Herramientas de distancia",
-                overviewDistanceText: "También se añadirá un punto de usuario por clic o geolocalización para comparar distancias con un evento seleccionado o con toda la lista.",
+                overviewShellTitle: "Vista general exploratoria",
+                overviewShellIntro: "Esta vista secundaria muestra los terremotos históricos en un mapa común y permite cambiar el contexto exploratorio sin tocar la tarjeta educativa del modo histórico.",
+                overviewShellNote: "El mapa por evento del modo histórico permanece sin cambios; esta vista sirve solo para exploración comparativa.",
+                overviewFilterChipLabel: "Filtro activo",
+                overviewFilterSummary: "Usa la búsqueda superior para filtrar inmediatamente el mapa y la lista enlazada.",
+                overviewFilterSummaryWithQuery: "Filtrando mapa y lista por:",
+                overviewSelectedHeading: "Evento resaltado",
+                overviewListHeading: "Eventos filtrados",
+                overviewEmpty: "No hay terremotos que coincidan con este filtro. Ajusta la búsqueda para volver a poblar el mapa general.",
+                overviewMapAria: "Mapa general de terremotos",
+                overviewOpenInHistorical: "Abrir tarjeta histórica",
                 magnitudeLabel: "Magnitud",
                 eventSources: "Fuentes de este evento",
                 chronologyYear: "Año",
@@ -2794,15 +2998,17 @@
                 searchPlaceholder: "Search event or region...",
                 viewHistorical: "Historical timeline",
                 viewOverview: "Overview",
-                overviewShellTitle: "Upcoming exploratory view",
-                overviewShellIntro: "This new primary view will replace the timeline with an exploratory workspace for maps, charts, and distance tools, separate from the reference center.",
-                overviewShellNote: "This shell establishes the requested second primary mode while keeping the reference center reserved for educational context.",
-                overviewMapTitle: "Overview map",
-                overviewMapText: "It will show all historical earthquakes in one place and let readers highlight an event without leaving exploration mode.",
-                overviewChartsTitle: "Interactive charts",
-                overviewChartsText: "This space will host the decade and magnitude-distribution charts used to filter the historical dataset.",
-                overviewDistanceTitle: "Distance tools",
-                overviewDistanceText: "A user location marker from click or geolocation will later support distance comparisons to one event or the full event set.",
+                overviewShellTitle: "Exploratory overview",
+                overviewShellIntro: "This secondary view places the historical earthquakes on one shared map and lets readers change the exploratory context without touching the educational card in historical mode.",
+                overviewShellNote: "The per-event map in historical mode stays unchanged; this view exists only for comparative exploration.",
+                overviewFilterChipLabel: "Active filter",
+                overviewFilterSummary: "Use the top search field to filter the map and linked list immediately.",
+                overviewFilterSummaryWithQuery: "Filtering map and list by:",
+                overviewSelectedHeading: "Highlighted event",
+                overviewListHeading: "Filtered events",
+                overviewEmpty: "No earthquakes match this filter. Adjust the search to repopulate the overview map.",
+                overviewMapAria: "Overview earthquake map",
+                overviewOpenInHistorical: "Open historical card",
                 magnitudeLabel: "Magnitude",
                 eventSources: "Sources for this event",
                 chronologyYear: "Year",
@@ -2863,15 +3069,17 @@
                 searchPlaceholder: "Ereignis oder Region suchen...",
                 viewHistorical: "Historische Chronologie",
                 viewOverview: "Überblick",
-                overviewShellTitle: "Kommende Erkundungsansicht",
-                overviewShellIntro: "Diese neue Hauptansicht ersetzt die Chronologie durch einen Erkundungsbereich mit Karte, Diagrammen und Distanzwerkzeugen, getrennt vom Referenzzentrum.",
-                overviewShellNote: "Diese Struktur etabliert den gewünschten zweiten Hauptmodus und reserviert das Referenzzentrum weiterhin für den Bildungskontext.",
-                overviewMapTitle: "Übersichtskarte",
-                overviewMapText: "Sie wird alle historischen Erdbeben in einer Ansicht zeigen und das Hervorheben eines Ereignisses ermöglichen, ohne den Erkundungsmodus zu verlassen.",
-                overviewChartsTitle: "Interaktive Diagramme",
-                overviewChartsText: "Hier entstehen später die Diagramme nach Jahrzehnten und Magnitudenverteilung, um den historischen Datensatz zu filtern.",
-                overviewDistanceTitle: "Distanzwerkzeuge",
-                overviewDistanceText: "Ein Nutzerpunkt per Klick oder Geolokalisierung wird später Distanzvergleiche zu einem einzelnen Ereignis oder zum gesamten Datensatz ermöglichen.",
+                overviewShellTitle: "Erkundender Überblick",
+                overviewShellIntro: "Diese Sekundäransicht zeigt die historischen Erdbeben auf einer gemeinsamen Karte und erlaubt einen explorativen Kontextwechsel, ohne die Bildungskarte des historischen Modus zu verändern.",
+                overviewShellNote: "Die ereignisbezogene Karte im historischen Modus bleibt unverändert; diese Ansicht dient nur der vergleichenden Exploration.",
+                overviewFilterChipLabel: "Aktiver Filter",
+                overviewFilterSummary: "Nutzen Sie die Suche oben, um Karte und verknüpfte Liste sofort zu filtern.",
+                overviewFilterSummaryWithQuery: "Karte und Liste werden gefiltert nach:",
+                overviewSelectedHeading: "Hervorgehobenes Ereignis",
+                overviewListHeading: "Gefilterte Ereignisse",
+                overviewEmpty: "Keine Erdbeben entsprechen diesem Filter. Passen Sie die Suche an, um die Übersichtskarte wieder zu füllen.",
+                overviewMapAria: "Übersichtskarte der Erdbeben",
+                overviewOpenInHistorical: "Historische Karte öffnen",
                 magnitudeLabel: "Magnitude",
                 eventSources: "Quellen zu diesem Ereignis",
                 chronologyYear: "Jahr",
@@ -4211,21 +4419,141 @@
             if (currentPrimaryView === 'historical') {
                 window.requestAnimationFrame(updateTimelineScrollHint);
                 window.requestAnimationFrame(updateReferenceTabScrollHint);
+            } else {
+                renderOverviewPlaceholder();
             }
+        }
+
+        function getFilteredEventEntries(filterText = '') {
+            const query = (filterText || '').trim().toLowerCase();
+            return eqData
+                .map((eq, index) => ({ eq, index }))
+                .filter(({ eq }) => {
+                    if (!query) return true;
+                    const title = eq.title[currentLang].toLowerCase();
+                    const loc = eq.location[currentLang].toLowerCase();
+                    return title.includes(query) || loc.includes(query) || eq.year.includes(query);
+                });
+        }
+
+        function renderOverviewMap(entries, selectedIndex) {
+            const mapEl = document.getElementById('overviewMap');
+            if (!mapEl) return;
+
+            if (!overviewMap) {
+                overviewMap = L.map('overviewMap', { zoomControl: true });
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    subdomains: 'abcd',
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+                }).addTo(overviewMap);
+            }
+
+            if (overviewDynamicLayer) {
+                overviewDynamicLayer.remove();
+            }
+            overviewDynamicLayer = L.layerGroup().addTo(overviewMap);
+
+            const borderLayer = L.geoJSON(colombiaBorderGeoJson, {
+                style: {
+                    color: '#8b0000',
+                    weight: 2,
+                    fillColor: '#f4d9d9',
+                    fillOpacity: 0.18
+                }
+            }).addTo(overviewDynamicLayer);
+
+            const boundsParts = [borderLayer.getBounds()];
+
+            entries.forEach(({ eq, index }) => {
+                const [lat, lng] = eq.coordinates.split(',').map(Number);
+                const isSelected = index === selectedIndex;
+                const marker = L.circleMarker([lat, lng], {
+                    radius: isSelected ? 12 : Math.max(6, Math.min(11, eq.magnitude + 1)),
+                    color: isSelected ? '#4a0000' : getSeverityColor(eq.magnitude),
+                    weight: isSelected ? 3 : 2,
+                    fillColor: getSeverityColor(eq.magnitude),
+                    fillOpacity: isSelected ? 0.92 : 0.72
+                }).addTo(overviewDynamicLayer);
+
+                marker.bindTooltip(`${eq.year} · ${eq.title[currentLang]} · M ${eq.magnitude}`);
+                marker.on('click', () => {
+                    activeIndex = index;
+                    renderTimeline(document.getElementById('searchInput').value.toLowerCase());
+                    renderEventDetail(activeIndex);
+                    renderOverviewPlaceholder();
+                });
+
+                boundsParts.push(L.latLngBounds([marker.getLatLng()]));
+            });
+
+            const mergedBounds = boundsParts.reduce((acc, next) => acc.extend(next), boundsParts[0]);
+            overviewMap.fitBounds(mergedBounds.pad(0.08));
+            window.requestAnimationFrame(() => overviewMap.invalidateSize());
         }
 
         function renderOverviewPlaceholder() {
             const ui = reportContent[currentLang];
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const entries = getFilteredEventEntries(query);
+            const selectedEntry = entries.find(entry => entry.index === activeIndex) || entries[0] || null;
+
+            if (selectedEntry) {
+                activeIndex = selectedEntry.index;
+            }
+
             document.getElementById('overviewPlaceholderKicker').innerText = ui.viewOverview;
             document.getElementById('overviewPlaceholderTitle').innerText = ui.overviewShellTitle;
             document.getElementById('overviewPlaceholderIntro').innerText = ui.overviewShellIntro;
-            document.getElementById('overviewPanelMapTitle').innerText = ui.overviewMapTitle;
-            document.getElementById('overviewPanelMapText').innerText = ui.overviewMapText;
-            document.getElementById('overviewPanelChartTitle').innerText = ui.overviewChartsTitle;
-            document.getElementById('overviewPanelChartText').innerText = ui.overviewChartsText;
-            document.getElementById('overviewPanelDistanceTitle').innerText = ui.overviewDistanceTitle;
-            document.getElementById('overviewPanelDistanceText').innerText = ui.overviewDistanceText;
+            document.getElementById('overviewFilterChipLabel').innerText = ui.overviewFilterChipLabel;
+            document.getElementById('overviewFilterSummary').innerText = query
+                ? `${ui.overviewFilterSummaryWithQuery} “${document.getElementById('searchInput').value.trim()}”`
+                : ui.overviewFilterSummary;
+            document.getElementById('overviewSelectedHeading').innerText = ui.overviewSelectedHeading;
+            document.getElementById('overviewListHeading').innerText = `${ui.overviewListHeading} (${entries.length})`;
             document.getElementById('overviewPlaceholderNote').innerText = ui.overviewShellNote;
+            document.getElementById('overviewMap').setAttribute('aria-label', ui.overviewMapAria);
+
+            const selectedContainer = document.getElementById('overviewSelectedEvent');
+            const listContainer = document.getElementById('overviewFilteredList');
+
+            if (!selectedEntry) {
+                selectedContainer.innerHTML = `<div class="overview-empty-state">${ui.overviewEmpty}</div>`;
+                listContainer.innerHTML = `<div class="overview-empty-state">${ui.overviewEmpty}</div>`;
+                renderOverviewMap([], null);
+                return;
+            }
+
+            const eq = selectedEntry.eq;
+            const mmiValue = typeof eq.mmi === 'object' ? eq.mmi[currentLang] : eq.mmi;
+            selectedContainer.innerHTML = `
+                <article class="overview-selected-card">
+                    <h4>${eq.title[currentLang]}</h4>
+                    <div class="overview-selected-meta">${eq.year} · ${eq.location[currentLang]}</div>
+                    <div class="overview-selected-summary">${eq.impact[currentLang]}</div>
+                    <div class="overview-selected-tags">
+                        <span class="tag">Mw ${eq.magnitude}</span>
+                        <span class="tag">${ui.depth}: ${eq.depth}</span>
+                        <span class="tag">MMI ${mmiValue}</span>
+                    </div>
+                </article>
+            `;
+
+            listContainer.innerHTML = entries.map(({ eq, index }) => {
+                const selectedClass = index === activeIndex ? 'active' : '';
+                return `
+                    <button class="overview-list-item ${selectedClass}" type="button" onclick="activeIndex=${index}; renderTimeline(document.getElementById('searchInput').value.toLowerCase()); renderEventDetail(activeIndex); renderOverviewPlaceholder();">
+                        <div class="overview-list-topline">
+                            <span class="overview-list-year">${eq.year}</span>
+                            <span class="tag">M ${eq.magnitude}</span>
+                        </div>
+                        <div class="overview-list-title">${eq.title[currentLang]}</div>
+                        <div class="overview-list-location">${eq.location[currentLang]}</div>
+                    </button>
+                `;
+            }).join('');
+
+            renderOverviewMap(entries, activeIndex);
         }
 
         function setLanguage(lang) {
@@ -4253,14 +4581,9 @@
             const container = document.getElementById('timelineNodes');
             container.innerHTML = '';
 
-            eqData.forEach((eq, index) => {
+            getFilteredEventEntries(filterText).forEach(({ eq, index }) => {
                 const title = eq.title[currentLang];
-                const loc = eq.location[currentLang];
                 const query = filterText.trim();
-
-                if (query && !title.toLowerCase().includes(query) && !loc.toLowerCase().includes(query) && !eq.year.includes(query)) {
-                    return;
-                }
 
                 const node = document.createElement('div');
                 node.className = `timeline-node ${index === activeIndex ? 'active' : ''}`;
@@ -4391,6 +4714,7 @@
         function filterEvents() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             renderTimeline(query);
+            renderOverviewPlaceholder();
         }
 
         window.onload = () => {
