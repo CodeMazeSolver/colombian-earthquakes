@@ -252,6 +252,10 @@
             overflow: hidden;
         }
 
+        .overview-map-panel {
+            position: relative;
+        }
+
         .overview-map-frame {
             height: 440px;
         }
@@ -754,17 +758,19 @@
         }
 
         .overview-map-toolbar {
-            display: flex;
-            justify-content: flex-start;
-            margin-bottom: 0.75rem;
+            position: absolute;
+            top: 0.9rem;
+            right: 0.9rem;
+            z-index: 500;
+            pointer-events: none;
         }
 
         .overview-map-reset-btn {
             display: inline-flex;
             align-items: center;
             gap: 0.42rem;
-            border: 1px solid var(--md-sys-color-surface-variant);
-            background: var(--md-sys-color-surface);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            background: rgba(255, 255, 255, 0.92);
             color: var(--md-sys-color-primary);
             border-radius: 999px;
             padding: 0.5rem 0.85rem;
@@ -772,6 +778,9 @@
             font-weight: 700;
             cursor: pointer;
             transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+            box-shadow: var(--shadow-1);
+            backdrop-filter: blur(8px);
+            pointer-events: auto;
         }
 
         .overview-map-reset-btn:hover,
@@ -2823,13 +2832,13 @@
                 <section class="overview-primary-card" aria-label="Overview map and selected earthquake">
                     <div class="overview-primary-card-layout">
                         <div class="overview-map-panel">
+                            <div id="overviewMap" class="overview-map-frame" aria-label="Overview earthquake map"></div>
                             <div class="overview-map-toolbar">
                                 <button class="overview-map-reset-btn" id="overviewResetMapBtn" type="button" onclick="resetOverviewMapView()">
                                     <span class="material-symbols-outlined" aria-hidden="true">center_focus_strong</span>
                                     <span id="overviewResetMapBtnText">Reiniciar mapa</span>
                                 </button>
                             </div>
-                            <div id="overviewMap" class="overview-map-frame" aria-label="Overview earthquake map"></div>
                         </div>
                         <aside class="overview-detail-panel">
                             <div class="overview-panel-block">
@@ -3934,7 +3943,6 @@
                 dashboardDrawerLink: "Abrir Earthquake Dashboard",
                 dashboardOverviewLink: "Ver Earthquake Dashboard relacionado",
                 dashboardReferenceTitle: "Proyecto relacionado: Earthquake Dashboard",
-                dashboardReferenceBody: "Explora el panel externo de sismos recientes por separado. Está enlazado aquí como proyecto complementario y no como feed en vivo integrado en este sitio histórico.",
                 footerDashboardLink: "Abrir Earthquake Dashboard",
                 footerGithubLabel: "Código del proyecto",
                 footerGithubNote: "Repositorio estático de esta experiencia histórica.",
@@ -4050,7 +4058,6 @@
                 dashboardDrawerLink: "Open Earthquake Dashboard",
                 dashboardOverviewLink: "Open related Earthquake Dashboard",
                 dashboardReferenceTitle: "Related project: Earthquake Dashboard",
-                dashboardReferenceBody: "Explore the external recent-earthquakes dashboard separately. It is linked here as a companion project, not as a live feed built into this historical site.",
                 footerDashboardLink: "Open Earthquake Dashboard",
                 footerGithubLabel: "Project code",
                 footerGithubNote: "Static repository for this historical experience.",
@@ -4166,7 +4173,6 @@
                 dashboardDrawerLink: "Earthquake Dashboard öffnen",
                 dashboardOverviewLink: "Zugehöriges Earthquake Dashboard öffnen",
                 dashboardReferenceTitle: "Verwandtes Projekt: Earthquake Dashboard",
-                dashboardReferenceBody: "Erkunden Sie das externe Dashboard zu aktuellen Erdbeben separat. Es ist hier als Begleitprojekt verlinkt, nicht als in diese historische Website integrierter Live-Feed.",
                 footerDashboardLink: "Earthquake Dashboard öffnen",
                 footerGithubLabel: "Projektcode",
                 footerGithubNote: "Statisches Repository dieser historischen Anwendung.",
@@ -5434,7 +5440,6 @@
             return `
                 <section class="reference-source-card reference-related-card">
                     <h3>${escapeHtml(ui.dashboardReferenceTitle)}</h3>
-                    <p>${escapeHtml(ui.dashboardReferenceBody)}</p>
                     <a class="project-link" href="${escapeHtml(EARTHQUAKE_DASHBOARD_URL)}" target="_blank" rel="noreferrer noopener">
                         <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
                         <span>${escapeHtml(ui.dashboardOverviewLink)}</span>
