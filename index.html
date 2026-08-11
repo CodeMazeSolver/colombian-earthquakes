@@ -683,12 +683,171 @@
             margin-top: 0.9rem;
         }
 
+        .overview-distance-panel-card {
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+            border-radius: var(--radius-l);
+            box-shadow: var(--shadow-1);
+            padding: 1rem 1.05rem;
+        }
+
+        .overview-distance-panel-toggle {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.85rem;
+            border: none;
+            background: transparent;
+            color: var(--md-sys-color-on-surface);
+            padding: 0;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .overview-distance-panel-toggle-text strong {
+            display: block;
+            font-size: 0.98rem;
+            margin-bottom: 0.18rem;
+        }
+
+        .overview-distance-panel-toggle-text span {
+            font-size: 0.84rem;
+            color: var(--md-sys-color-on-surface-variant);
+            line-height: 1.45;
+        }
+
+        .overview-distance-panel-toggle .material-symbols-outlined {
+            color: var(--md-sys-color-primary);
+            transition: transform 0.2s ease;
+        }
+
+        .overview-distance-panel-card[data-open="true"] .overview-distance-panel-toggle .material-symbols-outlined {
+            transform: rotate(180deg);
+        }
+
+        .overview-distance-panel-content {
+            display: grid;
+            gap: 0.8rem;
+            margin-top: 0.95rem;
+            padding-top: 0.95rem;
+            border-top: 1px solid rgba(139, 0, 0, 0.12);
+        }
+
+        .overview-distance-panel-content[hidden] {
+            display: none;
+        }
+
+        .overview-location-actions,
+        .overview-distance-mode-switch {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+        }
+
+        .overview-location-btn,
+        .overview-distance-mode-btn {
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+            color: var(--md-sys-color-primary);
+            border-radius: 999px;
+            padding: 0.48rem 0.82rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .overview-location-btn:hover,
+        .overview-location-btn:focus-visible,
+        .overview-distance-mode-btn:hover,
+        .overview-distance-mode-btn:focus-visible {
+            border-color: rgba(139, 0, 0, 0.35);
+            background: rgba(139, 0, 0, 0.05);
+            outline: none;
+        }
+
+        .overview-distance-mode-btn.active {
+            background: var(--md-sys-color-primary);
+            border-color: var(--md-sys-color-primary);
+            color: #fff;
+        }
+
+        .overview-location-status {
+            margin: 0;
+            font-size: 0.84rem;
+            color: var(--md-sys-color-on-surface-variant);
+            line-height: 1.45;
+        }
+
+        .overview-distance-results {
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        .overview-distance-card {
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: rgba(139, 0, 0, 0.03);
+            border-radius: var(--radius-m);
+            padding: 0.85rem 0.9rem;
+        }
+
+        .overview-distance-card strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .overview-distance-list {
+            display: grid;
+            gap: 0.45rem;
+            max-height: 240px;
+            overflow-y: auto;
+            padding-right: 0.15rem;
+        }
+
+        .overview-distance-list-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.55rem 0.65rem;
+            border-radius: var(--radius-s);
+            background: rgba(139, 0, 0, 0.04);
+            font-size: 0.84rem;
+        }
+
+        .overview-distance-list-item strong {
+            display: block;
+            margin-bottom: 0.15rem;
+        }
+
+        .overview-list-shell {
+            position: relative;
+        }
+
         .overview-list {
             display: grid;
             gap: 0.65rem;
             max-height: 420px;
             overflow-y: auto;
             padding-right: 0.2rem;
+            padding-bottom: 3rem;
+        }
+
+        .overview-list-more {
+            position: sticky;
+            bottom: 0;
+            margin-top: -2.35rem;
+            padding: 1.15rem 0 0.2rem;
+            text-align: center;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+            background: linear-gradient(180deg, rgba(255, 251, 247, 0) 0%, rgba(255, 251, 247, 0.96) 52%, rgba(255, 251, 247, 1) 100%);
+            pointer-events: none;
+        }
+
+        .overview-list-more[hidden] {
+            display: none;
         }
 
         .overview-list-item {
@@ -2372,6 +2531,28 @@
                         </aside>
                     </div>
                 </section>
+                <section class="overview-distance-panel-card" id="overviewDistancePanelCard" aria-label="Overview distance tools">
+                    <button class="overview-distance-panel-toggle" id="overviewDistancePanelToggle" type="button" aria-expanded="false" onclick="toggleOverviewDistancePanel()">
+                        <span class="overview-distance-panel-toggle-text">
+                            <strong id="overviewDistancePanelTitle">Herramientas de distancia</strong>
+                            <span id="overviewDistancePanelSummary">Oculto por defecto. Ábrelo para calcular distancias desde tu ubicación.</span>
+                        </span>
+                        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="overview-distance-panel-content" id="overviewDistancePanelContent" hidden>
+                        <div class="overview-location-actions">
+                            <button class="overview-location-btn" id="overviewUseMyLocationBtn" type="button" onclick="requestOverviewUserLocation()">Usar mi ubicación</button>
+                            <button class="overview-location-btn" id="overviewPickLocationBtn" type="button" onclick="armOverviewMapLocationPicker()">Elegir en el mapa</button>
+                            <button class="overview-location-btn" id="overviewClearLocationBtn" type="button" onclick="clearOverviewUserLocation()">Limpiar ubicación</button>
+                        </div>
+                        <div class="overview-distance-mode-switch" role="tablist" aria-label="Overview distance mode switch">
+                            <button class="overview-distance-mode-btn active" id="overviewDistanceSelectedBtn" type="button" onclick="setOverviewDistanceMode('selected')">Distancia al evento resaltado</button>
+                            <button class="overview-distance-mode-btn" id="overviewDistanceAllBtn" type="button" onclick="setOverviewDistanceMode('all')">Distancia a todos</button>
+                        </div>
+                        <p class="overview-location-status" id="overviewLocationStatus">Coloca tu ubicación con el botón o haz clic en el mapa.</p>
+                        <div id="overviewDistanceResults" class="overview-distance-results"></div>
+                    </div>
+                </section>
                 <section class="overview-secondary-card" aria-label="Overview charts and filtered event list">
                     <div class="overview-year-range-card">
                         <div class="overview-year-range-header">
@@ -2418,7 +2599,10 @@
                         </div>
                         <div class="overview-panel-block">
                             <h3 id="overviewListHeading">Eventos filtrados</h3>
-                            <div id="overviewFilteredList" class="overview-list"></div>
+                            <div class="overview-list-shell">
+                                <div id="overviewFilteredList" class="overview-list"></div>
+                                <div id="overviewListMore" class="overview-list-more" hidden>Desplázate para ver todos los resultados</div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -2594,6 +2778,11 @@
         let eventMapDefaultBounds = null;
         let overviewMap = null;
         let overviewDynamicLayer = null;
+        let overviewUserLocation = null;
+        let overviewLocationPlacementMode = false;
+        let overviewDistanceMode = 'selected';
+        let overviewDistancePanelOpen = false;
+        let overviewLocationStatusKey = 'idle';
 
         const eqData = [
             {
@@ -3430,6 +3619,28 @@
                 overviewDecadeTag: "Década",
                 overviewMagnitudeTag: "Magnitud",
                 overviewListHeading: "Eventos filtrados",
+                overviewListMore: "Desplázate para ver los {count} eventos filtrados",
+                overviewDistancePanelTitle: "Herramientas de distancia",
+                overviewDistancePanelClosed: "Oculto por defecto. Ábrelo para calcular distancias desde tu ubicación.",
+                overviewDistancePanelOpenSummary: "Calcula distancias desde tu ubicación al evento resaltado o a toda la lista filtrada.",
+                overviewLocationUse: "Usar mi ubicación",
+                overviewLocationPick: "Elegir en el mapa",
+                overviewLocationClear: "Limpiar ubicación",
+                overviewDistanceSelectedMode: "Distancia al evento resaltado",
+                overviewDistanceAllMode: "Distancia a todos",
+                overviewLocationIdle: "Coloca tu ubicación con el botón o haz clic en el mapa.",
+                overviewLocationPicking: "Haz clic en el mapa para colocar tu ubicación.",
+                overviewLocationReady: "Ubicación activa: {source}. Puedes reemplazarla con el botón o con otro clic en el mapa.",
+                overviewLocationGeolocating: "Solicitando tu ubicación del navegador...",
+                overviewLocationUnavailable: "La geolocalización no está disponible en este navegador.",
+                overviewLocationError: "No se pudo obtener tu ubicación del navegador.",
+                overviewLocationSourceBrowser: "ubicación del navegador",
+                overviewLocationSourceMap: "punto elegido en el mapa",
+                overviewDistanceSelectedTitle: "Distancia al evento resaltado",
+                overviewDistanceSelectedBody: "Tu ubicación está a {distance} km de {event}.",
+                overviewDistanceSelectedLine: "La línea en el mapa conecta tu ubicación con el evento activo.",
+                overviewDistanceAllTitle: "Distancias ordenadas a todos los eventos",
+                overviewDistanceAllEmpty: "Coloca una ubicación para ordenar los terremotos por proximidad.",
                 overviewEmpty: "No hay terremotos que coincidan con este filtro. Ajusta la búsqueda para volver a poblar el mapa general.",
                 overviewMapAria: "Mapa general de terremotos",
                 overviewOpenInHistorical: "Abrir tarjeta histórica",
@@ -3514,6 +3725,28 @@
                 overviewDecadeTag: "Decade",
                 overviewMagnitudeTag: "Magnitude",
                 overviewListHeading: "Filtered events",
+                overviewListMore: "Scroll to explore all {count} filtered events",
+                overviewDistancePanelTitle: "Distance tools",
+                overviewDistancePanelClosed: "Hidden by default. Open it to calculate distances from your location.",
+                overviewDistancePanelOpenSummary: "Calculate distances from your location to the highlighted event or the full filtered list.",
+                overviewLocationUse: "Use my location",
+                overviewLocationPick: "Pick on map",
+                overviewLocationClear: "Clear location",
+                overviewDistanceSelectedMode: "Distance to highlighted event",
+                overviewDistanceAllMode: "Distance to all",
+                overviewLocationIdle: "Place your location with the button or click directly on the map.",
+                overviewLocationPicking: "Click on the map to place your location.",
+                overviewLocationReady: "Active location: {source}. You can replace it with the button or another map click.",
+                overviewLocationGeolocating: "Requesting your browser location...",
+                overviewLocationUnavailable: "Geolocation is not available in this browser.",
+                overviewLocationError: "Your browser location could not be retrieved.",
+                overviewLocationSourceBrowser: "browser location",
+                overviewLocationSourceMap: "map-picked point",
+                overviewDistanceSelectedTitle: "Distance to highlighted event",
+                overviewDistanceSelectedBody: "Your location is {distance} km from {event}.",
+                overviewDistanceSelectedLine: "The line on the map connects your location to the active event.",
+                overviewDistanceAllTitle: "Sorted distances to all events",
+                overviewDistanceAllEmpty: "Place a location to sort earthquakes by proximity.",
                 overviewEmpty: "No earthquakes match this filter. Adjust the search to repopulate the overview map.",
                 overviewMapAria: "Overview earthquake map",
                 overviewOpenInHistorical: "Open historical card",
@@ -3598,6 +3831,28 @@
                 overviewDecadeTag: "Jahrzehnt",
                 overviewMagnitudeTag: "Magnitude",
                 overviewListHeading: "Gefilterte Ereignisse",
+                overviewListMore: "Scrollen Sie, um alle {count} gefilterten Ereignisse zu sehen",
+                overviewDistancePanelTitle: "Distanzwerkzeuge",
+                overviewDistancePanelClosed: "Standardmäßig verborgen. Öffnen Sie den Bereich, um Distanzen von Ihrem Standort zu berechnen.",
+                overviewDistancePanelOpenSummary: "Berechnet Distanzen von Ihrem Standort zum markierten Ereignis oder zur gesamten gefilterten Liste.",
+                overviewLocationUse: "Meinen Standort nutzen",
+                overviewLocationPick: "Auf der Karte wählen",
+                overviewLocationClear: "Standort löschen",
+                overviewDistanceSelectedMode: "Distanz zum markierten Ereignis",
+                overviewDistanceAllMode: "Distanz zu allen",
+                overviewLocationIdle: "Platzieren Sie Ihren Standort mit der Taste oder per Klick direkt auf der Karte.",
+                overviewLocationPicking: "Klicken Sie auf die Karte, um Ihren Standort zu setzen.",
+                overviewLocationReady: "Aktiver Standort: {source}. Sie können ihn per Taste oder erneutem Kartenklick ersetzen.",
+                overviewLocationGeolocating: "Browser-Standort wird angefragt...",
+                overviewLocationUnavailable: "Geolokalisierung ist in diesem Browser nicht verfügbar.",
+                overviewLocationError: "Der Browser-Standort konnte nicht ermittelt werden.",
+                overviewLocationSourceBrowser: "Browser-Standort",
+                overviewLocationSourceMap: "auf der Karte gewählter Punkt",
+                overviewDistanceSelectedTitle: "Distanz zum markierten Ereignis",
+                overviewDistanceSelectedBody: "Ihr Standort liegt {distance} km von {event} entfernt.",
+                overviewDistanceSelectedLine: "Die Linie auf der Karte verbindet Ihren Standort mit dem aktiven Ereignis.",
+                overviewDistanceAllTitle: "Sortierte Distanzen zu allen Ereignissen",
+                overviewDistanceAllEmpty: "Platzieren Sie einen Standort, um Erdbeben nach Nähe zu sortieren.",
                 overviewEmpty: "Keine Erdbeben entsprechen diesem Filter. Passen Sie die Suche an, um die Übersichtskarte wieder zu füllen.",
                 overviewMapAria: "Übersichtskarte der Erdbeben",
                 overviewOpenInHistorical: "Historische Karte öffnen",
@@ -4993,6 +5248,84 @@
             return '8.0+';
         }
 
+        function formatDistanceKm(distanceKm) {
+            return new Intl.NumberFormat(currentLang === 'de' ? 'de-DE' : currentLang === 'es' ? 'es-CO' : 'en-US', {
+                maximumFractionDigits: distanceKm >= 100 ? 0 : 1,
+                minimumFractionDigits: distanceKm >= 100 ? 0 : 1
+            }).format(distanceKm);
+        }
+
+        function calculateDistanceKm(lat1, lon1, lat2, lon2) {
+            const toRad = value => (value * Math.PI) / 180;
+            const earthRadiusKm = 6371;
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+            const a = Math.sin(dLat / 2) ** 2
+                + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+            return earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        }
+
+        function setOverviewDistanceMode(mode) {
+            overviewDistanceMode = mode === 'all' ? 'all' : 'selected';
+            renderOverviewPlaceholder();
+        }
+
+        function toggleOverviewDistancePanel() {
+            overviewDistancePanelOpen = !overviewDistancePanelOpen;
+            renderOverviewPlaceholder();
+        }
+
+        function armOverviewMapLocationPicker() {
+            overviewLocationPlacementMode = true;
+            overviewLocationStatusKey = 'picking';
+            renderOverviewPlaceholder();
+        }
+
+        function clearOverviewUserLocation() {
+            overviewUserLocation = null;
+            overviewLocationPlacementMode = false;
+            overviewLocationStatusKey = 'idle';
+            renderOverviewPlaceholder();
+        }
+
+        function requestOverviewUserLocation() {
+            const ui = reportContent[currentLang];
+            if (!navigator.geolocation) {
+                overviewLocationStatusKey = 'unavailable';
+                renderOverviewPlaceholder();
+                return;
+            }
+            overviewLocationPlacementMode = false;
+            overviewLocationStatusKey = 'geolocating';
+            renderOverviewPlaceholder();
+            navigator.geolocation.getCurrentPosition(
+                ({ coords }) => {
+                    overviewUserLocation = { lat: coords.latitude, lng: coords.longitude, source: 'browser' };
+                    overviewLocationStatusKey = 'ready';
+                    renderOverviewPlaceholder();
+                },
+                () => {
+                    overviewLocationStatusKey = 'error';
+                    renderOverviewPlaceholder();
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+            );
+        }
+
+        function getOverviewLocationStatusText(ui) {
+            if (overviewLocationStatusKey === 'picking') return ui.overviewLocationPicking;
+            if (overviewLocationStatusKey === 'geolocating') return ui.overviewLocationGeolocating;
+            if (overviewLocationStatusKey === 'unavailable') return ui.overviewLocationUnavailable;
+            if (overviewLocationStatusKey === 'error') return ui.overviewLocationError;
+            if (overviewUserLocation) {
+                const source = overviewUserLocation.source === 'browser'
+                    ? ui.overviewLocationSourceBrowser
+                    : ui.overviewLocationSourceMap;
+                return ui.overviewLocationReady.replace('{source}', source);
+            }
+            return ui.overviewLocationIdle;
+        }
+
         function setOverviewYearRange(boundary, rawValue) {
             const value = Number(rawValue);
             if (boundary === 'min') {
@@ -5145,7 +5478,7 @@
             clearBtn.textContent = ui.overviewClearCharts;
         }
 
-        function renderOverviewMap(entries, selectedIndex) {
+        function renderOverviewMap(entries, selectedIndex, selectedEntry = null) {
             const mapEl = document.getElementById('overviewMap');
             if (!mapEl) return;
 
@@ -5156,6 +5489,13 @@
                     maxZoom: 19,
                     attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
                 }).addTo(overviewMap);
+                overviewMap.on('click', event => {
+                    if (!overviewLocationPlacementMode) return;
+                    overviewUserLocation = { lat: event.latlng.lat, lng: event.latlng.lng, source: 'map' };
+                    overviewLocationPlacementMode = false;
+                    overviewLocationStatusKey = 'ready';
+                    renderOverviewPlaceholder();
+                });
             }
 
             if (overviewDynamicLayer) {
@@ -5194,6 +5534,34 @@
 
                 boundsParts.push(L.latLngBounds([marker.getLatLng()]));
             });
+
+            if (overviewUserLocation) {
+                const userLatLng = [overviewUserLocation.lat, overviewUserLocation.lng];
+                const userMarker = L.circleMarker(userLatLng, {
+                    radius: 9,
+                    color: '#0d47a1',
+                    weight: 3,
+                    fillColor: '#42a5f5',
+                    fillOpacity: 0.95
+                }).addTo(overviewDynamicLayer);
+                userMarker.bindTooltip(currentLang === 'es'
+                    ? 'Tu ubicación'
+                    : currentLang === 'de'
+                        ? 'Ihr Standort'
+                        : 'Your location');
+                boundsParts.push(L.latLngBounds([userMarker.getLatLng()]));
+
+                if (overviewDistanceMode === 'selected' && selectedEntry) {
+                    const [selectedLat, selectedLng] = selectedEntry.eq.coordinates.split(',').map(Number);
+                    const line = L.polyline([userLatLng, [selectedLat, selectedLng]], {
+                        color: '#0d47a1',
+                        weight: 3,
+                        opacity: 0.8,
+                        dashArray: '8 8'
+                    }).addTo(overviewDynamicLayer);
+                    boundsParts.push(line.getBounds());
+                }
+            }
 
             const mergedBounds = boundsParts.reduce((acc, next) => acc.extend(next), boundsParts[0]).pad(0.08);
             window.requestAnimationFrame(() => {
@@ -5250,6 +5618,21 @@
             document.getElementById('overviewMagnitudeChartNote').innerText = ui.overviewMagnitudeNote;
             document.getElementById('overviewClearFiltersBtn').innerText = ui.overviewClearCharts;
             document.getElementById('overviewListHeading').innerText = `${ui.overviewListHeading} (${entries.length})`;
+            document.getElementById('overviewDistancePanelTitle').innerText = ui.overviewDistancePanelTitle;
+            document.getElementById('overviewDistancePanelSummary').innerText = overviewDistancePanelOpen
+                ? ui.overviewDistancePanelOpenSummary
+                : ui.overviewDistancePanelClosed;
+            document.getElementById('overviewDistancePanelToggle').setAttribute('aria-expanded', String(overviewDistancePanelOpen));
+            document.getElementById('overviewDistancePanelCard').dataset.open = String(overviewDistancePanelOpen);
+            document.getElementById('overviewDistancePanelContent').hidden = !overviewDistancePanelOpen;
+            document.getElementById('overviewUseMyLocationBtn').innerText = ui.overviewLocationUse;
+            document.getElementById('overviewPickLocationBtn').innerText = ui.overviewLocationPick;
+            document.getElementById('overviewClearLocationBtn').innerText = ui.overviewLocationClear;
+            document.getElementById('overviewDistanceSelectedBtn').innerText = ui.overviewDistanceSelectedMode;
+            document.getElementById('overviewDistanceAllBtn').innerText = ui.overviewDistanceAllMode;
+            document.getElementById('overviewDistanceSelectedBtn').classList.toggle('active', overviewDistanceMode === 'selected');
+            document.getElementById('overviewDistanceAllBtn').classList.toggle('active', overviewDistanceMode === 'all');
+            document.getElementById('overviewLocationStatus').innerText = getOverviewLocationStatusText(ui);
             document.getElementById('overviewMap').setAttribute('aria-label', ui.overviewMapAria);
 
             syncOverviewYearRangeUi();
@@ -5257,16 +5640,34 @@
 
             const selectedContainer = document.getElementById('overviewSelectedEvent');
             const listContainer = document.getElementById('overviewFilteredList');
+            const listMore = document.getElementById('overviewListMore');
+            const distanceResultsContainer = document.getElementById('overviewDistanceResults');
+
+            if (listMore) {
+                listMore.textContent = ui.overviewListMore.replace('{count}', String(entries.length));
+                listMore.hidden = entries.length <= 4;
+            }
 
             if (!selectedEntry) {
                 selectedContainer.innerHTML = `<div class="overview-empty-state">${ui.overviewEmpty}</div>`;
+                distanceResultsContainer.innerHTML = '';
                 listContainer.innerHTML = `<div class="overview-empty-state">${ui.overviewEmpty}</div>`;
-                renderOverviewMap([], null);
+                renderOverviewMap([], null, null);
                 return;
             }
 
             const eq = selectedEntry.eq;
             const mmiValue = typeof eq.mmi === 'object' ? eq.mmi[currentLang] : eq.mmi;
+            const distanceResults = overviewUserLocation
+                ? entries.map(({ eq, index }) => {
+                    const [lat, lng] = eq.coordinates.split(',').map(Number);
+                    return {
+                        eq,
+                        index,
+                        distanceKm: calculateDistanceKm(overviewUserLocation.lat, overviewUserLocation.lng, lat, lng)
+                    };
+                }).sort((a, b) => a.distanceKm - b.distanceKm)
+                : [];
             selectedContainer.innerHTML = `
                 <article class="overview-selected-card">
                     <div class="overview-selected-kicker"><span class="material-symbols-outlined">info</span><span>${ui.overviewSelectedHeading}</span></div>
@@ -5280,6 +5681,38 @@
                     </div>
                 </article>
             `;
+
+            if (!overviewUserLocation) {
+                distanceResultsContainer.innerHTML = `<div class="overview-distance-card">${ui.overviewDistanceAllEmpty}</div>`;
+            } else if (overviewDistanceMode === 'selected') {
+                const selectedDistance = distanceResults.find(item => item.index === selectedEntry.index);
+                distanceResultsContainer.innerHTML = `
+                    <div class="overview-distance-card">
+                        <strong>${ui.overviewDistanceSelectedTitle}</strong>
+                        <div>${ui.overviewDistanceSelectedBody
+                            .replace('{distance}', formatDistanceKm(selectedDistance?.distanceKm || 0))
+                            .replace('{event}', eq.title[currentLang])}</div>
+                        <div class="overview-location-status">${ui.overviewDistanceSelectedLine}</div>
+                    </div>
+                `;
+            } else {
+                distanceResultsContainer.innerHTML = `
+                    <div class="overview-distance-card">
+                        <strong>${ui.overviewDistanceAllTitle}</strong>
+                        <div class="overview-distance-list">
+                            ${distanceResults.map(item => `
+                                <div class="overview-distance-list-item">
+                                    <div>
+                                        <strong>${item.eq.year} · ${item.eq.title[currentLang]}</strong>
+                                        <span>${item.eq.location[currentLang]}</span>
+                                    </div>
+                                    <span>${formatDistanceKm(item.distanceKm)} km</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
 
             listContainer.innerHTML = entries.map(({ eq, index }) => {
                 const selectedClass = index === activeIndex ? 'active' : '';
@@ -5295,7 +5728,7 @@
                 `;
             }).join('');
 
-            renderOverviewMap(entries, activeIndex);
+            renderOverviewMap(entries, activeIndex, selectedEntry);
         }
 
         function setLanguage(lang) {
