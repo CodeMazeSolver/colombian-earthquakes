@@ -262,6 +262,139 @@
             color: var(--md-sys-color-primary);
         }
 
+        .overview-panel-block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .overview-panel-block-header h3 {
+            margin: 0;
+        }
+
+        .overview-clear-filters {
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-surface);
+            color: var(--md-sys-color-primary);
+            border-radius: 999px;
+            padding: 0.42rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .overview-clear-filters:disabled {
+            opacity: 0.45;
+            cursor: default;
+        }
+
+        .overview-chart-blocks {
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .overview-chart-card {
+            background: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m);
+            padding: 0.9rem;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .overview-chart-card h4 {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--md-sys-color-primary);
+        }
+
+        .overview-chart-card p {
+            margin: 0;
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: 0.84rem;
+            line-height: 1.45;
+        }
+
+        .overview-chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
+            gap: 0.6rem;
+            align-items: end;
+        }
+
+        .overview-chart-bar {
+            border: 1px solid var(--md-sys-color-surface-variant);
+            background: var(--md-sys-color-bg);
+            border-radius: 16px;
+            padding: 0.65rem 0.55rem;
+            display: grid;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            min-height: 152px;
+        }
+
+        .overview-chart-bar:hover {
+            transform: translateY(-2px);
+            border-color: rgba(139, 0, 0, 0.32);
+            box-shadow: var(--shadow-1);
+        }
+
+        .overview-chart-bar.active {
+            border-color: var(--md-sys-color-primary);
+            background: var(--md-sys-color-primary-container);
+            box-shadow: var(--shadow-1);
+        }
+
+        .overview-chart-bar.is-dimmed {
+            opacity: 0.55;
+        }
+
+        .overview-chart-bar-topline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            font-size: 0.72rem;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .overview-chart-count {
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+        }
+
+        .overview-chart-track {
+            height: 108px;
+            display: flex;
+            align-items: end;
+        }
+
+        .overview-chart-fill {
+            width: 100%;
+            min-height: 6px;
+            border-radius: 12px 12px 6px 6px;
+            background: linear-gradient(180deg, rgba(255, 140, 0, 0.96) 0%, rgba(139, 0, 0, 0.92) 100%);
+            transition: height 0.2s ease, opacity 0.2s ease;
+        }
+
+        .overview-chart-bar.active .overview-chart-fill {
+            background: linear-gradient(180deg, rgba(186, 22, 22, 0.95) 0%, rgba(74, 0, 0, 0.95) 100%);
+        }
+
+        .overview-chart-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .overview-chart-caption {
+            font-size: 0.74rem;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
         .overview-selected-card {
             background: var(--md-sys-color-surface);
             border: 1px solid var(--md-sys-color-surface-variant);
@@ -1702,6 +1835,14 @@
                 padding: 0.9rem;
             }
 
+            .overview-chart-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .overview-chart-bar {
+                min-height: 138px;
+            }
+
             .overview-list-topline {
                 flex-direction: column;
                 gap: 0.2rem;
@@ -1938,6 +2079,28 @@
                     <div class="overview-panel-block">
                         <h3 id="overviewSelectedHeading">Evento resaltado</h3>
                         <div id="overviewSelectedEvent"></div>
+                    </div>
+                    <div class="overview-panel-block">
+                        <div class="overview-panel-block-header">
+                            <h3 id="overviewChartsHeading">Filtros analíticos</h3>
+                            <button class="overview-clear-filters" id="overviewClearFiltersBtn" type="button" onclick="clearOverviewChartFilters()">Limpiar gráficos</button>
+                        </div>
+                        <div class="overview-chart-blocks">
+                            <section class="overview-chart-card" aria-labelledby="overviewDecadeChartTitle">
+                                <div>
+                                    <h4 id="overviewDecadeChartTitle">Eventos por década</h4>
+                                    <p id="overviewDecadeChartNote">Selecciona una década para filtrar la exploración actual.</p>
+                                </div>
+                                <div id="overviewDecadeChart" class="overview-chart-grid"></div>
+                            </section>
+                            <section class="overview-chart-card" aria-labelledby="overviewMagnitudeChartTitle">
+                                <div>
+                                    <h4 id="overviewMagnitudeChartTitle">Distribución por magnitud</h4>
+                                    <p id="overviewMagnitudeChartNote">Selecciona un rango de magnitud para filtrar el mapa y la lista.</p>
+                                </div>
+                                <div id="overviewMagnitudeChart" class="overview-chart-grid"></div>
+                            </section>
+                        </div>
                     </div>
                     <div class="overview-panel-block">
                         <h3 id="overviewListHeading">Eventos filtrados</h3>
@@ -2938,7 +3101,16 @@
                 overviewFilterChipLabel: "Filtro activo",
                 overviewFilterSummary: "Usa la búsqueda superior para filtrar inmediatamente el mapa y la lista enlazada.",
                 overviewFilterSummaryWithQuery: "Filtrando mapa y lista por:",
+                overviewFilterSummaryWithCharts: "Mapa y lista filtrados por:",
                 overviewSelectedHeading: "Evento resaltado",
+                overviewChartsHeading: "Filtros analíticos",
+                overviewClearCharts: "Limpiar gráficos",
+                overviewDecadeTitle: "Eventos por década",
+                overviewDecadeNote: "Selecciona una década para filtrar la exploración actual.",
+                overviewMagnitudeTitle: "Distribución por magnitud",
+                overviewMagnitudeNote: "Selecciona un rango de magnitud para filtrar el mapa y la lista.",
+                overviewDecadeTag: "Década",
+                overviewMagnitudeTag: "Magnitud",
                 overviewListHeading: "Eventos filtrados",
                 overviewEmpty: "No hay terremotos que coincidan con este filtro. Ajusta la búsqueda para volver a poblar el mapa general.",
                 overviewMapAria: "Mapa general de terremotos",
@@ -3009,7 +3181,16 @@
                 overviewFilterChipLabel: "Active filter",
                 overviewFilterSummary: "Use the top search field to filter the map and linked list immediately.",
                 overviewFilterSummaryWithQuery: "Filtering map and list by:",
+                overviewFilterSummaryWithCharts: "Map and list filtered by:",
                 overviewSelectedHeading: "Highlighted event",
+                overviewChartsHeading: "Analytical filters",
+                overviewClearCharts: "Clear charts",
+                overviewDecadeTitle: "Events by decade",
+                overviewDecadeNote: "Select a decade to filter the current exploration state.",
+                overviewMagnitudeTitle: "Magnitude distribution",
+                overviewMagnitudeNote: "Select a magnitude range to filter the map and list.",
+                overviewDecadeTag: "Decade",
+                overviewMagnitudeTag: "Magnitude",
                 overviewListHeading: "Filtered events",
                 overviewEmpty: "No earthquakes match this filter. Adjust the search to repopulate the overview map.",
                 overviewMapAria: "Overview earthquake map",
@@ -3080,7 +3261,16 @@
                 overviewFilterChipLabel: "Aktiver Filter",
                 overviewFilterSummary: "Nutzen Sie die Suche oben, um Karte und verknüpfte Liste sofort zu filtern.",
                 overviewFilterSummaryWithQuery: "Karte und Liste werden gefiltert nach:",
+                overviewFilterSummaryWithCharts: "Karte und Liste gefiltert nach:",
                 overviewSelectedHeading: "Hervorgehobenes Ereignis",
+                overviewChartsHeading: "Analytische Filter",
+                overviewClearCharts: "Diagramme zurücksetzen",
+                overviewDecadeTitle: "Ereignisse nach Jahrzehnt",
+                overviewDecadeNote: "Wählen Sie ein Jahrzehnt, um die aktuelle Exploration zu filtern.",
+                overviewMagnitudeTitle: "Magnitudenverteilung",
+                overviewMagnitudeNote: "Wählen Sie einen Magnitudenbereich, um Karte und Liste zu filtern.",
+                overviewDecadeTag: "Jahrzehnt",
+                overviewMagnitudeTag: "Magnitude",
                 overviewListHeading: "Gefilterte Ereignisse",
                 overviewEmpty: "Keine Erdbeben entsprechen diesem Filter. Passen Sie die Suche an, um die Übersichtskarte wieder zu füllen.",
                 overviewMapAria: "Übersichtskarte der Erdbeben",
@@ -3896,6 +4086,10 @@
         let activeReferenceTab = 'measurement';
         let activeTermKey = null;
         let currentPrimaryView = 'historical';
+        let overviewChartFilters = {
+            decade: null,
+            magnitude: null
+        };
 
         function toggleMobileDrawer(forceState) {
             const shouldOpen = typeof forceState === 'boolean'
@@ -4443,7 +4637,7 @@
             }
         }
 
-        function getFilteredEventEntries(filterText = '') {
+        function getSearchFilteredEventEntries(filterText = '') {
             const query = (filterText || '').trim().toLowerCase();
             return eqData
                 .map((eq, index) => ({ eq, index }))
@@ -4453,6 +4647,84 @@
                     const loc = eq.location[currentLang].toLowerCase();
                     return title.includes(query) || loc.includes(query) || eq.year.includes(query);
                 });
+        }
+
+        function getMagnitudeBucketKey(magnitude) {
+            if (magnitude < 6) return '5.0–5.9';
+            if (magnitude < 7) return '6.0–6.9';
+            if (magnitude < 8) return '7.0–7.9';
+            return '8.0+';
+        }
+
+        function getOverviewFilteredEventEntries(filterText = '') {
+            return getSearchFilteredEventEntries(filterText).filter(({ eq }) => {
+                const matchesDecade = !overviewChartFilters.decade || `${Math.floor(Number(eq.year) / 10) * 10}s` === overviewChartFilters.decade;
+                const matchesMagnitude = !overviewChartFilters.magnitude || getMagnitudeBucketKey(eq.magnitude) === overviewChartFilters.magnitude;
+                return matchesDecade && matchesMagnitude;
+            });
+        }
+
+        function toggleOverviewChartFilter(type, value) {
+            if (!overviewChartFilters.hasOwnProperty(type)) return;
+            overviewChartFilters[type] = overviewChartFilters[type] === value ? null : value;
+            renderOverviewPlaceholder();
+        }
+
+        function clearOverviewChartFilters() {
+            overviewChartFilters = { decade: null, magnitude: null };
+            renderOverviewPlaceholder();
+        }
+
+        function renderOverviewCharts(baseEntries) {
+            const ui = reportContent[currentLang];
+            const decadeContainer = document.getElementById('overviewDecadeChart');
+            const magnitudeContainer = document.getElementById('overviewMagnitudeChart');
+            const clearBtn = document.getElementById('overviewClearFiltersBtn');
+            if (!decadeContainer || !magnitudeContainer || !clearBtn) return;
+
+            const decadeCounts = new Map();
+            const magnitudeOrder = ['5.0–5.9', '6.0–6.9', '7.0–7.9', '8.0+'];
+            const magnitudeCounts = new Map(magnitudeOrder.map(key => [key, 0]));
+
+            baseEntries.forEach(({ eq }) => {
+                const decadeKey = `${Math.floor(Number(eq.year) / 10) * 10}s`;
+                decadeCounts.set(decadeKey, (decadeCounts.get(decadeKey) || 0) + 1);
+                const magnitudeKey = getMagnitudeBucketKey(eq.magnitude);
+                magnitudeCounts.set(magnitudeKey, (magnitudeCounts.get(magnitudeKey) || 0) + 1);
+            });
+
+            const decadeSeries = [...decadeCounts.entries()]
+                .sort((a, b) => Number(a[0]) - Number(b[0]))
+                .map(([label, count]) => ({ label, count, type: 'decade' }));
+            const magnitudeSeries = magnitudeOrder.map(label => ({ label, count: magnitudeCounts.get(label) || 0, type: 'magnitude' }));
+
+            const renderSeries = (container, series, activeValue) => {
+                const maxCount = Math.max(1, ...series.map(item => item.count));
+                container.innerHTML = series.map(item => {
+                    const isActive = activeValue === item.label;
+                    const isDimmed = activeValue && activeValue !== item.label;
+                    const height = item.count > 0 ? Math.max(10, Math.round((item.count / maxCount) * 100)) : 6;
+                    const disabled = item.count === 0 ? 'disabled' : '';
+                    return `
+                        <button class="overview-chart-bar ${isActive ? 'active' : ''} ${isDimmed ? 'is-dimmed' : ''}" type="button" ${disabled} aria-pressed="${isActive}" onclick="toggleOverviewChartFilter('${item.type}', '${item.label}')">
+                            <div class="overview-chart-bar-topline">
+                                <span>${item.type === 'decade' ? ui.overviewDecadeTag : ui.overviewMagnitudeTag}</span>
+                                <span class="overview-chart-count">${item.count}</span>
+                            </div>
+                            <div class="overview-chart-track">
+                                <div class="overview-chart-fill" style="height:${height}%"></div>
+                            </div>
+                            <div class="overview-chart-label">${item.label}</div>
+                            <div class="overview-chart-caption">${item.count} / ${baseEntries.length}</div>
+                        </button>
+                    `;
+                }).join('');
+            };
+
+            renderSeries(decadeContainer, decadeSeries, overviewChartFilters.decade);
+            renderSeries(magnitudeContainer, magnitudeSeries, overviewChartFilters.magnitude);
+            clearBtn.disabled = !overviewChartFilters.decade && !overviewChartFilters.magnitude;
+            clearBtn.textContent = ui.overviewClearCharts;
         }
 
         function renderOverviewMap(entries, selectedIndex) {
@@ -4514,9 +4786,22 @@
 
         function renderOverviewPlaceholder() {
             const ui = reportContent[currentLang];
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const entries = getFilteredEventEntries(query);
+            const rawQuery = document.getElementById('searchInput').value.trim();
+            const query = rawQuery.toLowerCase();
+            const baseEntries = getSearchFilteredEventEntries(query);
+            const entries = getOverviewFilteredEventEntries(query);
             const selectedEntry = entries.find(entry => entry.index === activeIndex) || entries[0] || null;
+            const activeFilterParts = [];
+
+            if (rawQuery) {
+                activeFilterParts.push(`“${rawQuery}”`);
+            }
+            if (overviewChartFilters.decade) {
+                activeFilterParts.push(`${ui.overviewDecadeTag}: ${overviewChartFilters.decade}`);
+            }
+            if (overviewChartFilters.magnitude) {
+                activeFilterParts.push(`${ui.overviewMagnitudeTag}: ${overviewChartFilters.magnitude}`);
+            }
 
             if (selectedEntry) {
                 activeIndex = selectedEntry.index;
@@ -4526,13 +4811,21 @@
             document.getElementById('overviewPlaceholderTitle').innerText = ui.overviewShellTitle;
             document.getElementById('overviewPlaceholderIntro').innerText = ui.overviewShellIntro;
             document.getElementById('overviewFilterChipLabel').innerText = ui.overviewFilterChipLabel;
-            document.getElementById('overviewFilterSummary').innerText = query
-                ? `${ui.overviewFilterSummaryWithQuery} “${document.getElementById('searchInput').value.trim()}”`
+            document.getElementById('overviewFilterSummary').innerText = activeFilterParts.length
+                ? `${rawQuery ? ui.overviewFilterSummaryWithQuery : ui.overviewFilterSummaryWithCharts} ${activeFilterParts.join(' · ')}`
                 : ui.overviewFilterSummary;
             document.getElementById('overviewSelectedHeading').innerText = ui.overviewSelectedHeading;
+            document.getElementById('overviewChartsHeading').innerText = ui.overviewChartsHeading;
+            document.getElementById('overviewDecadeChartTitle').innerText = ui.overviewDecadeTitle;
+            document.getElementById('overviewDecadeChartNote').innerText = ui.overviewDecadeNote;
+            document.getElementById('overviewMagnitudeChartTitle').innerText = ui.overviewMagnitudeTitle;
+            document.getElementById('overviewMagnitudeChartNote').innerText = ui.overviewMagnitudeNote;
+            document.getElementById('overviewClearFiltersBtn').innerText = ui.overviewClearCharts;
             document.getElementById('overviewListHeading').innerText = `${ui.overviewListHeading} (${entries.length})`;
             document.getElementById('overviewPlaceholderNote').innerText = ui.overviewShellNote;
             document.getElementById('overviewMap').setAttribute('aria-label', ui.overviewMapAria);
+
+            renderOverviewCharts(baseEntries);
 
             const selectedContainer = document.getElementById('overviewSelectedEvent');
             const listContainer = document.getElementById('overviewFilteredList');
@@ -4601,7 +4894,7 @@
             const container = document.getElementById('timelineNodes');
             container.innerHTML = '';
 
-            getFilteredEventEntries(filterText).forEach(({ eq, index }) => {
+            getSearchFilteredEventEntries(filterText).forEach(({ eq, index }) => {
                 const title = eq.title[currentLang];
                 const query = filterText.trim();
 
