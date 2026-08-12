@@ -6319,6 +6319,7 @@
             }).addTo(overviewDynamicLayer);
 
             const defaultBounds = borderLayer.getBounds();
+            const boundsParts = [defaultBounds];
             const focusBoundsParts = [];
 
             entries.forEach(({ eq, index }) => {
