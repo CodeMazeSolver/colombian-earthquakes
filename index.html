@@ -762,7 +762,96 @@
             top: 0.9rem;
             right: 0.9rem;
             z-index: 500;
+            display: grid;
+            gap: 0.55rem;
+            justify-items: end;
+            max-width: min(290px, calc(100% - 1.8rem));
             pointer-events: none;
+        }
+
+        .overview-map-control-card {
+            width: min(290px, 100%);
+            display: grid;
+            gap: 0.55rem;
+            padding: 0.75rem 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: var(--shadow-1);
+            backdrop-filter: blur(8px);
+            pointer-events: auto;
+        }
+
+        .overview-map-control-label,
+        .overview-map-control-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.6rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+        }
+
+        .overview-map-control-header strong {
+            color: var(--md-sys-color-on-surface);
+            font-size: 0.8rem;
+        }
+
+        .overview-map-select,
+        .overview-map-control-card input[type="range"] {
+            width: 100%;
+        }
+
+        .overview-map-select {
+            min-height: 2.35rem;
+            border: 1px solid rgba(139, 0, 0, 0.18);
+            border-radius: 12px;
+            background: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
+            padding: 0.45rem 0.7rem;
+            font-size: 0.84rem;
+            font-weight: 500;
+        }
+
+        .overview-map-select:focus-visible,
+        .overview-map-control-card input[type="range"]:focus-visible,
+        .overview-map-radius-toggle:focus-visible {
+            outline: 2px solid rgba(139, 0, 0, 0.28);
+            outline-offset: 2px;
+        }
+
+        .overview-map-control-card input[type="range"] {
+            accent-color: var(--md-sys-color-primary);
+            cursor: pointer;
+        }
+
+        .overview-map-radius-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.42rem;
+            border: 1px solid rgba(139, 0, 0, 0.18);
+            background: rgba(139, 0, 0, 0.04);
+            color: var(--md-sys-color-primary);
+            border-radius: 999px;
+            padding: 0.45rem 0.78rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .overview-map-radius-toggle:hover,
+        .overview-map-radius-toggle:focus-visible {
+            border-color: rgba(139, 0, 0, 0.32);
+            background: rgba(139, 0, 0, 0.08);
+        }
+
+        .overview-map-radius-toggle.is-active {
+            background: var(--md-sys-color-primary);
+            border-color: var(--md-sys-color-primary);
+            color: #fff;
         }
 
         .overview-map-reset-btn {
@@ -792,6 +881,30 @@
 
         .overview-map-reset-btn .material-symbols-outlined {
             font-size: 1rem;
+        }
+
+        .overview-radius-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 92px;
+            padding: 0.28rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(139, 0, 0, 0.18);
+            background: rgba(255, 255, 255, 0.94);
+            color: var(--md-sys-color-primary);
+            font-size: 0.77rem;
+            font-weight: 700;
+            line-height: 1;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14);
+            backdrop-filter: blur(8px);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .overview-radius-label-marker {
+            background: transparent;
+            border: none;
         }
 
         .overview-distance-line-label {
@@ -2402,6 +2515,18 @@
                 height: 360px;
             }
 
+            .overview-map-toolbar {
+                left: 0.9rem;
+                right: 0.9rem;
+                justify-items: stretch;
+                max-width: none;
+            }
+
+            .overview-map-control-card,
+            .overview-map-reset-btn {
+                width: 100%;
+            }
+
             .overview-list {
                 max-height: none;
             }
@@ -2864,6 +2989,24 @@
                         <div class="overview-map-panel">
                             <div id="overviewMap" class="overview-map-frame" aria-label="Overview earthquake map"></div>
                             <div class="overview-map-toolbar">
+                                <div class="overview-map-control-card">
+                                    <label class="overview-map-control-label" for="overviewBasemapSelect">
+                                        <span id="overviewBasemapLabel">Mapa base</span>
+                                    </label>
+                                    <select class="overview-map-select" id="overviewBasemapSelect" onchange="setOverviewBasemap(this.value)">
+                                        <option value="light">Claro</option>
+                                        <option value="topo">Topográfico</option>
+                                        <option value="satellite">Satélite</option>
+                                    </select>
+                                </div>
+                                <div class="overview-map-control-card">
+                                    <div class="overview-map-control-header">
+                                        <span id="overviewRadiusLabel">Radio de impacto</span>
+                                        <strong id="overviewRadiusValue">250 km</strong>
+                                    </div>
+                                    <input id="overviewRadiusInput" type="range" min="50" max="600" step="25" value="250" oninput="setOverviewRadiusKm(this.value)">
+                                    <button class="overview-map-radius-toggle" id="overviewRadiusToggleBtn" type="button" onclick="toggleOverviewRadiusRing()">Mostrar radio</button>
+                                </div>
                                 <button class="overview-map-reset-btn" id="overviewResetMapBtn" type="button" onclick="resetOverviewMapView()">
                                     <span class="material-symbols-outlined" aria-hidden="true">center_focus_strong</span>
                                     <span id="overviewResetMapBtnText">Reiniciar mapa</span>
@@ -3155,6 +3298,36 @@
         let overviewDistanceMode = 'selected';
         let overviewDistancePanelOpen = false;
         let overviewLocationStatusKey = 'idle';
+        let overviewBaseLayer = null;
+        let overviewBasemap = 'light';
+        let overviewRadiusKm = 250;
+        let overviewRadiusVisible = false;
+
+        const OVERVIEW_BASEMAPS = {
+            light: {
+                url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+                options: {
+                    subdomains: 'abcd',
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+                }
+            },
+            topo: {
+                url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+                options: {
+                    subdomains: 'abc',
+                    maxZoom: 17,
+                    attribution: 'Map data: &copy; OpenStreetMap contributors, SRTM | Map style: &copy; OpenTopoMap'
+                }
+            },
+            satellite: {
+                url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                options: {
+                    maxZoom: 18,
+                    attribution: 'Tiles &copy; Esri'
+                }
+            }
+        };
 
         const eqData = [
             {
@@ -3811,8 +3984,8 @@
                 magnitude: 7.4,
                 depth: "110.3 km",
                 mmi: "VII",
-                deaths: "164+",
-                injured: { es: "885+", en: "885+", de: "885+" },
+                deaths: "254+",
+                injured: { es: "2.597+", en: "2,597+", de: "2.597+" },
                 location: {
                     es: "Chocó / San José del Palmar",
                     en: "Chocó / San José del Palmar",
@@ -3830,9 +4003,9 @@
                     de: "Erdbeben von Chocó 2026"
                 },
                 impact: {
-                    es: "El fuerte sismo de 2026 en Chocó produjo al menos 164 muertes, más de 880 personas heridas y daños extensos en distintas zonas del país. Se incorpora como el caso colombiano más reciente de gran magnitud y como referencia contemporánea para el occidente andino y pacífico.",
-                    en: "The strong 2026 earthquake in Chocó caused at least 164 deaths, injured more than 880 people, and caused extensive damage in different parts of the country. It is included as the most recent major Colombian case and as a contemporary reference point for the western Andean and Pacific region.",
-                    de: "Das starke Erdbeben von 2026 in Chocó verursachte mindestens 164 Todesopfer, verletzte mehr als 880 Menschen und richtete in verschiedenen Teilen des Landes erhebliche Schäden an. Es wird als jüngster großer Fall Kolumbiens und als aktueller Referenzpunkt für den westlichen Anden- und Pazifikraum aufgenommen."
+                    es: "El fuerte sismo de 2026 en Chocó produjo al menos 254 muertes, más de 2.500 personas heridas y daños extensos en distintas zonas del país. Se incorpora como el caso colombiano más reciente de gran magnitud y como referencia contemporánea para el occidente andino y pacífico.",
+                    en: "The strong 2026 earthquake in Chocó caused at least 254 deaths, injured more than 2,500 people, and caused extensive damage in different parts of the country. It is included as the most recent major Colombian case and as a contemporary reference point for the western Andean and Pacific region.",
+                    de: "Das starke Erdbeben von 2026 in Chocó verursachte mindestens 254 Todesopfer, verletzte mehr als 2.500 Menschen und richtete in verschiedenen Teilen des Landes erhebliche Schäden an. Es wird als jüngster großer Fall Kolumbiens und als aktueller Referenzpunkt für den westlichen Anden- und Pazifikraum aufgenommen."
                 },
                 significance: {
                     es: "Actualiza la cronología con un gran evento reciente ya documentado por múltiples fuentes públicas.",
@@ -4005,7 +4178,14 @@
                 overviewLocationUse: "Usar mi ubicación",
                 overviewLocationPick: "Elegir en el mapa",
                 overviewLocationClear: "Limpiar ubicación",
+                overviewBasemapLabel: "Mapa base",
+                overviewBasemapLight: "Claro",
+                overviewBasemapTopo: "Topográfico",
+                overviewBasemapSatellite: "Satélite",
                 overviewResetMap: "Reiniciar mapa",
+                overviewRadiusLabel: "Radio de impacto",
+                overviewRadiusToggleShow: "Mostrar radio",
+                overviewRadiusToggleHide: "Ocultar radio",
                 overviewDistanceSelectedMode: "Distancia al evento resaltado",
                 overviewDistanceAllMode: "Distancia a todos",
                 overviewLocationIdle: "Coloca tu ubicación con el botón o haz clic en el mapa.",
@@ -4019,6 +4199,7 @@
                 overviewDistanceSelectedTitle: "Distancia al evento resaltado",
                 overviewDistanceSelectedBody: "Tu ubicación está a {distance} km de {event}.",
                 overviewDistanceSelectedLine: "La línea en el mapa conecta tu ubicación con el evento activo.",
+                overviewRadiusSummary: "Radio alrededor del evento activo: {distance} km.",
                 overviewDistanceAllTitle: "Distancias ordenadas a todos los eventos",
                 overviewDistanceAllEmpty: "Coloca una ubicación para ordenar los terremotos por proximidad.",
                 overviewEmpty: "No hay terremotos que coincidan con este filtro. Ajusta la búsqueda para volver a poblar el mapa general.",
@@ -4119,7 +4300,14 @@
                 overviewLocationUse: "Use my location",
                 overviewLocationPick: "Pick on map",
                 overviewLocationClear: "Clear location",
+                overviewBasemapLabel: "Basemap",
+                overviewBasemapLight: "Light",
+                overviewBasemapTopo: "Topographic",
+                overviewBasemapSatellite: "Satellite",
                 overviewResetMap: "Reset map",
+                overviewRadiusLabel: "Impact radius",
+                overviewRadiusToggleShow: "Show radius",
+                overviewRadiusToggleHide: "Hide radius",
                 overviewDistanceSelectedMode: "Distance to highlighted event",
                 overviewDistanceAllMode: "Distance to all",
                 overviewLocationIdle: "Place your location with the button or click directly on the map.",
@@ -4133,6 +4321,7 @@
                 overviewDistanceSelectedTitle: "Distance to highlighted event",
                 overviewDistanceSelectedBody: "Your location is {distance} km from {event}.",
                 overviewDistanceSelectedLine: "The line on the map connects your location to the active event.",
+                overviewRadiusSummary: "Radius around the active event: {distance} km.",
                 overviewDistanceAllTitle: "Sorted distances to all events",
                 overviewDistanceAllEmpty: "Place a location to sort earthquakes by proximity.",
                 overviewEmpty: "No earthquakes match this filter. Adjust the search to repopulate the overview map.",
@@ -4233,7 +4422,14 @@
                 overviewLocationUse: "Meinen Standort nutzen",
                 overviewLocationPick: "Auf der Karte wählen",
                 overviewLocationClear: "Standort löschen",
+                overviewBasemapLabel: "Basiskarte",
+                overviewBasemapLight: "Hell",
+                overviewBasemapTopo: "Topografisch",
+                overviewBasemapSatellite: "Satellit",
                 overviewResetMap: "Karte zurücksetzen",
+                overviewRadiusLabel: "Wirkungsradius",
+                overviewRadiusToggleShow: "Radius anzeigen",
+                overviewRadiusToggleHide: "Radius ausblenden",
                 overviewDistanceSelectedMode: "Distanz zum markierten Ereignis",
                 overviewDistanceAllMode: "Distanz zu allen",
                 overviewLocationIdle: "Platzieren Sie Ihren Standort mit der Taste oder per Klick direkt auf der Karte.",
@@ -4247,6 +4443,7 @@
                 overviewDistanceSelectedTitle: "Distanz zum markierten Ereignis",
                 overviewDistanceSelectedBody: "Ihr Standort liegt {distance} km von {event} entfernt.",
                 overviewDistanceSelectedLine: "Die Linie auf der Karte verbindet Ihren Standort mit dem aktiven Ereignis.",
+                overviewRadiusSummary: "Radius um das aktive Ereignis: {distance} km.",
                 overviewDistanceAllTitle: "Sortierte Distanzen zu allen Ereignissen",
                 overviewDistanceAllEmpty: "Platzieren Sie einen Standort, um Erdbeben nach Nähe zu sortieren.",
                 overviewEmpty: "Keine Erdbeben entsprechen diesem Filter. Passen Sie die Suche an, um die Übersichtskarte wieder zu füllen.",
@@ -5779,6 +5976,33 @@
             renderOverviewPlaceholder();
         }
 
+        function setOverviewBasemap(value) {
+            overviewBasemap = OVERVIEW_BASEMAPS[value] ? value : 'light';
+            if (overviewMap) {
+                applyOverviewBasemap();
+            }
+        }
+
+        function setOverviewRadiusKm(rawValue) {
+            overviewRadiusKm = Number(rawValue) || 250;
+            renderOverviewPlaceholder();
+        }
+
+        function toggleOverviewRadiusRing() {
+            overviewRadiusVisible = !overviewRadiusVisible;
+            renderOverviewPlaceholder();
+        }
+
+        function applyOverviewBasemap() {
+            if (!overviewMap) return;
+            if (overviewBaseLayer) {
+                overviewMap.removeLayer(overviewBaseLayer);
+            }
+            const config = OVERVIEW_BASEMAPS[overviewBasemap] || OVERVIEW_BASEMAPS.light;
+            overviewBaseLayer = L.tileLayer(config.url, config.options);
+            overviewBaseLayer.addTo(overviewMap);
+        }
+
         function resetOverviewMapView() {
             if (!overviewMap || !overviewMapDefaultBounds) return;
             overviewMap.fitBounds(overviewMapDefaultBounds);
@@ -5980,11 +6204,7 @@
 
             if (!overviewMap) {
                 overviewMap = L.map('overviewMap', { zoomControl: true });
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                    subdomains: 'abcd',
-                    maxZoom: 19,
-                    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
-                }).addTo(overviewMap);
+                applyOverviewBasemap();
                 overviewMap.on('click', event => {
                     if (!overviewLocationPlacementMode) return;
                     overviewUserLocation = { lat: event.latlng.lat, lng: event.latlng.lng, source: 'map' };
@@ -6030,6 +6250,27 @@
 
                 boundsParts.push(L.latLngBounds([marker.getLatLng()]));
             });
+
+            if (overviewRadiusVisible && selectedEntry) {
+                const [selectedLat, selectedLng] = selectedEntry.eq.coordinates.split(',').map(Number);
+                const radiusCircle = L.circle([selectedLat, selectedLng], {
+                    radius: overviewRadiusKm * 1000,
+                    color: '#8b0000',
+                    weight: 2,
+                    opacity: 0.75,
+                    fillColor: '#ffb4ab',
+                    fillOpacity: 0.12,
+                    dashArray: '10 8'
+                }).addTo(overviewDynamicLayer);
+                L.marker([selectedLat, selectedLng], {
+                    interactive: false,
+                    icon: L.divIcon({
+                        className: 'overview-radius-label-marker',
+                        html: `<span class="overview-radius-label">${formatDistanceKm(overviewRadiusKm)} km</span>`
+                    })
+                }).addTo(overviewDynamicLayer);
+                boundsParts.push(radiusCircle.getBounds());
+            }
 
             if (overviewUserLocation) {
                 const userLatLng = [overviewUserLocation.lat, overviewUserLocation.lng];
@@ -6131,6 +6372,16 @@
             document.getElementById('overviewDistancePanelToggle').setAttribute('aria-expanded', String(overviewDistancePanelOpen));
             document.getElementById('overviewDistancePanelCard').dataset.open = String(overviewDistancePanelOpen);
             document.getElementById('overviewDistancePanelContent').hidden = !overviewDistancePanelOpen;
+            document.getElementById('overviewBasemapLabel').innerText = ui.overviewBasemapLabel;
+            document.getElementById('overviewBasemapSelect').value = overviewBasemap;
+            document.getElementById('overviewBasemapSelect').options[0].text = ui.overviewBasemapLight;
+            document.getElementById('overviewBasemapSelect').options[1].text = ui.overviewBasemapTopo;
+            document.getElementById('overviewBasemapSelect').options[2].text = ui.overviewBasemapSatellite;
+            document.getElementById('overviewRadiusLabel').innerText = ui.overviewRadiusLabel;
+            document.getElementById('overviewRadiusValue').innerText = `${formatDistanceKm(overviewRadiusKm)} km`;
+            document.getElementById('overviewRadiusInput').value = String(overviewRadiusKm);
+            document.getElementById('overviewRadiusToggleBtn').innerText = overviewRadiusVisible ? ui.overviewRadiusToggleHide : ui.overviewRadiusToggleShow;
+            document.getElementById('overviewRadiusToggleBtn').classList.toggle('is-active', overviewRadiusVisible);
             document.getElementById('overviewResetMapBtnText').innerText = ui.overviewResetMap;
             document.getElementById('overviewUseMyLocationBtn').innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">my_location</span><span>${ui.overviewLocationUse}</span>`;
             document.getElementById('overviewPickLocationBtn').innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">${overviewLocationPlacementMode ? 'location_searching' : 'edit_location_alt'}</span><span>${ui.overviewLocationPick}</span>`;
@@ -6202,6 +6453,7 @@
                             .replace('{distance}', formatDistanceKm(selectedDistance?.distanceKm || 0))
                             .replace('{event}', eq.title[currentLang])}</div>
                         <div class="overview-location-status">${ui.overviewDistanceSelectedLine}</div>
+                        ${overviewRadiusVisible ? `<div class="overview-location-status">${ui.overviewRadiusSummary.replace('{distance}', formatDistanceKm(overviewRadiusKm))}</div>` : ''}
                     </div>
                 `;
             } else {
