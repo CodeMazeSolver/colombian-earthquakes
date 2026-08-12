@@ -769,7 +769,7 @@
             pointer-events: none;
         }
 
-        .overview-map-control-card {
+        .overview-radius-controls-card {
             width: min(290px, 100%);
             display: grid;
             gap: 0.55rem;
@@ -782,7 +782,6 @@
             pointer-events: auto;
         }
 
-        .overview-map-control-label,
         .overview-map-control-header {
             display: flex;
             align-items: center;
@@ -798,32 +797,56 @@
             font-size: 0.8rem;
         }
 
-        .overview-map-select,
-        .overview-map-control-card input[type="range"] {
+        .overview-radius-controls-card input[type="range"] {
             width: 100%;
         }
 
-        .overview-map-select {
-            min-height: 2.35rem;
-            border: 1px solid rgba(139, 0, 0, 0.18);
-            border-radius: 12px;
-            background: var(--md-sys-color-surface);
-            color: var(--md-sys-color-on-surface);
-            padding: 0.45rem 0.7rem;
-            font-size: 0.84rem;
-            font-weight: 500;
-        }
-
-        .overview-map-select:focus-visible,
-        .overview-map-control-card input[type="range"]:focus-visible,
+        .overview-radius-controls-card input[type="range"]:focus-visible,
         .overview-map-radius-toggle:focus-visible {
             outline: 2px solid rgba(139, 0, 0, 0.28);
             outline-offset: 2px;
         }
 
-        .overview-map-control-card input[type="range"] {
+        .overview-radius-controls-card input[type="range"] {
             accent-color: var(--md-sys-color-primary);
             cursor: pointer;
+        }
+
+        .leaflet-top.leaflet-right .overview-default-layers-control {
+            margin-top: 0.9rem;
+            margin-right: 0.9rem;
+            pointer-events: auto;
+        }
+
+        .overview-default-layers-control.leaflet-control-layers {
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.68);
+            box-shadow: var(--shadow-1);
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+        }
+
+        .overview-default-layers-control .leaflet-control-layers-toggle {
+            width: 42px;
+            height: 42px;
+        }
+
+        .overview-default-layers-control.leaflet-control-layers-expanded {
+            padding: 0.72rem 0.8rem;
+            min-width: 220px;
+        }
+
+        .overview-default-layers-control .leaflet-control-layers-base label,
+        .overview-default-layers-control .leaflet-control-layers-overlays label {
+            font-size: 0.84rem;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 0.36rem;
+        }
+
+        .overview-default-layers-control .leaflet-control-layers-base label:last-child,
+        .overview-default-layers-control .leaflet-control-layers-overlays label:last-child {
+            margin-bottom: 0;
         }
 
         .overview-map-radius-toggle {
@@ -2522,9 +2545,14 @@
                 max-width: none;
             }
 
-            .overview-map-control-card,
+            .overview-radius-controls-card,
             .overview-map-reset-btn {
                 width: 100%;
+            }
+
+            .overview-default-layers-control.leaflet-control-layers-expanded {
+                min-width: 0;
+                width: min(280px, calc(100vw - 3rem));
             }
 
             .overview-list {
@@ -2989,17 +3017,7 @@
                         <div class="overview-map-panel">
                             <div id="overviewMap" class="overview-map-frame" aria-label="Overview earthquake map"></div>
                             <div class="overview-map-toolbar">
-                                <div class="overview-map-control-card">
-                                    <label class="overview-map-control-label" for="overviewBasemapSelect">
-                                        <span id="overviewBasemapLabel">Mapa base</span>
-                                    </label>
-                                    <select class="overview-map-select" id="overviewBasemapSelect" onchange="setOverviewBasemap(this.value)">
-                                        <option value="light">Claro</option>
-                                        <option value="topo">Topográfico</option>
-                                        <option value="satellite">Satélite</option>
-                                    </select>
-                                </div>
-                                <div class="overview-map-control-card">
+                                <div class="overview-radius-controls-card">
                                     <div class="overview-map-control-header">
                                         <span id="overviewRadiusLabel">Radio de impacto</span>
                                         <strong id="overviewRadiusValue">250 km</strong>
@@ -3299,12 +3317,15 @@
         let overviewDistancePanelOpen = false;
         let overviewLocationStatusKey = 'idle';
         let overviewBaseLayer = null;
+        let overviewOverlayLayers = {};
+        let overviewLayerControl = null;
         let overviewBasemap = 'light';
         let overviewRadiusKm = 250;
         let overviewRadiusVisible = false;
 
         const OVERVIEW_BASEMAPS = {
             light: {
+                labelKey: 'overviewBasemapLight',
                 url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
                 options: {
                     subdomains: 'abcd',
@@ -3313,6 +3334,7 @@
                 }
             },
             topo: {
+                labelKey: 'overviewBasemapTopo',
                 url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
                 options: {
                     subdomains: 'abc',
@@ -3321,11 +3343,23 @@
                 }
             },
             satellite: {
+                labelKey: 'overviewBasemapSatellite',
                 url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
                 options: {
                     maxZoom: 18,
                     attribution: 'Tiles &copy; Esri'
                 }
+            }
+        };
+
+        const OVERVIEW_OVERLAY_DEFS = {
+            populationDensity: {
+                labelKey: 'overviewOverlayPopulation',
+                createLayer: () => L.imageOverlay(
+                    'https://worldpop.arcgis.com/arcgis/rest/services/WorldPop_Population_Density_1km/ImageServer/exportImage?bbox=-81,12,-66,-5&bboxSR=4326&imageSR=4326&size=1200,1200&format=png32&transparent=true&f=image',
+                    [[-5, -81], [12, -66]],
+                    { opacity: 0.45, interactive: false, crossOrigin: true }
+                )
             }
         };
 
@@ -4200,6 +4234,7 @@
                 overviewDistanceSelectedBody: "Tu ubicación está a {distance} km de {event}.",
                 overviewDistanceSelectedLine: "La línea en el mapa conecta tu ubicación con el evento activo.",
                 overviewRadiusSummary: "Radio alrededor del evento activo: {distance} km.",
+                overviewOverlayPopulation: "Densidad de población",
                 overviewDistanceAllTitle: "Distancias ordenadas a todos los eventos",
                 overviewDistanceAllEmpty: "Coloca una ubicación para ordenar los terremotos por proximidad.",
                 overviewEmpty: "No hay terremotos que coincidan con este filtro. Ajusta la búsqueda para volver a poblar el mapa general.",
@@ -4322,6 +4357,7 @@
                 overviewDistanceSelectedBody: "Your location is {distance} km from {event}.",
                 overviewDistanceSelectedLine: "The line on the map connects your location to the active event.",
                 overviewRadiusSummary: "Radius around the active event: {distance} km.",
+                overviewOverlayPopulation: "Population density",
                 overviewDistanceAllTitle: "Sorted distances to all events",
                 overviewDistanceAllEmpty: "Place a location to sort earthquakes by proximity.",
                 overviewEmpty: "No earthquakes match this filter. Adjust the search to repopulate the overview map.",
@@ -4444,6 +4480,7 @@
                 overviewDistanceSelectedBody: "Ihr Standort liegt {distance} km von {event} entfernt.",
                 overviewDistanceSelectedLine: "Die Linie auf der Karte verbindet Ihren Standort mit dem aktiven Ereignis.",
                 overviewRadiusSummary: "Radius um das aktive Ereignis: {distance} km.",
+                overviewOverlayPopulation: "Bevölkerungsdichte",
                 overviewDistanceAllTitle: "Sortierte Distanzen zu allen Ereignissen",
                 overviewDistanceAllEmpty: "Platzieren Sie einen Standort, um Erdbeben nach Nähe zu sortieren.",
                 overviewEmpty: "Keine Erdbeben entsprechen diesem Filter. Passen Sie die Suche an, um die Übersichtskarte wieder zu füllen.",
@@ -5979,7 +6016,7 @@
         function setOverviewBasemap(value) {
             overviewBasemap = OVERVIEW_BASEMAPS[value] ? value : 'light';
             if (overviewMap) {
-                applyOverviewBasemap();
+                applyOverviewBasemap({ preserveView: true });
             }
         }
 
@@ -5993,14 +6030,52 @@
             renderOverviewPlaceholder();
         }
 
-        function applyOverviewBasemap() {
+        function applyOverviewBasemap({ preserveView = false } = {}) {
             if (!overviewMap) return;
+            const currentCenter = preserveView ? overviewMap.getCenter() : null;
+            const currentZoom = preserveView ? overviewMap.getZoom() : null;
             if (overviewBaseLayer) {
                 overviewMap.removeLayer(overviewBaseLayer);
             }
             const config = OVERVIEW_BASEMAPS[overviewBasemap] || OVERVIEW_BASEMAPS.light;
             overviewBaseLayer = L.tileLayer(config.url, config.options);
             overviewBaseLayer.addTo(overviewMap);
+            if (preserveView && currentCenter && Number.isFinite(currentZoom)) {
+                overviewMap.setView(currentCenter, currentZoom, { animate: false });
+            }
+        }
+
+        function ensureOverviewLayerControl() {
+            if (!overviewMap) return;
+            if (!overviewLayerControl) {
+                const baseLayers = Object.fromEntries(
+                    Object.entries(OVERVIEW_BASEMAPS).map(([key, config]) => [
+                        reportContent[currentLang][config.labelKey],
+                        key === overviewBasemap ? overviewBaseLayer : L.layerGroup()
+                    ])
+                );
+                const overlays = Object.fromEntries(
+                    Object.entries(OVERVIEW_OVERLAY_DEFS).map(([key, config]) => [
+                        reportContent[currentLang][config.labelKey],
+                        overviewOverlayLayers[key]
+                    ])
+                );
+                overviewLayerControl = L.control.layers(baseLayers, overlays, { collapsed: true, position: 'topright' }).addTo(overviewMap);
+                overviewLayerControl.getContainer()?.classList.add('overview-default-layers-control');
+                return;
+            }
+            const container = overviewLayerControl.getContainer();
+            if (!container) return;
+            const labels = [...container.querySelectorAll('.leaflet-control-layers-base span, .leaflet-control-layers-overlays span')];
+            const localized = [
+                ...Object.values(OVERVIEW_BASEMAPS).map(config => reportContent[currentLang][config.labelKey]),
+                ...Object.values(OVERVIEW_OVERLAY_DEFS).map(config => reportContent[currentLang][config.labelKey])
+            ];
+            labels.forEach((label, index) => {
+                if (localized[index]) {
+                    label.textContent = localized[index];
+                }
+            });
         }
 
         function resetOverviewMapView() {
@@ -6205,6 +6280,21 @@
             if (!overviewMap) {
                 overviewMap = L.map('overviewMap', { zoomControl: true });
                 applyOverviewBasemap();
+                overviewOverlayLayers = Object.fromEntries(
+                    Object.entries(OVERVIEW_OVERLAY_DEFS).map(([key, config]) => [key, config.createLayer()])
+                );
+                overviewMap.on('baselayerchange', event => {
+                    const matched = Object.entries(OVERVIEW_BASEMAPS).find(([, config]) => reportContent[currentLang][config.labelKey] === event.name);
+                    if (matched) {
+                        overviewBasemap = matched[0];
+                    }
+                });
+                overviewMap.on('overlayadd', event => {
+                    if (event.layer === overviewOverlayLayers.populationDensity) {
+                        event.layer.setOpacity(0.45);
+                    }
+                });
+                ensureOverviewLayerControl();
                 overviewMap.on('click', event => {
                     if (!overviewLocationPlacementMode) return;
                     overviewUserLocation = { lat: event.latlng.lat, lng: event.latlng.lng, source: 'map' };
@@ -6228,7 +6318,8 @@
                 }
             }).addTo(overviewDynamicLayer);
 
-            const boundsParts = [borderLayer.getBounds()];
+            const defaultBounds = borderLayer.getBounds();
+            const focusBoundsParts = [];
 
             entries.forEach(({ eq, index }) => {
                 const [lat, lng] = eq.coordinates.split(',').map(Number);
@@ -6249,6 +6340,9 @@
                 });
 
                 boundsParts.push(L.latLngBounds([marker.getLatLng()]));
+                if (isSelected) {
+                    focusBoundsParts.push(L.latLngBounds([marker.getLatLng()]));
+                }
             });
 
             if (overviewRadiusVisible && selectedEntry) {
@@ -6270,6 +6364,7 @@
                     })
                 }).addTo(overviewDynamicLayer);
                 boundsParts.push(radiusCircle.getBounds());
+                focusBoundsParts.push(radiusCircle.getBounds());
             }
 
             if (overviewUserLocation) {
@@ -6306,14 +6401,18 @@
                         })
                     }).addTo(overviewDynamicLayer);
                     boundsParts.push(line.getBounds());
+                    focusBoundsParts.push(line.getBounds());
                 }
             }
 
-            const mergedBounds = boundsParts.reduce((acc, next) => acc.extend(next), boundsParts[0]).pad(0.08);
+            const mergedBounds = boundsParts.reduce((acc, next) => acc.extend(next), defaultBounds).pad(0.08);
+            const focusBounds = (focusBoundsParts.length ? focusBoundsParts : [defaultBounds])
+                .reduce((acc, next) => acc.extend(next), L.latLngBounds(focusBoundsParts.length ? focusBoundsParts[0] : defaultBounds))
+                .pad(0.12);
             overviewMapDefaultBounds = mergedBounds;
             window.requestAnimationFrame(() => {
                 overviewMap.invalidateSize();
-                overviewMap.fitBounds(mergedBounds);
+                overviewMap.fitBounds(focusBounds);
             });
         }
 
@@ -6372,11 +6471,7 @@
             document.getElementById('overviewDistancePanelToggle').setAttribute('aria-expanded', String(overviewDistancePanelOpen));
             document.getElementById('overviewDistancePanelCard').dataset.open = String(overviewDistancePanelOpen);
             document.getElementById('overviewDistancePanelContent').hidden = !overviewDistancePanelOpen;
-            document.getElementById('overviewBasemapLabel').innerText = ui.overviewBasemapLabel;
-            document.getElementById('overviewBasemapSelect').value = overviewBasemap;
-            document.getElementById('overviewBasemapSelect').options[0].text = ui.overviewBasemapLight;
-            document.getElementById('overviewBasemapSelect').options[1].text = ui.overviewBasemapTopo;
-            document.getElementById('overviewBasemapSelect').options[2].text = ui.overviewBasemapSatellite;
+            ensureOverviewLayerControl();
             document.getElementById('overviewRadiusLabel').innerText = ui.overviewRadiusLabel;
             document.getElementById('overviewRadiusValue').innerText = `${formatDistanceKm(overviewRadiusKm)} km`;
             document.getElementById('overviewRadiusInput').value = String(overviewRadiusKm);
