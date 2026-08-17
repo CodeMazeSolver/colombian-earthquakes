@@ -758,25 +758,20 @@
         }
 
         .overview-map-toolbar {
+            position: static;
+            display: contents;
+            max-width: none;
+        }
+
+        .overview-map-tools {
+            display: contents;
+        }
+
+        .overview-map-tool-toggle {
             position: absolute;
             top: 0.9rem;
             right: 0.9rem;
             z-index: 500;
-            display: grid;
-            gap: 0.55rem;
-            justify-items: end;
-            max-width: min(290px, calc(100% - 1.8rem));
-            pointer-events: none;
-        }
-
-        .overview-map-tools {
-            display: grid;
-            gap: 0.55rem;
-            justify-items: end;
-            pointer-events: auto;
-        }
-
-        .overview-map-tool-toggle {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -792,6 +787,7 @@
             transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
             box-shadow: var(--shadow-1);
             backdrop-filter: blur(8px);
+            pointer-events: auto;
         }
 
         .overview-map-tool-toggle:hover,
@@ -809,7 +805,11 @@
         }
 
         .overview-map-tools-panel {
-            width: min(290px, 100%);
+            position: absolute;
+            top: 4rem;
+            right: 0.9rem;
+            z-index: 500;
+            width: min(290px, calc(100% - 1.8rem));
             display: grid;
             gap: 0.55rem;
             padding: 0.75rem 0.8rem;
@@ -818,6 +818,7 @@
             background: rgba(255, 255, 255, 0.92);
             box-shadow: var(--shadow-1);
             backdrop-filter: blur(8px);
+            pointer-events: auto;
         }
 
         .overview-map-tools-panel[hidden] {
@@ -825,15 +826,17 @@
         }
 
         .overview-plate-legend {
-            width: min(290px, 100%);
+            width: 100%;
+            max-width: none;
             display: grid;
             gap: 0.55rem;
             padding: 0.75rem 0.8rem;
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.92);
-            box-shadow: var(--shadow-1);
-            backdrop-filter: blur(8px);
+            border: none;
+            border-top: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: 0;
+            background: var(--md-sys-color-surface);
+            box-shadow: none;
+            backdrop-filter: none;
             pointer-events: auto;
         }
 
@@ -855,6 +858,10 @@
             color: var(--md-sys-color-on-surface);
             font-size: 0.78rem;
             line-height: 1.35;
+        }
+
+        .overview-plate-legend-row[hidden] {
+            display: none;
         }
 
         .overview-plate-legend-swatch {
@@ -2655,13 +2662,6 @@
                 height: 360px;
             }
 
-            .overview-map-toolbar {
-                left: 0.9rem;
-                right: 0.9rem;
-                justify-items: stretch;
-                max-width: none;
-            }
-
             .overview-radius-controls-card,
             .overview-map-reset-btn {
                 width: 100%;
@@ -3140,8 +3140,24 @@
                                         <span id="overviewMapToolsToggleText">Map tools</span>
                                     </button>
                                     <div class="overview-plate-legend" id="overviewPlateLegend" hidden>
-                                        <h4 class="overview-plate-legend-title" id="overviewPlateLegendTitle">Plate boundary types</h4>
-                                        <div class="overview-plate-legend-row">
+                                        <h4 class="overview-plate-legend-title" id="overviewPlateLegendTitle">Map legend</h4>
+                                        <div class="overview-plate-legend-row" id="overviewPopulationLegendRow" hidden>
+                                            <div class="overview-plate-legend-swatch" aria-hidden="true">
+                                                <svg viewBox="0 0 42 16">
+                                                    <defs>
+                                                        <linearGradient id="populationDensityLegendGradient" x1="0" y1="0" x2="1" y2="0">
+                                                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+                                                            <stop offset="45%" stop-color="#c7cacc" stop-opacity="0.58"/>
+                                                            <stop offset="100%" stop-color="#3f464a" stop-opacity="0.96"/>
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <rect x="0.5" y="1.5" width="41" height="13" rx="2" fill="#ffffff" stroke="#b9bec1"/>
+                                                    <rect x="1" y="2" width="40" height="12" rx="1.5" fill="url(#populationDensityLegendGradient)"/>
+                                                </svg>
+                                            </div>
+                                            <span id="overviewPopulationLegend">Population density — USGS / ORNL LandScan</span>
+                                        </div>
+                                        <div class="overview-plate-legend-row" data-legend-layer="plate">
                                             <div class="overview-plate-legend-swatch" aria-hidden="true">
                                                 <svg viewBox="0 0 42 16">
                                                     <line x1="0" y1="8" x2="42" y2="8" stroke="#b3271e" stroke-width="2"/>
@@ -3151,7 +3167,7 @@
                                             </div>
                                             <span id="overviewPlateLegendConvergent">Convergent — subduction (teeth on overriding plate)</span>
                                         </div>
-                                        <div class="overview-plate-legend-row">
+                                        <div class="overview-plate-legend-row" data-legend-layer="plate">
                                             <div class="overview-plate-legend-swatch" aria-hidden="true">
                                                 <svg viewBox="0 0 42 16">
                                                     <line x1="0" y1="8" x2="42" y2="8" stroke="#b3271e" stroke-width="2"/>
@@ -3161,7 +3177,7 @@
                                             </div>
                                             <span id="overviewPlateLegendDivergent">Divergent — spreading ridge (perpendicular ticks)</span>
                                         </div>
-                                        <div class="overview-plate-legend-row">
+                                        <div class="overview-plate-legend-row" data-legend-layer="plate">
                                             <div class="overview-plate-legend-swatch" aria-hidden="true">
                                                 <svg viewBox="0 0 42 16">
                                                     <line x1="0" y1="8" x2="42" y2="8" stroke="#b3271e" stroke-width="2.2"/>
@@ -3169,7 +3185,7 @@
                                             </div>
                                             <span id="overviewPlateLegendTransform">Transform — strike-slip (plain line)</span>
                                         </div>
-                                        <div class="overview-plate-legend-row">
+                                        <div class="overview-plate-legend-row" data-legend-layer="plate">
                                             <div class="overview-plate-legend-swatch" aria-hidden="true">
                                                 <svg viewBox="0 0 42 16">
                                                     <line x1="0" y1="8" x2="42" y2="8" stroke="#b3271e" stroke-width="1.4" stroke-dasharray="4 4"/>
@@ -4665,12 +4681,15 @@
                 overviewRadiusSummary: "Radio alrededor del evento activo: {distance} km.",
                 overviewOverlayPopulation: "Densidad de población",
                 overviewOverlayPlateBoundaries: "Límites de placas tectónicas",
-                overviewPlateLegendTitle: "Tipos de límites de placa",
+                overviewPlateLegendTitle: "Leyenda del mapa",
+                overviewPopulationLegend: "Densidad de población — USGS / ORNL LandScan",
                 overviewPlateLegendConvergent: "Convergente — subducción (dientes en la placa superior)",
                 overviewPlateLegendDivergent: "Divergente — dorsal de expansión (marcas perpendiculares)",
                 overviewPlateLegendTransform: "Transformante — desgarre lateral (línea simple)",
                 overviewPlateLegendOther: "Otras / zonas difusas de límite",
                 overviewPlateLegendNote: "Fuente: servicio USGS Tectonic Plate Boundaries (modelo Bird, 2003), consultado en vivo.",
+                overviewPopulationLegendNote: "Fuente: teselas de densidad de población USGS PAGER LandScan 2018.",
+                overviewCombinedLegendNote: "Fuentes: densidad de población USGS / ORNL LandScan; límites de placas USGS (modelo Bird, 2003), consultados en vivo.",
                 overviewDistanceAllTitle: "Distancias ordenadas a todos los eventos",
                 overviewDistanceAllEmpty: "Coloca una ubicación para ordenar los terremotos por proximidad.",
                 overviewEmpty: "No hay terremotos que coincidan con este filtro. Ajusta la búsqueda para volver a poblar el mapa general.",
@@ -4796,12 +4815,15 @@
                 overviewRadiusSummary: "Radius around the active event: {distance} km.",
                 overviewOverlayPopulation: "Population density",
                 overviewOverlayPlateBoundaries: "Tectonic plate boundaries",
-                overviewPlateLegendTitle: "Plate boundary types",
+                overviewPlateLegendTitle: "Map legend",
+                overviewPopulationLegend: "Population density — USGS / ORNL LandScan",
                 overviewPlateLegendConvergent: "Convergent — subduction (teeth on overriding plate)",
                 overviewPlateLegendDivergent: "Divergent — spreading ridge (perpendicular ticks)",
                 overviewPlateLegendTransform: "Transform — strike-slip (plain line)",
                 overviewPlateLegendOther: "Other / diffuse boundary zone",
                 overviewPlateLegendNote: "Source: USGS Tectonic Plate Boundaries service (Bird, 2003 model), fetched live.",
+                overviewPopulationLegendNote: "Source: USGS PAGER LandScan 2018 population-density tiles.",
+                overviewCombinedLegendNote: "Sources: USGS / ORNL LandScan population density; USGS Tectonic Plate Boundaries (Bird, 2003), fetched live.",
                 overviewDistanceAllTitle: "Sorted distances to all events",
                 overviewDistanceAllEmpty: "Place a location to sort earthquakes by proximity.",
                 overviewEmpty: "No earthquakes match this filter. Adjust the search to repopulate the overview map.",
@@ -4927,12 +4949,15 @@
                 overviewRadiusSummary: "Radius um das aktive Ereignis: {distance} km.",
                 overviewOverlayPopulation: "Bevölkerungsdichte",
                 overviewOverlayPlateBoundaries: "Tektonische Plattengrenzen",
-                overviewPlateLegendTitle: "Typen von Plattengrenzen",
+                overviewPlateLegendTitle: "Kartenlegende",
+                overviewPopulationLegend: "Bevölkerungsdichte — USGS / ORNL LandScan",
                 overviewPlateLegendConvergent: "Konvergent — Subduktion (Zähne auf der überschiebenden Platte)",
                 overviewPlateLegendDivergent: "Divergent — Spreizungsrücken (senkrechte Markierungen)",
                 overviewPlateLegendTransform: "Transform — Blattverschiebung (einfache Linie)",
                 overviewPlateLegendOther: "Andere / diffuse Grenzzonen",
                 overviewPlateLegendNote: "Quelle: USGS-Dienst Tectonic Plate Boundaries (Bird-Modell, 2003), live geladen.",
+                overviewPopulationLegendNote: "Quelle: Bevölkerungsdichte-Kacheln USGS PAGER LandScan 2018.",
+                overviewCombinedLegendNote: "Quellen: Bevölkerungsdichte USGS / ORNL LandScan; USGS-Plattengrenzen (Bird-Modell, 2003), live geladen.",
                 overviewDistanceAllTitle: "Sortierte Distanzen zu allen Ereignissen",
                 overviewDistanceAllEmpty: "Platzieren Sie einen Standort, um Erdbeben nach Nähe zu sortieren.",
                 overviewEmpty: "Keine Erdbeben entsprechen diesem Filter. Passen Sie die Suche an, um die Übersichtskarte wieder zu füllen.",
@@ -6550,13 +6575,26 @@
                 overviewOverlayLayers?.plateBoundaries
                 && overviewMap?.hasLayer(overviewOverlayLayers.plateBoundaries)
             );
-            legend.hidden = !plateLegendVisible;
+            const populationLegendVisible = Boolean(
+                overviewOverlayLayers?.populationDensity
+                && overviewMap?.hasLayer(overviewOverlayLayers.populationDensity)
+            );
+            legend.hidden = !plateLegendVisible && !populationLegendVisible;
+            document.getElementById('overviewPopulationLegendRow').hidden = !populationLegendVisible;
+            legend.querySelectorAll('[data-legend-layer="plate"]').forEach(row => {
+                row.hidden = !plateLegendVisible;
+            });
             document.getElementById('overviewPlateLegendTitle').innerText = ui.overviewPlateLegendTitle;
+            document.getElementById('overviewPopulationLegend').innerText = ui.overviewPopulationLegend;
             document.getElementById('overviewPlateLegendConvergent').innerText = ui.overviewPlateLegendConvergent;
             document.getElementById('overviewPlateLegendDivergent').innerText = ui.overviewPlateLegendDivergent;
             document.getElementById('overviewPlateLegendTransform').innerText = ui.overviewPlateLegendTransform;
             document.getElementById('overviewPlateLegendOther').innerText = ui.overviewPlateLegendOther;
-            document.getElementById('overviewPlateLegendNote').innerText = ui.overviewPlateLegendNote;
+            document.getElementById('overviewPlateLegendNote').innerText = plateLegendVisible && populationLegendVisible
+                ? ui.overviewCombinedLegendNote
+                : populationLegendVisible
+                    ? ui.overviewPopulationLegendNote
+                    : ui.overviewPlateLegendNote;
         }
 
         function resetOverviewMapView() {
