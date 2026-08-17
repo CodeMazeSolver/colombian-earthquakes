@@ -758,11 +758,247 @@
         }
 
         .overview-map-toolbar {
+            position: static;
+            display: contents;
+            max-width: none;
+        }
+
+        .overview-map-tools {
+            display: contents;
+        }
+
+        .overview-map-tool-toggle {
             position: absolute;
             top: 0.9rem;
             right: 0.9rem;
             z-index: 500;
-            pointer-events: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--md-sys-color-primary);
+            border-radius: 999px;
+            padding: 0.5rem 0.85rem;
+            font-size: 0.84rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+            box-shadow: var(--shadow-1);
+            backdrop-filter: blur(8px);
+            pointer-events: auto;
+        }
+
+        .overview-map-tool-toggle:hover,
+        .overview-map-tool-toggle:focus-visible,
+        .overview-map-tool-toggle.is-active {
+            border-color: rgba(139, 0, 0, 0.35);
+            background: rgba(139, 0, 0, 0.08);
+            outline: none;
+        }
+
+        .overview-map-tool-toggle.is-active {
+            background: var(--md-sys-color-primary);
+            border-color: var(--md-sys-color-primary);
+            color: #fff;
+        }
+
+        .overview-map-tools-panel {
+            position: absolute;
+            top: 4rem;
+            right: 0.9rem;
+            z-index: 500;
+            width: min(290px, calc(100% - 1.8rem));
+            display: grid;
+            gap: 0.55rem;
+            padding: 0.75rem 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: var(--shadow-1);
+            backdrop-filter: blur(8px);
+            pointer-events: auto;
+        }
+
+        .overview-map-tools-panel[hidden] {
+            display: none;
+        }
+
+        .overview-plate-legend {
+            width: 100%;
+            max-width: none;
+            display: grid;
+            gap: 0.55rem;
+            padding: 0.75rem 0.8rem;
+            border: none;
+            border-top: 1px solid var(--md-sys-color-surface-variant);
+            border-radius: 0;
+            background: var(--md-sys-color-surface);
+            box-shadow: none;
+            backdrop-filter: none;
+            pointer-events: auto;
+        }
+
+        .overview-plate-legend[hidden] {
+            display: none;
+        }
+
+        .overview-plate-legend-title {
+            margin: 0;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .overview-plate-legend-row {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            color: var(--md-sys-color-on-surface);
+            font-size: 0.78rem;
+            line-height: 1.35;
+        }
+
+        .overview-plate-legend-row[hidden] {
+            display: none;
+        }
+
+        .overview-plate-legend-swatch {
+            flex: 0 0 42px;
+            height: 16px;
+        }
+
+        .overview-plate-legend-swatch svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            overflow: visible;
+        }
+
+        .overview-plate-legend-note {
+            font-size: 0.72rem;
+            color: var(--md-sys-color-outline);
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            padding-top: 0.45rem;
+        }
+
+        .overview-radius-controls-card {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .overview-map-control-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.6rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+        }
+
+        .overview-map-control-header strong {
+            color: var(--md-sys-color-on-surface);
+            font-size: 0.8rem;
+        }
+
+        .overview-radius-controls-card input[type="range"] {
+            width: 100%;
+        }
+
+        .overview-radius-controls-card input[type="range"]:focus-visible,
+        .overview-map-radius-toggle:focus-visible {
+            outline: 2px solid rgba(139, 0, 0, 0.28);
+            outline-offset: 2px;
+        }
+
+        .overview-radius-controls-card input[type="range"] {
+            accent-color: var(--md-sys-color-primary);
+            cursor: pointer;
+        }
+
+        .leaflet-top.leaflet-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .leaflet-top.leaflet-left .overview-default-layers-control {
+            order: -1;
+            margin-top: 0.9rem;
+            margin-left: 0.9rem;
+            margin-bottom: 0.45rem;
+            pointer-events: auto;
+        }
+
+        .leaflet-top.leaflet-left .leaflet-control-zoom {
+            margin-top: 0;
+            margin-left: 0.9rem;
+        }
+
+        .overview-default-layers-control.leaflet-control-layers {
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.68);
+            box-shadow: var(--shadow-1);
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+        }
+
+        .overview-default-layers-control .leaflet-control-layers-toggle {
+            width: 42px;
+            height: 42px;
+        }
+
+        .overview-default-layers-control.leaflet-control-layers-expanded {
+            padding: 0.72rem 0.8rem;
+            min-width: 220px;
+        }
+
+        .overview-default-layers-control .leaflet-control-layers-base label,
+        .overview-default-layers-control .leaflet-control-layers-overlays label {
+            font-size: 0.84rem;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 0.36rem;
+        }
+
+        .overview-default-layers-control .leaflet-control-layers-base label:last-child,
+        .overview-default-layers-control .leaflet-control-layers-overlays label:last-child {
+            margin-bottom: 0;
+        }
+
+        .tectonic-symbol {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        .overview-map-radius-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.42rem;
+            border: 1px solid rgba(139, 0, 0, 0.18);
+            background: rgba(139, 0, 0, 0.04);
+            color: var(--md-sys-color-primary);
+            border-radius: 999px;
+            padding: 0.45rem 0.78rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .overview-map-radius-toggle:hover,
+        .overview-map-radius-toggle:focus-visible {
+            border-color: rgba(139, 0, 0, 0.32);
+            background: rgba(139, 0, 0, 0.08);
+        }
+
+        .overview-map-radius-toggle.is-active {
+            background: var(--md-sys-color-primary);
+            border-color: var(--md-sys-color-primary);
+            color: #fff;
         }
 
         .overview-map-reset-btn {
@@ -792,6 +1028,30 @@
 
         .overview-map-reset-btn .material-symbols-outlined {
             font-size: 1rem;
+        }
+
+        .overview-radius-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 92px;
+            padding: 0.28rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(139, 0, 0, 0.18);
+            background: rgba(255, 255, 255, 0.94);
+            color: var(--md-sys-color-primary);
+            font-size: 0.77rem;
+            font-weight: 700;
+            line-height: 1;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14);
+            backdrop-filter: blur(8px);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .overview-radius-label-marker {
+            background: transparent;
+            border: none;
         }
 
         .overview-distance-line-label {
@@ -2402,6 +2662,16 @@
                 height: 360px;
             }
 
+            .overview-radius-controls-card,
+            .overview-map-reset-btn {
+                width: 100%;
+            }
+
+            .overview-default-layers-control.leaflet-control-layers-expanded {
+                min-width: 0;
+                width: min(280px, calc(100vw - 3rem));
+            }
+
             .overview-list {
                 max-height: none;
             }
@@ -2864,11 +3134,84 @@
                         <div class="overview-map-panel">
                             <div id="overviewMap" class="overview-map-frame" aria-label="Overview earthquake map"></div>
                             <div class="overview-map-toolbar">
-                                <button class="overview-map-reset-btn" id="overviewResetMapBtn" type="button" onclick="resetOverviewMapView()">
-                                    <span class="material-symbols-outlined" aria-hidden="true">center_focus_strong</span>
-                                    <span id="overviewResetMapBtnText">Reiniciar mapa</span>
-                                </button>
+                                <div class="overview-map-tools">
+                                    <button class="overview-map-tool-toggle" id="overviewMapToolsToggleBtn" type="button" aria-expanded="false" onclick="toggleOverviewMapTools()">
+                                        <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+                                        <span id="overviewMapToolsToggleText">Map tools</span>
+                                    </button>
+                                    <div class="overview-plate-legend" id="overviewPlateLegend" hidden>
+                                        <h4 class="overview-plate-legend-title" id="overviewPlateLegendTitle">Map legend</h4>
+                                        <div class="overview-plate-legend-row" id="overviewPopulationLegendRow" hidden>
+                                            <div class="overview-plate-legend-swatch" aria-hidden="true">
+                                                <svg viewBox="0 0 42 16">
+                                                    <defs>
+                                                        <linearGradient id="populationDensityLegendGradient" x1="0" y1="0" x2="1" y2="0">
+                                                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+                                                            <stop offset="45%" stop-color="#c7cacc" stop-opacity="0.58"/>
+                                                            <stop offset="100%" stop-color="#3f464a" stop-opacity="0.96"/>
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <rect x="0.5" y="1.5" width="41" height="13" rx="2" fill="#ffffff" stroke="#b9bec1"/>
+                                                    <rect x="1" y="2" width="40" height="12" rx="1.5" fill="url(#populationDensityLegendGradient)"/>
+                                                </svg>
+                                            </div>
+                                            <span id="overviewPopulationLegend">Population density — USGS / ORNL LandScan</span>
+                                        </div>
+                                        <div class="overview-plate-legend-row" data-legend-layer="plate">
+                                            <div class="overview-plate-legend-swatch" aria-hidden="true">
+                                                <svg viewBox="0 0 42 16">
+                                                    <line x1="0" y1="8" x2="42" y2="8" stroke="#b3271e" stroke-width="2"/>
+                                                    <polygon points="10,8 10,2 4,8" fill="#b3271e"/>
+                                                    <polygon points="26,8 26,2 20,8" fill="#b3271e"/>
+                                                </svg>
+                                            </div>
+                                            <span id="overviewPlateLegendConvergent">Convergent — subduction (teeth on overriding plate)</span>
+                                        </div>
+                                        <div class="overview-plate-legend-row" data-legend-layer="plate">
+                                            <div class="overview-plate-legend-swatch" aria-hidden="true">
+                                                <svg viewBox="0 0 42 16">
+                                                    <line x1="0" y1="8" x2="42" y2="8" stroke="#b3271e" stroke-width="2"/>
+                                                    <line x1="12" y1="2" x2="12" y2="14" stroke="#b3271e" stroke-width="2"/>
+                                                    <line x1="28" y1="2" x2="28" y2="14" stroke="#b3271e" stroke-width="2"/>
+                                                </svg>
+                                            </div>
+                                            <span id="overviewPlateLegendDivergent">Divergent — spreading ridge (perpendicular ticks)</span>
+                                        </div>
+                                        <div class="overview-plate-legend-row" data-legend-layer="plate">
+                                            <div class="overview-plate-legend-swatch" aria-hidden="true">
+                                                <svg viewBox="0 0 42 16">
+                                                    <line x1="0" y1="8" x2="42" y2="8" stroke="#b3271e" stroke-width="2.2"/>
+                                                </svg>
+                                            </div>
+                                            <span id="overviewPlateLegendTransform">Transform — strike-slip (plain line)</span>
+                                        </div>
+                                        <div class="overview-plate-legend-row" data-legend-layer="plate">
+                                            <div class="overview-plate-legend-swatch" aria-hidden="true">
+                                                <svg viewBox="0 0 42 16">
+                                                    <line x1="0" y1="8" x2="42" y2="8" stroke="#b3271e" stroke-width="1.4" stroke-dasharray="4 4"/>
+                                                </svg>
+                                            </div>
+                                            <span id="overviewPlateLegendOther">Other / diffuse boundary zone</span>
+                                        </div>
+                                        <div class="overview-plate-legend-note" id="overviewPlateLegendNote">Source: USGS Tectonic Plate Boundaries service (Bird, 2003 model), fetched live.</div>
+                                    </div>
+                                    <div class="overview-map-tools-panel" id="overviewMapToolsPanel" hidden>
+                                        <div class="overview-radius-controls-card">
+                                            <div class="overview-map-control-header">
+                                                <span id="overviewRadiusLabel">Radio de impacto</span>
+                                                <strong id="overviewRadiusValue">250 km</strong>
+                                            </div>
+                                            <input id="overviewRadiusInput" type="range" min="50" max="600" step="25" value="250" oninput="setOverviewRadiusKm(this.value)">
+                                            <button class="overview-map-radius-toggle" id="overviewRadiusToggleBtn" type="button" onclick="toggleOverviewRadiusRing()">Mostrar radio</button>
+                                        </div>
+                                        <button class="overview-map-reset-btn" id="overviewResetMapBtn" type="button" onclick="resetOverviewMapView()">
+                                            <span class="material-symbols-outlined" aria-hidden="true">center_focus_strong</span>
+                                            <span id="overviewResetMapBtnText">Reiniciar mapa</span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                         <aside class="overview-detail-panel">
                             <div class="overview-panel-block">
@@ -2979,6 +3322,7 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
     <script>
         const EARTHQUAKE_DASHBOARD_URL = 'https://codemazesolver.github.io/usgs-geo-dashboard/';
         const REPOSITORY_URL = 'https://github.com/CodeMazeSolver/colombian-earthquakes';
@@ -3154,7 +3498,314 @@
         let overviewLocationPlacementMode = false;
         let overviewDistanceMode = 'selected';
         let overviewDistancePanelOpen = false;
+        let overviewMapToolsOpen = false;
         let overviewLocationStatusKey = 'idle';
+        let overviewBaseLayer = null;
+        let overviewBasemapLayers = {};
+        let overviewOverlayLayers = {};
+        let overviewLayerControl = null;
+        let overviewBasemap = 'light';
+        let overviewRadiusKm = 250;
+        let overviewRadiusVisible = false;
+
+        const OVERVIEW_BASEMAPS = {
+            light: {
+                labelKey: 'overviewBasemapLight',
+                url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+                options: {
+                    subdomains: 'abcd',
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+                }
+            },
+            topo: {
+                labelKey: 'overviewBasemapTopo',
+                url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+                options: {
+                    subdomains: 'abc',
+                    maxZoom: 19,
+                    maxNativeZoom: 17,
+                    attribution: 'Map data: &copy; OpenStreetMap contributors, SRTM | Map style: &copy; OpenTopoMap'
+                }
+            },
+            satellite: {
+                labelKey: 'overviewBasemapSatellite',
+                url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                options: {
+                    maxZoom: 19,
+                    maxNativeZoom: 18,
+                    attribution: 'Tiles &copy; Esri'
+                }
+            }
+        };
+
+        const OVERVIEW_OVERLAY_DEFS = {
+            populationDensity: {
+                labelKey: 'overviewOverlayPopulation',
+                createLayer: () => createOverviewPopulationDensityLayer()
+            },
+            plateBoundaries: {
+                labelKey: 'overviewOverlayPlateBoundaries',
+                createLayer: () => createOverviewPlateBoundaryLayer()
+            }
+        };
+
+        const OVERVIEW_POPULATION_TILE_URL = 'https://earthquake.usgs.gov/arcgis/rest/services/eq/pager_landscan2018bin/MapServer/tile/{z}/{y}/{x}';
+        const OVERVIEW_PLATE_BOUNDARIES_SERVICE = 'https://earthquake.usgs.gov/arcgis/rest/services/eq/map_plateboundaries/MapServer';
+        const OVERVIEW_PLATE_BOUNDARIES_FALLBACK_URL = 'assets/pb2002_steps_colombia.geojson';
+        const OVERVIEW_PLATE_BOUNDARY_FETCH_TIMEOUT_MS = 4000;
+        const OVERVIEW_PLATE_LINE_COLOR = '#b3271e';
+
+        let overviewPlateBoundaryLoadPromise = null;
+        let overviewPlateBoundaryLoadError = null;
+        let overviewPlateBoundaryLayers = null;
+
+        function createOverviewPopulationDensityLayer() {
+            return L.tileLayer(OVERVIEW_POPULATION_TILE_URL, {
+                attribution: 'Population Data &copy; USGS / ORNL LandScan',
+                opacity: 0.65,
+                maxZoom: 16
+            });
+        }
+
+        function createOverviewPlateBoundaryLayerIcon(svgMarkup) {
+            return L.divIcon({
+                className: 'tectonic-symbol',
+                html: svgMarkup,
+                iconSize: [12, 12],
+                iconAnchor: [6, 6]
+            });
+        }
+
+        const overviewPlateToothIcon = createOverviewPlateBoundaryLayerIcon(`
+            <svg width="12" height="12" viewBox="0 0 12 12" style="display:block; transform: rotate(90deg); transform-origin: 50% 50%;">
+                <polygon points="6,1 6,11 0,6" fill="${OVERVIEW_PLATE_LINE_COLOR}" />
+            </svg>
+        `);
+
+        const overviewPlateTickIcon = createOverviewPlateBoundaryLayerIcon(`
+            <svg width="12" height="12" viewBox="0 0 12 12" style="display:block; transform: rotate(90deg); transform-origin: 50% 50%;">
+                <line x1="0" y1="6" x2="12" y2="6" stroke="${OVERVIEW_PLATE_LINE_COLOR}" stroke-width="2" stroke-linecap="square"/>
+            </svg>
+        `);
+
+        function classifyOverviewPlateBoundary(label) {
+            if (label && typeof label === 'object') {
+                const stepClass = String(label.STEPCLASS || '').toUpperCase();
+                if (stepClass === 'SUB' || stepClass === 'CCB' || stepClass === 'OCB') return 'convergent';
+                if (stepClass === 'OSR' || stepClass === 'CRB') return 'divergent';
+                if (stepClass === 'OTF' || stepClass === 'CTF') return 'transform';
+                return 'other';
+            }
+            if (!label) return 'other';
+            const normalized = String(label).toLowerCase();
+            if (normalized.includes('convergent')) return 'convergent';
+            if (normalized.includes('divergent')) return 'divergent';
+            if (normalized.includes('transform')) return 'transform';
+            return 'other';
+        }
+
+        function createOverviewPlateBoundaryLayer() {
+            const categoryLayers = {
+                convergent: L.layerGroup(),
+                divergent: L.layerGroup(),
+                transform: L.layerGroup(),
+                other: L.layerGroup()
+            };
+            const layer = L.layerGroup(Object.values(categoryLayers));
+            layer._overviewPlateBoundaryOverlay = true;
+            layer._overviewPlateCategoryLayers = categoryLayers;
+            layer.on('add', () => {
+                ensureOverviewPlateBoundaryData().catch(() => {
+                    // Keep the overlay toggle stable even if the remote service times out.
+                });
+            });
+            return layer;
+        }
+
+        function getOverviewPlateBoundaryLayers() {
+            return overviewOverlayLayers?.plateBoundaries?._overviewPlateCategoryLayers || {};
+        }
+
+        function addOverviewStyledPlateBoundaryLine(targetLayers, latlngs, type, weightScale = 1) {
+            const targetLayer = targetLayers[type] || targetLayers.other;
+            if (!targetLayer) return;
+            if (type === 'convergent') {
+                const line = L.polyline(latlngs, {
+                    color: OVERVIEW_PLATE_LINE_COLOR,
+                    weight: 2 * weightScale,
+                    opacity: 0.9
+                });
+                targetLayer.addLayer(line);
+                if (L.polylineDecorator) {
+                    targetLayer.addLayer(L.polylineDecorator(line, {
+                        patterns: [{
+                            offset: 10,
+                            repeat: 22,
+                            symbol: L.Symbol.marker({
+                                rotate: true,
+                                markerOptions: { icon: overviewPlateToothIcon }
+                            })
+                        }]
+                    }));
+                }
+                return;
+            }
+
+            if (type === 'divergent') {
+                const line = L.polyline(latlngs, {
+                    color: OVERVIEW_PLATE_LINE_COLOR,
+                    weight: 2 * weightScale,
+                    opacity: 0.9
+                });
+                targetLayer.addLayer(line);
+                if (L.polylineDecorator) {
+                    targetLayer.addLayer(L.polylineDecorator(line, {
+                        patterns: [{
+                            offset: 10,
+                            repeat: 16,
+                            symbol: L.Symbol.marker({
+                                rotate: true,
+                                markerOptions: { icon: overviewPlateTickIcon }
+                            })
+                        }]
+                    }));
+                }
+                return;
+            }
+
+            if (type === 'transform') {
+                targetLayer.addLayer(L.polyline(latlngs, {
+                    color: OVERVIEW_PLATE_LINE_COLOR,
+                    weight: 2.2 * weightScale,
+                    opacity: 0.9
+                }));
+                return;
+            }
+
+            targetLayer.addLayer(L.polyline(latlngs, {
+                color: OVERVIEW_PLATE_LINE_COLOR,
+                weight: 1.4 * weightScale,
+                opacity: 0.75,
+                dashArray: '4 4'
+            }));
+        }
+
+        async function fetchOverviewPlateBoundaryFeatures(layerId) {
+            const pageSize = 1000;
+            let offset = 0;
+            let allFeatures = [];
+            while (true) {
+                const url = `${OVERVIEW_PLATE_BOUNDARIES_SERVICE}/${layerId}/query?where=1%3D1&outFields=NAME,LABEL&returnGeometry=true&outSR=4326&f=geojson&resultRecordCount=${pageSize}&resultOffset=${offset}`;
+                const controller = new AbortController();
+                const timeoutId = window.setTimeout(() => controller.abort(), OVERVIEW_PLATE_BOUNDARY_FETCH_TIMEOUT_MS);
+                let response;
+                try {
+                    response = await fetch(url, { signal: controller.signal });
+                } catch (error) {
+                    if (error?.name === 'AbortError') {
+                        throw new Error(`Timed out after ${OVERVIEW_PLATE_BOUNDARY_FETCH_TIMEOUT_MS}ms while loading USGS plate boundaries layer ${layerId}`);
+                    }
+                    throw error;
+                } finally {
+                    window.clearTimeout(timeoutId);
+                }
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status} while loading USGS plate boundaries layer ${layerId}`);
+                }
+                const geojson = await response.json();
+                const features = geojson.features || [];
+                allFeatures = allFeatures.concat(features);
+                if (features.length < pageSize) break;
+                offset += pageSize;
+            }
+            return allFeatures;
+        }
+
+        async function fetchOverviewPlateBoundaryFallbackFeatures() {
+            const response = await fetch(OVERVIEW_PLATE_BOUNDARIES_FALLBACK_URL);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} while loading local plate boundary fallback data`);
+            }
+            const geojson = await response.json();
+            return geojson.features || [];
+        }
+
+        function renderOverviewPlateBoundaryFeatures(targetLayers, features, weightScale) {
+            features.forEach(feature => {
+                const geometry = feature.geometry;
+                if (!geometry) return;
+                const type = classifyOverviewPlateBoundary(feature.properties?.LABEL ?? feature.properties);
+                const lines = geometry.type === 'MultiLineString' ? geometry.coordinates : [geometry.coordinates];
+                lines.forEach(coords => {
+                    const latlngs = coords.map(coord => [coord[1], coord[0]]);
+                    if (latlngs.length >= 2) {
+                        addOverviewStyledPlateBoundaryLine(targetLayers, latlngs, type, weightScale);
+                    }
+                });
+            });
+        }
+
+        function ensureOverviewPlateBoundaryData() {
+            const targetLayers = getOverviewPlateBoundaryLayers();
+            if (!targetLayers.convergent || !targetLayers.divergent || !targetLayers.transform || !targetLayers.other) {
+                return Promise.resolve(null);
+            }
+            if (overviewPlateBoundaryLayers && Object.values(targetLayers).every(layer => layer?._overviewPlateBoundaryReady)) {
+                return Promise.resolve(overviewPlateBoundaryLayers);
+            }
+            if (overviewPlateBoundaryLoadError) {
+                Object.values(targetLayers).forEach(layer => {
+                    if (layer) layer._overviewPlateBoundaryError = overviewPlateBoundaryLoadError;
+                });
+                return Promise.reject(overviewPlateBoundaryLoadError);
+            }
+
+            if (!overviewPlateBoundaryLoadPromise) {
+                overviewPlateBoundaryLoadPromise = Promise.all([
+                    fetchOverviewPlateBoundaryFeatures(1),
+                    fetchOverviewPlateBoundaryFeatures(0)
+                ]).then(([plateFeatures, microplateFeatures]) => ({
+                    plateFeatures,
+                    microplateFeatures,
+                    source: 'usgs'
+                })).catch(async error => {
+                    console.warn('USGS plate boundary service failed for the overview map; trying local fallback data.', error);
+                    const fallbackFeatures = await fetchOverviewPlateBoundaryFallbackFeatures();
+                    return {
+                        plateFeatures: fallbackFeatures,
+                        microplateFeatures: [],
+                        source: 'fallback'
+                    };
+                }).catch(error => {
+                    overviewPlateBoundaryLoadError = error;
+                    throw error;
+                });
+            }
+
+            return overviewPlateBoundaryLoadPromise.then(({ plateFeatures, microplateFeatures, source }) => {
+                const resolvedLayers = getOverviewPlateBoundaryLayers();
+                if (!overviewPlateBoundaryLayers) {
+                    overviewPlateBoundaryLayers = resolvedLayers;
+                    renderOverviewPlateBoundaryFeatures(resolvedLayers, plateFeatures, 1);
+                    renderOverviewPlateBoundaryFeatures(resolvedLayers, microplateFeatures, 0.7);
+                    Object.values(resolvedLayers).forEach(layer => {
+                        if (layer) {
+                            layer._overviewPlateBoundaryReady = true;
+                            layer._overviewPlateBoundaryError = null;
+                            layer._overviewPlateBoundarySource = source;
+                        }
+                    });
+                }
+                return overviewPlateBoundaryLayers;
+            }).catch(error => {
+                Object.values(getOverviewPlateBoundaryLayers()).forEach(layer => {
+                    if (layer) layer._overviewPlateBoundaryError = error;
+                });
+                console.error('Could not load overview plate boundary overlay from USGS.', error);
+                throw error;
+            });
+        }
 
         const eqData = [
             {
@@ -3811,8 +4462,8 @@
                 magnitude: 7.4,
                 depth: "110.3 km",
                 mmi: "VII",
-                deaths: "164+",
-                injured: { es: "885+", en: "885+", de: "885+" },
+                deaths: "254+",
+                injured: { es: "2.597+", en: "2,597+", de: "2.597+" },
                 location: {
                     es: "Chocó / San José del Palmar",
                     en: "Chocó / San José del Palmar",
@@ -3830,9 +4481,9 @@
                     de: "Erdbeben von Chocó 2026"
                 },
                 impact: {
-                    es: "El fuerte sismo de 2026 en Chocó produjo al menos 164 muertes, más de 880 personas heridas y daños extensos en distintas zonas del país. Se incorpora como el caso colombiano más reciente de gran magnitud y como referencia contemporánea para el occidente andino y pacífico.",
-                    en: "The strong 2026 earthquake in Chocó caused at least 164 deaths, injured more than 880 people, and caused extensive damage in different parts of the country. It is included as the most recent major Colombian case and as a contemporary reference point for the western Andean and Pacific region.",
-                    de: "Das starke Erdbeben von 2026 in Chocó verursachte mindestens 164 Todesopfer, verletzte mehr als 880 Menschen und richtete in verschiedenen Teilen des Landes erhebliche Schäden an. Es wird als jüngster großer Fall Kolumbiens und als aktueller Referenzpunkt für den westlichen Anden- und Pazifikraum aufgenommen."
+                    es: "El fuerte sismo de 2026 en Chocó produjo al menos 254 muertes, más de 2.500 personas heridas y daños extensos en distintas zonas del país. Se incorpora como el caso colombiano más reciente de gran magnitud y como referencia contemporánea para el occidente andino y pacífico.",
+                    en: "The strong 2026 earthquake in Chocó caused at least 254 deaths, injured more than 2,500 people, and caused extensive damage in different parts of the country. It is included as the most recent major Colombian case and as a contemporary reference point for the western Andean and Pacific region.",
+                    de: "Das starke Erdbeben von 2026 in Chocó verursachte mindestens 254 Todesopfer, verletzte mehr als 2.500 Menschen und richtete in verschiedenen Teilen des Landes erhebliche Schäden an. Es wird als jüngster großer Fall Kolumbiens und als aktueller Referenzpunkt für den westlichen Anden- und Pazifikraum aufgenommen."
                 },
                 significance: {
                     es: "Actualiza la cronología con un gran evento reciente ya documentado por múltiples fuentes públicas.",
@@ -4005,7 +4656,15 @@
                 overviewLocationUse: "Usar mi ubicación",
                 overviewLocationPick: "Elegir en el mapa",
                 overviewLocationClear: "Limpiar ubicación",
+                overviewBasemapLabel: "Mapa base",
+                overviewBasemapLight: "Claro",
+                overviewBasemapTopo: "Topográfico",
+                overviewBasemapSatellite: "Satélite",
+                overviewMapToolsToggle: "Herramientas del mapa",
                 overviewResetMap: "Reiniciar mapa",
+                overviewRadiusLabel: "Radio de impacto",
+                overviewRadiusToggleShow: "Mostrar radio",
+                overviewRadiusToggleHide: "Ocultar radio",
                 overviewDistanceSelectedMode: "Distancia al evento resaltado",
                 overviewDistanceAllMode: "Distancia a todos",
                 overviewLocationIdle: "Coloca tu ubicación con el botón o haz clic en el mapa.",
@@ -4019,6 +4678,18 @@
                 overviewDistanceSelectedTitle: "Distancia al evento resaltado",
                 overviewDistanceSelectedBody: "Tu ubicación está a {distance} km de {event}.",
                 overviewDistanceSelectedLine: "La línea en el mapa conecta tu ubicación con el evento activo.",
+                overviewRadiusSummary: "Radio alrededor del evento activo: {distance} km.",
+                overviewOverlayPopulation: "Densidad de población",
+                overviewOverlayPlateBoundaries: "Límites de placas tectónicas",
+                overviewPlateLegendTitle: "Leyenda del mapa",
+                overviewPopulationLegend: "Densidad de población — USGS / ORNL LandScan",
+                overviewPlateLegendConvergent: "Convergente — subducción (dientes en la placa superior)",
+                overviewPlateLegendDivergent: "Divergente — dorsal de expansión (marcas perpendiculares)",
+                overviewPlateLegendTransform: "Transformante — desgarre lateral (línea simple)",
+                overviewPlateLegendOther: "Otras / zonas difusas de límite",
+                overviewPlateLegendNote: "Fuente: servicio USGS Tectonic Plate Boundaries (modelo Bird, 2003), consultado en vivo.",
+                overviewPopulationLegendNote: "Fuente: teselas de densidad de población USGS PAGER LandScan 2018.",
+                overviewCombinedLegendNote: "Fuentes: densidad de población USGS / ORNL LandScan; límites de placas USGS (modelo Bird, 2003), consultados en vivo.",
                 overviewDistanceAllTitle: "Distancias ordenadas a todos los eventos",
                 overviewDistanceAllEmpty: "Coloca una ubicación para ordenar los terremotos por proximidad.",
                 overviewEmpty: "No hay terremotos que coincidan con este filtro. Ajusta la búsqueda para volver a poblar el mapa general.",
@@ -4119,7 +4790,15 @@
                 overviewLocationUse: "Use my location",
                 overviewLocationPick: "Pick on map",
                 overviewLocationClear: "Clear location",
+                overviewBasemapLabel: "Basemap",
+                overviewBasemapLight: "Light",
+                overviewBasemapTopo: "Topographic",
+                overviewBasemapSatellite: "Satellite",
+                overviewMapToolsToggle: "Map tools",
                 overviewResetMap: "Reset map",
+                overviewRadiusLabel: "Impact radius",
+                overviewRadiusToggleShow: "Show radius",
+                overviewRadiusToggleHide: "Hide radius",
                 overviewDistanceSelectedMode: "Distance to highlighted event",
                 overviewDistanceAllMode: "Distance to all",
                 overviewLocationIdle: "Place your location with the button or click directly on the map.",
@@ -4133,6 +4812,18 @@
                 overviewDistanceSelectedTitle: "Distance to highlighted event",
                 overviewDistanceSelectedBody: "Your location is {distance} km from {event}.",
                 overviewDistanceSelectedLine: "The line on the map connects your location to the active event.",
+                overviewRadiusSummary: "Radius around the active event: {distance} km.",
+                overviewOverlayPopulation: "Population density",
+                overviewOverlayPlateBoundaries: "Tectonic plate boundaries",
+                overviewPlateLegendTitle: "Map legend",
+                overviewPopulationLegend: "Population density — USGS / ORNL LandScan",
+                overviewPlateLegendConvergent: "Convergent — subduction (teeth on overriding plate)",
+                overviewPlateLegendDivergent: "Divergent — spreading ridge (perpendicular ticks)",
+                overviewPlateLegendTransform: "Transform — strike-slip (plain line)",
+                overviewPlateLegendOther: "Other / diffuse boundary zone",
+                overviewPlateLegendNote: "Source: USGS Tectonic Plate Boundaries service (Bird, 2003 model), fetched live.",
+                overviewPopulationLegendNote: "Source: USGS PAGER LandScan 2018 population-density tiles.",
+                overviewCombinedLegendNote: "Sources: USGS / ORNL LandScan population density; USGS Tectonic Plate Boundaries (Bird, 2003), fetched live.",
                 overviewDistanceAllTitle: "Sorted distances to all events",
                 overviewDistanceAllEmpty: "Place a location to sort earthquakes by proximity.",
                 overviewEmpty: "No earthquakes match this filter. Adjust the search to repopulate the overview map.",
@@ -4233,7 +4924,15 @@
                 overviewLocationUse: "Meinen Standort nutzen",
                 overviewLocationPick: "Auf der Karte wählen",
                 overviewLocationClear: "Standort löschen",
+                overviewBasemapLabel: "Basiskarte",
+                overviewBasemapLight: "Hell",
+                overviewBasemapTopo: "Topografisch",
+                overviewBasemapSatellite: "Satellit",
+                overviewMapToolsToggle: "Kartenwerkzeuge",
                 overviewResetMap: "Karte zurücksetzen",
+                overviewRadiusLabel: "Wirkungsradius",
+                overviewRadiusToggleShow: "Radius anzeigen",
+                overviewRadiusToggleHide: "Radius ausblenden",
                 overviewDistanceSelectedMode: "Distanz zum markierten Ereignis",
                 overviewDistanceAllMode: "Distanz zu allen",
                 overviewLocationIdle: "Platzieren Sie Ihren Standort mit der Taste oder per Klick direkt auf der Karte.",
@@ -4247,6 +4946,18 @@
                 overviewDistanceSelectedTitle: "Distanz zum markierten Ereignis",
                 overviewDistanceSelectedBody: "Ihr Standort liegt {distance} km von {event} entfernt.",
                 overviewDistanceSelectedLine: "Die Linie auf der Karte verbindet Ihren Standort mit dem aktiven Ereignis.",
+                overviewRadiusSummary: "Radius um das aktive Ereignis: {distance} km.",
+                overviewOverlayPopulation: "Bevölkerungsdichte",
+                overviewOverlayPlateBoundaries: "Tektonische Plattengrenzen",
+                overviewPlateLegendTitle: "Kartenlegende",
+                overviewPopulationLegend: "Bevölkerungsdichte — USGS / ORNL LandScan",
+                overviewPlateLegendConvergent: "Konvergent — Subduktion (Zähne auf der überschiebenden Platte)",
+                overviewPlateLegendDivergent: "Divergent — Spreizungsrücken (senkrechte Markierungen)",
+                overviewPlateLegendTransform: "Transform — Blattverschiebung (einfache Linie)",
+                overviewPlateLegendOther: "Andere / diffuse Grenzzonen",
+                overviewPlateLegendNote: "Quelle: USGS-Dienst Tectonic Plate Boundaries (Bird-Modell, 2003), live geladen.",
+                overviewPopulationLegendNote: "Quelle: Bevölkerungsdichte-Kacheln USGS PAGER LandScan 2018.",
+                overviewCombinedLegendNote: "Quellen: Bevölkerungsdichte USGS / ORNL LandScan; USGS-Plattengrenzen (Bird-Modell, 2003), live geladen.",
                 overviewDistanceAllTitle: "Sortierte Distanzen zu allen Ereignissen",
                 overviewDistanceAllEmpty: "Platzieren Sie einen Standort, um Erdbeben nach Nähe zu sortieren.",
                 overviewEmpty: "Keine Erdbeben entsprechen diesem Filter. Passen Sie die Suche an, um die Übersichtskarte wieder zu füllen.",
@@ -5766,6 +6477,11 @@
             renderOverviewPlaceholder();
         }
 
+        function toggleOverviewMapTools() {
+            overviewMapToolsOpen = !overviewMapToolsOpen;
+            renderOverviewPlaceholder();
+        }
+
         function armOverviewMapLocationPicker() {
             overviewLocationPlacementMode = !overviewLocationPlacementMode;
             overviewLocationStatusKey = overviewLocationPlacementMode ? 'picking' : overviewUserLocation ? 'ready' : 'idle';
@@ -5777,6 +6493,108 @@
             overviewLocationPlacementMode = false;
             overviewLocationStatusKey = 'idle';
             renderOverviewPlaceholder();
+        }
+
+        function setOverviewBasemap(value) {
+            overviewBasemap = OVERVIEW_BASEMAPS[value] ? value : 'light';
+            if (overviewMap && overviewBaseLayer && overviewBasemapLayers[overviewBasemap] && !overviewMap.hasLayer(overviewBasemapLayers[overviewBasemap])) {
+                overviewMap.addLayer(overviewBasemapLayers[overviewBasemap]);
+            } else if (overviewMap) {
+                applyOverviewBasemap({ preserveView: true });
+            }
+        }
+
+        function setOverviewRadiusKm(rawValue) {
+            overviewRadiusKm = Number(rawValue) || 250;
+            renderOverviewPlaceholder();
+        }
+
+        function toggleOverviewRadiusRing() {
+            overviewRadiusVisible = !overviewRadiusVisible;
+            renderOverviewPlaceholder();
+        }
+
+        function applyOverviewBasemap({ preserveView = false } = {}) {
+            if (!overviewMap) return;
+            const currentCenter = preserveView ? overviewMap.getCenter() : null;
+            const currentZoom = preserveView ? overviewMap.getZoom() : null;
+            const config = OVERVIEW_BASEMAPS[overviewBasemap] || OVERVIEW_BASEMAPS.light;
+            if (!overviewBasemapLayers[overviewBasemap]) {
+                overviewBasemapLayers[overviewBasemap] = L.tileLayer(config.url, config.options);
+            }
+            Object.entries(overviewBasemapLayers).forEach(([key, layer]) => {
+                if (key !== overviewBasemap && overviewMap.hasLayer(layer)) {
+                    overviewMap.removeLayer(layer);
+                }
+            });
+            overviewBaseLayer = overviewBasemapLayers[overviewBasemap];
+            if (!overviewMap.hasLayer(overviewBaseLayer)) {
+                overviewBaseLayer.addTo(overviewMap);
+            }
+            if (preserveView && currentCenter && Number.isFinite(currentZoom)) {
+                overviewMap.setView(currentCenter, currentZoom, { animate: false });
+            }
+        }
+
+        function ensureOverviewLayerControl() {
+            if (!overviewMap) return;
+            Object.entries(OVERVIEW_BASEMAPS).forEach(([key, config]) => {
+                if (!overviewBasemapLayers[key]) {
+                    overviewBasemapLayers[key] = L.tileLayer(config.url, config.options);
+                }
+            });
+            const baseLayers = Object.fromEntries(
+                Object.entries(OVERVIEW_BASEMAPS).map(([key, config]) => [
+                    reportContent[currentLang][config.labelKey],
+                    overviewBasemapLayers[key]
+                ])
+            );
+            const overlays = Object.fromEntries(
+                Object.entries(OVERVIEW_OVERLAY_DEFS).map(([key, config]) => [
+                    reportContent[currentLang][config.labelKey],
+                    overviewOverlayLayers[key]
+                ])
+            );
+            if (overviewLayerControl) {
+                overviewLayerControl.remove();
+            }
+            overviewLayerControl = L.control.layers(baseLayers, overlays, { collapsed: true, position: 'topleft' }).addTo(overviewMap);
+            const layerControlContainer = overviewLayerControl.getContainer();
+            layerControlContainer?.classList.add('overview-default-layers-control');
+            const topLeftContainer = layerControlContainer?.parentElement;
+            const zoomControl = topLeftContainer?.querySelector('.leaflet-control-zoom');
+            if (topLeftContainer && layerControlContainer && zoomControl && topLeftContainer.firstElementChild !== layerControlContainer) {
+                topLeftContainer.insertBefore(layerControlContainer, zoomControl);
+            }
+        }
+
+        function updateOverviewPlateLegendVisibility(ui = reportContent[currentLang]) {
+            const legend = document.getElementById('overviewPlateLegend');
+            if (!legend) return;
+            const plateLegendVisible = Boolean(
+                overviewOverlayLayers?.plateBoundaries
+                && overviewMap?.hasLayer(overviewOverlayLayers.plateBoundaries)
+            );
+            const populationLegendVisible = Boolean(
+                overviewOverlayLayers?.populationDensity
+                && overviewMap?.hasLayer(overviewOverlayLayers.populationDensity)
+            );
+            legend.hidden = !plateLegendVisible && !populationLegendVisible;
+            document.getElementById('overviewPopulationLegendRow').hidden = !populationLegendVisible;
+            legend.querySelectorAll('[data-legend-layer="plate"]').forEach(row => {
+                row.hidden = !plateLegendVisible;
+            });
+            document.getElementById('overviewPlateLegendTitle').innerText = ui.overviewPlateLegendTitle;
+            document.getElementById('overviewPopulationLegend').innerText = ui.overviewPopulationLegend;
+            document.getElementById('overviewPlateLegendConvergent').innerText = ui.overviewPlateLegendConvergent;
+            document.getElementById('overviewPlateLegendDivergent').innerText = ui.overviewPlateLegendDivergent;
+            document.getElementById('overviewPlateLegendTransform').innerText = ui.overviewPlateLegendTransform;
+            document.getElementById('overviewPlateLegendOther').innerText = ui.overviewPlateLegendOther;
+            document.getElementById('overviewPlateLegendNote').innerText = plateLegendVisible && populationLegendVisible
+                ? ui.overviewCombinedLegendNote
+                : populationLegendVisible
+                    ? ui.overviewPopulationLegendNote
+                    : ui.overviewPlateLegendNote;
         }
 
         function resetOverviewMapView() {
@@ -5980,11 +6798,29 @@
 
             if (!overviewMap) {
                 overviewMap = L.map('overviewMap', { zoomControl: true });
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                    subdomains: 'abcd',
-                    maxZoom: 19,
-                    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
-                }).addTo(overviewMap);
+                applyOverviewBasemap();
+                overviewOverlayLayers = Object.fromEntries(
+                    Object.entries(OVERVIEW_OVERLAY_DEFS).map(([key, config]) => [key, config.createLayer()])
+                );
+                overviewMap.on('baselayerchange', event => {
+                    const matched = Object.entries(OVERVIEW_BASEMAPS).find(([, config]) => reportContent[currentLang][config.labelKey] === event.name);
+                    if (matched) {
+                        overviewBasemap = matched[0];
+                        overviewBaseLayer = overviewBasemapLayers[matched[0]] || overviewBaseLayer;
+                    }
+                });
+                overviewMap.on('overlayadd', event => {
+                    if (event.layer?._overviewPlateBoundaryOverlay) {
+                        ensureOverviewPlateBoundaryData().catch(() => {
+                            // The layer stays toggleable even if the service is temporarily unavailable.
+                        });
+                    }
+                    updateOverviewPlateLegendVisibility();
+                });
+                overviewMap.on('overlayremove', () => {
+                    updateOverviewPlateLegendVisibility();
+                });
+                ensureOverviewLayerControl();
                 overviewMap.on('click', event => {
                     if (!overviewLocationPlacementMode) return;
                     overviewUserLocation = { lat: event.latlng.lat, lng: event.latlng.lng, source: 'map' };
@@ -5992,6 +6828,9 @@
                     overviewLocationStatusKey = 'ready';
                     renderOverviewPlaceholder();
                 });
+            } else {
+                applyOverviewBasemap();
+                ensureOverviewLayerControl();
             }
 
             if (overviewDynamicLayer) {
@@ -6008,7 +6847,9 @@
                 }
             }).addTo(overviewDynamicLayer);
 
-            const boundsParts = [borderLayer.getBounds()];
+            const defaultBounds = borderLayer.getBounds();
+            const boundsParts = [defaultBounds];
+            const focusBoundsParts = [];
 
             entries.forEach(({ eq, index }) => {
                 const [lat, lng] = eq.coordinates.split(',').map(Number);
@@ -6030,6 +6871,28 @@
 
                 boundsParts.push(L.latLngBounds([marker.getLatLng()]));
             });
+
+            if (overviewRadiusVisible && selectedEntry) {
+                const [selectedLat, selectedLng] = selectedEntry.eq.coordinates.split(',').map(Number);
+                const radiusCircle = L.circle([selectedLat, selectedLng], {
+                    radius: overviewRadiusKm * 1000,
+                    color: '#8b0000',
+                    weight: 2,
+                    opacity: 0.75,
+                    fillColor: '#ffb4ab',
+                    fillOpacity: 0.12,
+                    dashArray: '10 8'
+                }).addTo(overviewDynamicLayer);
+                L.marker([selectedLat, selectedLng], {
+                    interactive: false,
+                    icon: L.divIcon({
+                        className: 'overview-radius-label-marker',
+                        html: `<span class="overview-radius-label">${formatDistanceKm(overviewRadiusKm)} km</span>`
+                    })
+                }).addTo(overviewDynamicLayer);
+                boundsParts.push(radiusCircle.getBounds());
+                focusBoundsParts.push(radiusCircle.getBounds());
+            }
 
             if (overviewUserLocation) {
                 const userLatLng = [overviewUserLocation.lat, overviewUserLocation.lng];
@@ -6065,14 +6928,18 @@
                         })
                     }).addTo(overviewDynamicLayer);
                     boundsParts.push(line.getBounds());
+                    focusBoundsParts.push(line.getBounds());
                 }
             }
 
-            const mergedBounds = boundsParts.reduce((acc, next) => acc.extend(next), boundsParts[0]).pad(0.08);
+            const mergedBounds = boundsParts.reduce((acc, next) => acc.extend(next), defaultBounds).pad(0.08);
+            const focusBounds = (focusBoundsParts.length ? focusBoundsParts : [defaultBounds])
+                .reduce((acc, next) => acc.extend(next), L.latLngBounds(focusBoundsParts.length ? focusBoundsParts[0] : defaultBounds))
+                .pad(0.12);
             overviewMapDefaultBounds = mergedBounds;
             window.requestAnimationFrame(() => {
                 overviewMap.invalidateSize();
-                overviewMap.fitBounds(mergedBounds);
+                overviewMap.fitBounds(focusBounds);
             });
         }
 
@@ -6131,6 +6998,17 @@
             document.getElementById('overviewDistancePanelToggle').setAttribute('aria-expanded', String(overviewDistancePanelOpen));
             document.getElementById('overviewDistancePanelCard').dataset.open = String(overviewDistancePanelOpen);
             document.getElementById('overviewDistancePanelContent').hidden = !overviewDistancePanelOpen;
+            ensureOverviewLayerControl();
+            document.getElementById('overviewMapToolsToggleText').innerText = ui.overviewMapToolsToggle;
+            document.getElementById('overviewMapToolsToggleBtn').classList.toggle('is-active', overviewMapToolsOpen);
+            document.getElementById('overviewMapToolsToggleBtn').setAttribute('aria-expanded', String(overviewMapToolsOpen));
+            document.getElementById('overviewMapToolsPanel').hidden = !overviewMapToolsOpen;
+            updateOverviewPlateLegendVisibility(ui);
+            document.getElementById('overviewRadiusLabel').innerText = ui.overviewRadiusLabel;
+            document.getElementById('overviewRadiusValue').innerText = `${formatDistanceKm(overviewRadiusKm)} km`;
+            document.getElementById('overviewRadiusInput').value = String(overviewRadiusKm);
+            document.getElementById('overviewRadiusToggleBtn').innerText = overviewRadiusVisible ? ui.overviewRadiusToggleHide : ui.overviewRadiusToggleShow;
+            document.getElementById('overviewRadiusToggleBtn').classList.toggle('is-active', overviewRadiusVisible);
             document.getElementById('overviewResetMapBtnText').innerText = ui.overviewResetMap;
             document.getElementById('overviewUseMyLocationBtn').innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">my_location</span><span>${ui.overviewLocationUse}</span>`;
             document.getElementById('overviewPickLocationBtn').innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">${overviewLocationPlacementMode ? 'location_searching' : 'edit_location_alt'}</span><span>${ui.overviewLocationPick}</span>`;
@@ -6202,6 +7080,7 @@
                             .replace('{distance}', formatDistanceKm(selectedDistance?.distanceKm || 0))
                             .replace('{event}', eq.title[currentLang])}</div>
                         <div class="overview-location-status">${ui.overviewDistanceSelectedLine}</div>
+                        ${overviewRadiusVisible ? `<div class="overview-location-status">${ui.overviewRadiusSummary.replace('{distance}', formatDistanceKm(overviewRadiusKm))}</div>` : ''}
                     </div>
                 `;
             } else {
