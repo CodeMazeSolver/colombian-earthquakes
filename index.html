@@ -769,7 +769,62 @@
             pointer-events: none;
         }
 
-        .overview-radius-controls-card {
+        .overview-map-tools {
+            display: grid;
+            gap: 0.55rem;
+            justify-items: end;
+            pointer-events: auto;
+        }
+
+        .overview-map-tool-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--md-sys-color-primary);
+            border-radius: 999px;
+            padding: 0.5rem 0.85rem;
+            font-size: 0.84rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+            box-shadow: var(--shadow-1);
+            backdrop-filter: blur(8px);
+        }
+
+        .overview-map-tool-toggle:hover,
+        .overview-map-tool-toggle:focus-visible,
+        .overview-map-tool-toggle.is-active {
+            border-color: rgba(139, 0, 0, 0.35);
+            background: rgba(139, 0, 0, 0.08);
+            outline: none;
+        }
+
+        .overview-map-tool-toggle.is-active {
+            background: var(--md-sys-color-primary);
+            border-color: var(--md-sys-color-primary);
+            color: #fff;
+        }
+
+        .overview-map-tools-panel {
+            width: min(290px, 100%);
+            display: grid;
+            gap: 0.55rem;
+            padding: 0.75rem 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: var(--shadow-1);
+            backdrop-filter: blur(8px);
+        }
+
+        .overview-map-tools-panel[hidden] {
+            display: none;
+        }
+
+        .overview-plate-legend {
             width: min(290px, 100%);
             display: grid;
             gap: 0.55rem;
@@ -780,6 +835,50 @@
             box-shadow: var(--shadow-1);
             backdrop-filter: blur(8px);
             pointer-events: auto;
+        }
+
+        .overview-plate-legend[hidden] {
+            display: none;
+        }
+
+        .overview-plate-legend-title {
+            margin: 0;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .overview-plate-legend-row {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            color: var(--md-sys-color-on-surface);
+            font-size: 0.78rem;
+            line-height: 1.35;
+        }
+
+        .overview-plate-legend-swatch {
+            flex: 0 0 42px;
+            height: 16px;
+        }
+
+        .overview-plate-legend-swatch svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            overflow: visible;
+        }
+
+        .overview-plate-legend-note {
+            font-size: 0.72rem;
+            color: var(--md-sys-color-outline);
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            padding-top: 0.45rem;
+        }
+
+        .overview-radius-controls-card {
+            display: grid;
+            gap: 0.55rem;
         }
 
         .overview-map-control-header {
@@ -812,10 +911,23 @@
             cursor: pointer;
         }
 
-        .leaflet-top.leaflet-right .overview-default-layers-control {
+        .leaflet-top.leaflet-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .leaflet-top.leaflet-left .overview-default-layers-control {
+            order: -1;
             margin-top: 0.9rem;
-            margin-right: 0.9rem;
+            margin-left: 0.9rem;
+            margin-bottom: 0.45rem;
             pointer-events: auto;
+        }
+
+        .leaflet-top.leaflet-left .leaflet-control-zoom {
+            margin-top: 0;
+            margin-left: 0.9rem;
         }
 
         .overview-default-layers-control.leaflet-control-layers {
@@ -847,6 +959,11 @@
         .overview-default-layers-control .leaflet-control-layers-base label:last-child,
         .overview-default-layers-control .leaflet-control-layers-overlays label:last-child {
             margin-bottom: 0;
+        }
+
+        .tectonic-symbol {
+            background: transparent !important;
+            border: none !important;
         }
 
         .overview-map-radius-toggle {
@@ -3017,19 +3134,68 @@
                         <div class="overview-map-panel">
                             <div id="overviewMap" class="overview-map-frame" aria-label="Overview earthquake map"></div>
                             <div class="overview-map-toolbar">
-                                <div class="overview-radius-controls-card">
-                                    <div class="overview-map-control-header">
-                                        <span id="overviewRadiusLabel">Radio de impacto</span>
-                                        <strong id="overviewRadiusValue">250 km</strong>
+                                <div class="overview-map-tools">
+                                    <button class="overview-map-tool-toggle" id="overviewMapToolsToggleBtn" type="button" aria-expanded="false" onclick="toggleOverviewMapTools()">
+                                        <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+                                        <span id="overviewMapToolsToggleText">Map tools</span>
+                                    </button>
+                                    <div class="overview-plate-legend" id="overviewPlateLegend" hidden>
+                                        <h4 class="overview-plate-legend-title" id="overviewPlateLegendTitle">Plate boundary types</h4>
+                                        <div class="overview-plate-legend-row">
+                                            <div class="overview-plate-legend-swatch" aria-hidden="true">
+                                                <svg viewBox="0 0 42 16">
+                                                    <line x1="0" y1="8" x2="42" y2="8" stroke="#b3271e" stroke-width="2"/>
+                                                    <polygon points="10,8 10,2 4,8" fill="#b3271e"/>
+                                                    <polygon points="26,8 26,2 20,8" fill="#b3271e"/>
+                                                </svg>
+                                            </div>
+                                            <span id="overviewPlateLegendConvergent">Convergent — subduction (teeth on overriding plate)</span>
+                                        </div>
+                                        <div class="overview-plate-legend-row">
+                                            <div class="overview-plate-legend-swatch" aria-hidden="true">
+                                                <svg viewBox="0 0 42 16">
+                                                    <line x1="0" y1="8" x2="42" y2="8" stroke="#b3271e" stroke-width="2"/>
+                                                    <line x1="12" y1="2" x2="12" y2="14" stroke="#b3271e" stroke-width="2"/>
+                                                    <line x1="28" y1="2" x2="28" y2="14" stroke="#b3271e" stroke-width="2"/>
+                                                </svg>
+                                            </div>
+                                            <span id="overviewPlateLegendDivergent">Divergent — spreading ridge (perpendicular ticks)</span>
+                                        </div>
+                                        <div class="overview-plate-legend-row">
+                                            <div class="overview-plate-legend-swatch" aria-hidden="true">
+                                                <svg viewBox="0 0 42 16">
+                                                    <line x1="0" y1="8" x2="42" y2="8" stroke="#b3271e" stroke-width="2.2"/>
+                                                </svg>
+                                            </div>
+                                            <span id="overviewPlateLegendTransform">Transform — strike-slip (plain line)</span>
+                                        </div>
+                                        <div class="overview-plate-legend-row">
+                                            <div class="overview-plate-legend-swatch" aria-hidden="true">
+                                                <svg viewBox="0 0 42 16">
+                                                    <line x1="0" y1="8" x2="42" y2="8" stroke="#b3271e" stroke-width="1.4" stroke-dasharray="4 4"/>
+                                                </svg>
+                                            </div>
+                                            <span id="overviewPlateLegendOther">Other / diffuse boundary zone</span>
+                                        </div>
+                                        <div class="overview-plate-legend-note" id="overviewPlateLegendNote">Source: USGS Tectonic Plate Boundaries service (Bird, 2003 model), fetched live.</div>
                                     </div>
-                                    <input id="overviewRadiusInput" type="range" min="50" max="600" step="25" value="250" oninput="setOverviewRadiusKm(this.value)">
-                                    <button class="overview-map-radius-toggle" id="overviewRadiusToggleBtn" type="button" onclick="toggleOverviewRadiusRing()">Mostrar radio</button>
+                                    <div class="overview-map-tools-panel" id="overviewMapToolsPanel" hidden>
+                                        <div class="overview-radius-controls-card">
+                                            <div class="overview-map-control-header">
+                                                <span id="overviewRadiusLabel">Radio de impacto</span>
+                                                <strong id="overviewRadiusValue">250 km</strong>
+                                            </div>
+                                            <input id="overviewRadiusInput" type="range" min="50" max="600" step="25" value="250" oninput="setOverviewRadiusKm(this.value)">
+                                            <button class="overview-map-radius-toggle" id="overviewRadiusToggleBtn" type="button" onclick="toggleOverviewRadiusRing()">Mostrar radio</button>
+                                        </div>
+                                        <button class="overview-map-reset-btn" id="overviewResetMapBtn" type="button" onclick="resetOverviewMapView()">
+                                            <span class="material-symbols-outlined" aria-hidden="true">center_focus_strong</span>
+                                            <span id="overviewResetMapBtnText">Reiniciar mapa</span>
+                                        </button>
+                                    </div>
                                 </div>
-                                <button class="overview-map-reset-btn" id="overviewResetMapBtn" type="button" onclick="resetOverviewMapView()">
-                                    <span class="material-symbols-outlined" aria-hidden="true">center_focus_strong</span>
-                                    <span id="overviewResetMapBtnText">Reiniciar mapa</span>
-                                </button>
                             </div>
+
                         </div>
                         <aside class="overview-detail-panel">
                             <div class="overview-panel-block">
@@ -3140,6 +3306,7 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
     <script>
         const EARTHQUAKE_DASHBOARD_URL = 'https://codemazesolver.github.io/usgs-geo-dashboard/';
         const REPOSITORY_URL = 'https://github.com/CodeMazeSolver/colombian-earthquakes';
@@ -3315,8 +3482,10 @@
         let overviewLocationPlacementMode = false;
         let overviewDistanceMode = 'selected';
         let overviewDistancePanelOpen = false;
+        let overviewMapToolsOpen = false;
         let overviewLocationStatusKey = 'idle';
         let overviewBaseLayer = null;
+        let overviewBasemapLayers = {};
         let overviewOverlayLayers = {};
         let overviewLayerControl = null;
         let overviewBasemap = 'light';
@@ -3338,7 +3507,8 @@
                 url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
                 options: {
                     subdomains: 'abc',
-                    maxZoom: 17,
+                    maxZoom: 19,
+                    maxNativeZoom: 17,
                     attribution: 'Map data: &copy; OpenStreetMap contributors, SRTM | Map style: &copy; OpenTopoMap'
                 }
             },
@@ -3346,7 +3516,8 @@
                 labelKey: 'overviewBasemapSatellite',
                 url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
                 options: {
-                    maxZoom: 18,
+                    maxZoom: 19,
+                    maxNativeZoom: 18,
                     attribution: 'Tiles &copy; Esri'
                 }
             }
@@ -3355,13 +3526,314 @@
         const OVERVIEW_OVERLAY_DEFS = {
             populationDensity: {
                 labelKey: 'overviewOverlayPopulation',
-                createLayer: () => L.imageOverlay(
-                    'https://worldpop.arcgis.com/arcgis/rest/services/WorldPop_Population_Density_1km/ImageServer/exportImage?bbox=-81,12,-66,-5&bboxSR=4326&imageSR=4326&size=1200,1200&format=png32&transparent=true&f=image',
-                    [[-5, -81], [12, -66]],
-                    { opacity: 0.45, interactive: false, crossOrigin: true }
-                )
+                createLayer: () => createOverviewPopulationDensityLayer()
+            },
+            plateBoundaries: {
+                labelKey: 'overviewOverlayPlateBoundaries',
+                createLayer: () => createOverviewPlateBoundaryLayer()
             }
         };
+
+        const OVERVIEW_POPULATION_TILE_URL = 'https://earthquake.usgs.gov/earthquakes/map/tiles/population/{z}/{x}/{y}.png';
+        const OVERVIEW_POPULATION_FALLBACK_URL = 'https://gis.earthdata.nasa.gov/image/rest/services/gpw-v4/gpw_v4_population_density_adjusted_to_2015_unwpp_country_totals_rev11/ImageServer/exportImage?bbox=-81,-5,-66,12&bboxSR=4326&imageSR=4326&size=1200,1200&format=png32&transparent=true&f=image';
+        const OVERVIEW_PLATE_BOUNDARIES_SERVICE = 'https://earthquake.usgs.gov/arcgis/rest/services/eq/map_plateboundaries/MapServer';
+        const OVERVIEW_PLATE_BOUNDARIES_FALLBACK_URL = 'assets/pb2002_steps_colombia.geojson';
+        const OVERVIEW_PLATE_BOUNDARY_FETCH_TIMEOUT_MS = 4000;
+        const OVERVIEW_PLATE_LINE_COLOR = '#b3271e';
+
+        let overviewPlateBoundaryLoadPromise = null;
+        let overviewPlateBoundaryLoadError = null;
+        let overviewPlateBoundaryLayers = null;
+
+        function createOverviewPopulationDensityLayer() {
+            const fallbackLayer = L.imageOverlay(
+                OVERVIEW_POPULATION_FALLBACK_URL,
+                [[-5, -81], [12, -66]],
+                {
+                    opacity: 0.45,
+                    interactive: false,
+                    crossOrigin: true,
+                    attribution: 'Population data &copy; NASA SEDAC GPWv4'
+                }
+            );
+
+            const primaryLayer = L.tileLayer(OVERVIEW_POPULATION_TILE_URL, {
+                minZoom: 0,
+                maxZoom: 19,
+                maxNativeZoom: 8,
+                opacity: 0.6,
+                crossOrigin: true,
+                attribution: 'Population data &copy; ORNL LandScan / USGS'
+            });
+
+            const group = L.layerGroup([primaryLayer]);
+            let fallbackActivated = false;
+
+            const activateFallback = () => {
+                if (fallbackActivated) return;
+                fallbackActivated = true;
+                console.warn('Overview population tile overlay failed; falling back to the static GPW image overlay.');
+                if (group.hasLayer(primaryLayer)) {
+                    group.removeLayer(primaryLayer);
+                }
+                if (!group.hasLayer(fallbackLayer)) {
+                    group.addLayer(fallbackLayer);
+                }
+            };
+
+            primaryLayer.on('tileerror', activateFallback);
+
+            group.on('add', () => {
+                if (fallbackActivated) {
+                    if (!group.hasLayer(fallbackLayer)) {
+                        group.addLayer(fallbackLayer);
+                    }
+                } else if (!group.hasLayer(primaryLayer)) {
+                    group.addLayer(primaryLayer);
+                }
+            });
+
+            return group;
+        }
+
+        function createOverviewPlateBoundaryLayerIcon(svgMarkup) {
+            return L.divIcon({
+                className: 'tectonic-symbol',
+                html: svgMarkup,
+                iconSize: [12, 12],
+                iconAnchor: [6, 6]
+            });
+        }
+
+        const overviewPlateToothIcon = createOverviewPlateBoundaryLayerIcon(`
+            <svg width="12" height="12" viewBox="0 0 12 12" style="display:block; transform: rotate(90deg); transform-origin: 50% 50%;">
+                <polygon points="6,1 6,11 0,6" fill="${OVERVIEW_PLATE_LINE_COLOR}" />
+            </svg>
+        `);
+
+        const overviewPlateTickIcon = createOverviewPlateBoundaryLayerIcon(`
+            <svg width="12" height="12" viewBox="0 0 12 12" style="display:block; transform: rotate(90deg); transform-origin: 50% 50%;">
+                <line x1="0" y1="6" x2="12" y2="6" stroke="${OVERVIEW_PLATE_LINE_COLOR}" stroke-width="2" stroke-linecap="square"/>
+            </svg>
+        `);
+
+        function classifyOverviewPlateBoundary(label) {
+            if (label && typeof label === 'object') {
+                const stepClass = String(label.STEPCLASS || '').toUpperCase();
+                if (stepClass === 'SUB' || stepClass === 'CCB' || stepClass === 'OCB') return 'convergent';
+                if (stepClass === 'OSR' || stepClass === 'CRB') return 'divergent';
+                if (stepClass === 'OTF' || stepClass === 'CTF') return 'transform';
+                return 'other';
+            }
+            if (!label) return 'other';
+            const normalized = String(label).toLowerCase();
+            if (normalized.includes('convergent')) return 'convergent';
+            if (normalized.includes('divergent')) return 'divergent';
+            if (normalized.includes('transform')) return 'transform';
+            return 'other';
+        }
+
+        function createOverviewPlateBoundaryLayer() {
+            const categoryLayers = {
+                convergent: L.layerGroup(),
+                divergent: L.layerGroup(),
+                transform: L.layerGroup(),
+                other: L.layerGroup()
+            };
+            const layer = L.layerGroup(Object.values(categoryLayers));
+            layer._overviewPlateBoundaryOverlay = true;
+            layer._overviewPlateCategoryLayers = categoryLayers;
+            layer.on('add', () => {
+                ensureOverviewPlateBoundaryData().catch(() => {
+                    // Keep the overlay toggle stable even if the remote service times out.
+                });
+            });
+            return layer;
+        }
+
+        function getOverviewPlateBoundaryLayers() {
+            return overviewOverlayLayers?.plateBoundaries?._overviewPlateCategoryLayers || {};
+        }
+
+        function addOverviewStyledPlateBoundaryLine(targetLayers, latlngs, type, weightScale = 1) {
+            const targetLayer = targetLayers[type] || targetLayers.other;
+            if (!targetLayer) return;
+            if (type === 'convergent') {
+                const line = L.polyline(latlngs, {
+                    color: OVERVIEW_PLATE_LINE_COLOR,
+                    weight: 2 * weightScale,
+                    opacity: 0.9
+                });
+                targetLayer.addLayer(line);
+                if (L.polylineDecorator) {
+                    targetLayer.addLayer(L.polylineDecorator(line, {
+                        patterns: [{
+                            offset: 10,
+                            repeat: 22,
+                            symbol: L.Symbol.marker({
+                                rotate: true,
+                                markerOptions: { icon: overviewPlateToothIcon }
+                            })
+                        }]
+                    }));
+                }
+                return;
+            }
+
+            if (type === 'divergent') {
+                const line = L.polyline(latlngs, {
+                    color: OVERVIEW_PLATE_LINE_COLOR,
+                    weight: 2 * weightScale,
+                    opacity: 0.9
+                });
+                targetLayer.addLayer(line);
+                if (L.polylineDecorator) {
+                    targetLayer.addLayer(L.polylineDecorator(line, {
+                        patterns: [{
+                            offset: 10,
+                            repeat: 16,
+                            symbol: L.Symbol.marker({
+                                rotate: true,
+                                markerOptions: { icon: overviewPlateTickIcon }
+                            })
+                        }]
+                    }));
+                }
+                return;
+            }
+
+            if (type === 'transform') {
+                targetLayer.addLayer(L.polyline(latlngs, {
+                    color: OVERVIEW_PLATE_LINE_COLOR,
+                    weight: 2.2 * weightScale,
+                    opacity: 0.9
+                }));
+                return;
+            }
+
+            targetLayer.addLayer(L.polyline(latlngs, {
+                color: OVERVIEW_PLATE_LINE_COLOR,
+                weight: 1.4 * weightScale,
+                opacity: 0.75,
+                dashArray: '4 4'
+            }));
+        }
+
+        async function fetchOverviewPlateBoundaryFeatures(layerId) {
+            const pageSize = 1000;
+            let offset = 0;
+            let allFeatures = [];
+            while (true) {
+                const url = `${OVERVIEW_PLATE_BOUNDARIES_SERVICE}/${layerId}/query?where=1%3D1&outFields=NAME,LABEL&returnGeometry=true&outSR=4326&f=geojson&resultRecordCount=${pageSize}&resultOffset=${offset}`;
+                const controller = new AbortController();
+                const timeoutId = window.setTimeout(() => controller.abort(), OVERVIEW_PLATE_BOUNDARY_FETCH_TIMEOUT_MS);
+                let response;
+                try {
+                    response = await fetch(url, { signal: controller.signal });
+                } catch (error) {
+                    if (error?.name === 'AbortError') {
+                        throw new Error(`Timed out after ${OVERVIEW_PLATE_BOUNDARY_FETCH_TIMEOUT_MS}ms while loading USGS plate boundaries layer ${layerId}`);
+                    }
+                    throw error;
+                } finally {
+                    window.clearTimeout(timeoutId);
+                }
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status} while loading USGS plate boundaries layer ${layerId}`);
+                }
+                const geojson = await response.json();
+                const features = geojson.features || [];
+                allFeatures = allFeatures.concat(features);
+                if (features.length < pageSize) break;
+                offset += pageSize;
+            }
+            return allFeatures;
+        }
+
+        async function fetchOverviewPlateBoundaryFallbackFeatures() {
+            const response = await fetch(OVERVIEW_PLATE_BOUNDARIES_FALLBACK_URL);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} while loading local plate boundary fallback data`);
+            }
+            const geojson = await response.json();
+            return geojson.features || [];
+        }
+
+        function renderOverviewPlateBoundaryFeatures(targetLayers, features, weightScale) {
+            features.forEach(feature => {
+                const geometry = feature.geometry;
+                if (!geometry) return;
+                const type = classifyOverviewPlateBoundary(feature.properties?.LABEL ?? feature.properties);
+                const lines = geometry.type === 'MultiLineString' ? geometry.coordinates : [geometry.coordinates];
+                lines.forEach(coords => {
+                    const latlngs = coords.map(coord => [coord[1], coord[0]]);
+                    if (latlngs.length >= 2) {
+                        addOverviewStyledPlateBoundaryLine(targetLayers, latlngs, type, weightScale);
+                    }
+                });
+            });
+        }
+
+        function ensureOverviewPlateBoundaryData() {
+            const targetLayers = getOverviewPlateBoundaryLayers();
+            if (!targetLayers.convergent || !targetLayers.divergent || !targetLayers.transform || !targetLayers.other) {
+                return Promise.resolve(null);
+            }
+            if (overviewPlateBoundaryLayers && Object.values(targetLayers).every(layer => layer?._overviewPlateBoundaryReady)) {
+                return Promise.resolve(overviewPlateBoundaryLayers);
+            }
+            if (overviewPlateBoundaryLoadError) {
+                Object.values(targetLayers).forEach(layer => {
+                    if (layer) layer._overviewPlateBoundaryError = overviewPlateBoundaryLoadError;
+                });
+                return Promise.reject(overviewPlateBoundaryLoadError);
+            }
+
+            if (!overviewPlateBoundaryLoadPromise) {
+                overviewPlateBoundaryLoadPromise = Promise.all([
+                    fetchOverviewPlateBoundaryFeatures(1),
+                    fetchOverviewPlateBoundaryFeatures(0)
+                ]).then(([plateFeatures, microplateFeatures]) => ({
+                    plateFeatures,
+                    microplateFeatures,
+                    source: 'usgs'
+                })).catch(async error => {
+                    console.warn('USGS plate boundary service failed for the overview map; trying local fallback data.', error);
+                    const fallbackFeatures = await fetchOverviewPlateBoundaryFallbackFeatures();
+                    return {
+                        plateFeatures: fallbackFeatures,
+                        microplateFeatures: [],
+                        source: 'fallback'
+                    };
+                }).catch(error => {
+                    overviewPlateBoundaryLoadError = error;
+                    throw error;
+                });
+            }
+
+            return overviewPlateBoundaryLoadPromise.then(({ plateFeatures, microplateFeatures, source }) => {
+                const resolvedLayers = getOverviewPlateBoundaryLayers();
+                if (!overviewPlateBoundaryLayers) {
+                    overviewPlateBoundaryLayers = resolvedLayers;
+                    renderOverviewPlateBoundaryFeatures(resolvedLayers, plateFeatures, 1);
+                    renderOverviewPlateBoundaryFeatures(resolvedLayers, microplateFeatures, 0.7);
+                    Object.values(resolvedLayers).forEach(layer => {
+                        if (layer) {
+                            layer._overviewPlateBoundaryReady = true;
+                            layer._overviewPlateBoundaryError = null;
+                            layer._overviewPlateBoundarySource = source;
+                        }
+                    });
+                }
+                return overviewPlateBoundaryLayers;
+            }).catch(error => {
+                Object.values(getOverviewPlateBoundaryLayers()).forEach(layer => {
+                    if (layer) layer._overviewPlateBoundaryError = error;
+                });
+                console.error('Could not load overview plate boundary overlay from USGS.', error);
+                throw error;
+            });
+        }
 
         const eqData = [
             {
@@ -4216,6 +4688,7 @@
                 overviewBasemapLight: "Claro",
                 overviewBasemapTopo: "Topográfico",
                 overviewBasemapSatellite: "Satélite",
+                overviewMapToolsToggle: "Herramientas del mapa",
                 overviewResetMap: "Reiniciar mapa",
                 overviewRadiusLabel: "Radio de impacto",
                 overviewRadiusToggleShow: "Mostrar radio",
@@ -4235,6 +4708,13 @@
                 overviewDistanceSelectedLine: "La línea en el mapa conecta tu ubicación con el evento activo.",
                 overviewRadiusSummary: "Radio alrededor del evento activo: {distance} km.",
                 overviewOverlayPopulation: "Densidad de población",
+                overviewOverlayPlateBoundaries: "Límites de placas tectónicas",
+                overviewPlateLegendTitle: "Tipos de límites de placa",
+                overviewPlateLegendConvergent: "Convergente — subducción (dientes en la placa superior)",
+                overviewPlateLegendDivergent: "Divergente — dorsal de expansión (marcas perpendiculares)",
+                overviewPlateLegendTransform: "Transformante — desgarre lateral (línea simple)",
+                overviewPlateLegendOther: "Otras / zonas difusas de límite",
+                overviewPlateLegendNote: "Fuente: servicio USGS Tectonic Plate Boundaries (modelo Bird, 2003), consultado en vivo.",
                 overviewDistanceAllTitle: "Distancias ordenadas a todos los eventos",
                 overviewDistanceAllEmpty: "Coloca una ubicación para ordenar los terremotos por proximidad.",
                 overviewEmpty: "No hay terremotos que coincidan con este filtro. Ajusta la búsqueda para volver a poblar el mapa general.",
@@ -4339,6 +4819,7 @@
                 overviewBasemapLight: "Light",
                 overviewBasemapTopo: "Topographic",
                 overviewBasemapSatellite: "Satellite",
+                overviewMapToolsToggle: "Map tools",
                 overviewResetMap: "Reset map",
                 overviewRadiusLabel: "Impact radius",
                 overviewRadiusToggleShow: "Show radius",
@@ -4358,6 +4839,13 @@
                 overviewDistanceSelectedLine: "The line on the map connects your location to the active event.",
                 overviewRadiusSummary: "Radius around the active event: {distance} km.",
                 overviewOverlayPopulation: "Population density",
+                overviewOverlayPlateBoundaries: "Tectonic plate boundaries",
+                overviewPlateLegendTitle: "Plate boundary types",
+                overviewPlateLegendConvergent: "Convergent — subduction (teeth on overriding plate)",
+                overviewPlateLegendDivergent: "Divergent — spreading ridge (perpendicular ticks)",
+                overviewPlateLegendTransform: "Transform — strike-slip (plain line)",
+                overviewPlateLegendOther: "Other / diffuse boundary zone",
+                overviewPlateLegendNote: "Source: USGS Tectonic Plate Boundaries service (Bird, 2003 model), fetched live.",
                 overviewDistanceAllTitle: "Sorted distances to all events",
                 overviewDistanceAllEmpty: "Place a location to sort earthquakes by proximity.",
                 overviewEmpty: "No earthquakes match this filter. Adjust the search to repopulate the overview map.",
@@ -4462,6 +4950,7 @@
                 overviewBasemapLight: "Hell",
                 overviewBasemapTopo: "Topografisch",
                 overviewBasemapSatellite: "Satellit",
+                overviewMapToolsToggle: "Kartenwerkzeuge",
                 overviewResetMap: "Karte zurücksetzen",
                 overviewRadiusLabel: "Wirkungsradius",
                 overviewRadiusToggleShow: "Radius anzeigen",
@@ -4481,6 +4970,13 @@
                 overviewDistanceSelectedLine: "Die Linie auf der Karte verbindet Ihren Standort mit dem aktiven Ereignis.",
                 overviewRadiusSummary: "Radius um das aktive Ereignis: {distance} km.",
                 overviewOverlayPopulation: "Bevölkerungsdichte",
+                overviewOverlayPlateBoundaries: "Tektonische Plattengrenzen",
+                overviewPlateLegendTitle: "Typen von Plattengrenzen",
+                overviewPlateLegendConvergent: "Konvergent — Subduktion (Zähne auf der überschiebenden Platte)",
+                overviewPlateLegendDivergent: "Divergent — Spreizungsrücken (senkrechte Markierungen)",
+                overviewPlateLegendTransform: "Transform — Blattverschiebung (einfache Linie)",
+                overviewPlateLegendOther: "Andere / diffuse Grenzzonen",
+                overviewPlateLegendNote: "Quelle: USGS-Dienst Tectonic Plate Boundaries (Bird-Modell, 2003), live geladen.",
                 overviewDistanceAllTitle: "Sortierte Distanzen zu allen Ereignissen",
                 overviewDistanceAllEmpty: "Platzieren Sie einen Standort, um Erdbeben nach Nähe zu sortieren.",
                 overviewEmpty: "Keine Erdbeben entsprechen diesem Filter. Passen Sie die Suche an, um die Übersichtskarte wieder zu füllen.",
@@ -6000,6 +6496,11 @@
             renderOverviewPlaceholder();
         }
 
+        function toggleOverviewMapTools() {
+            overviewMapToolsOpen = !overviewMapToolsOpen;
+            renderOverviewPlaceholder();
+        }
+
         function armOverviewMapLocationPicker() {
             overviewLocationPlacementMode = !overviewLocationPlacementMode;
             overviewLocationStatusKey = overviewLocationPlacementMode ? 'picking' : overviewUserLocation ? 'ready' : 'idle';
@@ -6015,7 +6516,9 @@
 
         function setOverviewBasemap(value) {
             overviewBasemap = OVERVIEW_BASEMAPS[value] ? value : 'light';
-            if (overviewMap) {
+            if (overviewMap && overviewBaseLayer && overviewBasemapLayers[overviewBasemap] && !overviewMap.hasLayer(overviewBasemapLayers[overviewBasemap])) {
+                overviewMap.addLayer(overviewBasemapLayers[overviewBasemap]);
+            } else if (overviewMap) {
                 applyOverviewBasemap({ preserveView: true });
             }
         }
@@ -6034,12 +6537,19 @@
             if (!overviewMap) return;
             const currentCenter = preserveView ? overviewMap.getCenter() : null;
             const currentZoom = preserveView ? overviewMap.getZoom() : null;
-            if (overviewBaseLayer) {
-                overviewMap.removeLayer(overviewBaseLayer);
-            }
             const config = OVERVIEW_BASEMAPS[overviewBasemap] || OVERVIEW_BASEMAPS.light;
-            overviewBaseLayer = L.tileLayer(config.url, config.options);
-            overviewBaseLayer.addTo(overviewMap);
+            if (!overviewBasemapLayers[overviewBasemap]) {
+                overviewBasemapLayers[overviewBasemap] = L.tileLayer(config.url, config.options);
+            }
+            Object.entries(overviewBasemapLayers).forEach(([key, layer]) => {
+                if (key !== overviewBasemap && overviewMap.hasLayer(layer)) {
+                    overviewMap.removeLayer(layer);
+                }
+            });
+            overviewBaseLayer = overviewBasemapLayers[overviewBasemap];
+            if (!overviewMap.hasLayer(overviewBaseLayer)) {
+                overviewBaseLayer.addTo(overviewMap);
+            }
             if (preserveView && currentCenter && Number.isFinite(currentZoom)) {
                 overviewMap.setView(currentCenter, currentZoom, { animate: false });
             }
@@ -6047,35 +6557,50 @@
 
         function ensureOverviewLayerControl() {
             if (!overviewMap) return;
-            if (!overviewLayerControl) {
-                const baseLayers = Object.fromEntries(
-                    Object.entries(OVERVIEW_BASEMAPS).map(([key, config]) => [
-                        reportContent[currentLang][config.labelKey],
-                        key === overviewBasemap ? overviewBaseLayer : L.layerGroup()
-                    ])
-                );
-                const overlays = Object.fromEntries(
-                    Object.entries(OVERVIEW_OVERLAY_DEFS).map(([key, config]) => [
-                        reportContent[currentLang][config.labelKey],
-                        overviewOverlayLayers[key]
-                    ])
-                );
-                overviewLayerControl = L.control.layers(baseLayers, overlays, { collapsed: true, position: 'topright' }).addTo(overviewMap);
-                overviewLayerControl.getContainer()?.classList.add('overview-default-layers-control');
-                return;
-            }
-            const container = overviewLayerControl.getContainer();
-            if (!container) return;
-            const labels = [...container.querySelectorAll('.leaflet-control-layers-base span, .leaflet-control-layers-overlays span')];
-            const localized = [
-                ...Object.values(OVERVIEW_BASEMAPS).map(config => reportContent[currentLang][config.labelKey]),
-                ...Object.values(OVERVIEW_OVERLAY_DEFS).map(config => reportContent[currentLang][config.labelKey])
-            ];
-            labels.forEach((label, index) => {
-                if (localized[index]) {
-                    label.textContent = localized[index];
+            Object.entries(OVERVIEW_BASEMAPS).forEach(([key, config]) => {
+                if (!overviewBasemapLayers[key]) {
+                    overviewBasemapLayers[key] = L.tileLayer(config.url, config.options);
                 }
             });
+            const baseLayers = Object.fromEntries(
+                Object.entries(OVERVIEW_BASEMAPS).map(([key, config]) => [
+                    reportContent[currentLang][config.labelKey],
+                    overviewBasemapLayers[key]
+                ])
+            );
+            const overlays = Object.fromEntries(
+                Object.entries(OVERVIEW_OVERLAY_DEFS).map(([key, config]) => [
+                    reportContent[currentLang][config.labelKey],
+                    overviewOverlayLayers[key]
+                ])
+            );
+            if (overviewLayerControl) {
+                overviewLayerControl.remove();
+            }
+            overviewLayerControl = L.control.layers(baseLayers, overlays, { collapsed: true, position: 'topleft' }).addTo(overviewMap);
+            const layerControlContainer = overviewLayerControl.getContainer();
+            layerControlContainer?.classList.add('overview-default-layers-control');
+            const topLeftContainer = layerControlContainer?.parentElement;
+            const zoomControl = topLeftContainer?.querySelector('.leaflet-control-zoom');
+            if (topLeftContainer && layerControlContainer && zoomControl && topLeftContainer.firstElementChild !== layerControlContainer) {
+                topLeftContainer.insertBefore(layerControlContainer, zoomControl);
+            }
+        }
+
+        function updateOverviewPlateLegendVisibility(ui = reportContent[currentLang]) {
+            const legend = document.getElementById('overviewPlateLegend');
+            if (!legend) return;
+            const plateLegendVisible = Boolean(
+                overviewOverlayLayers?.plateBoundaries
+                && overviewMap?.hasLayer(overviewOverlayLayers.plateBoundaries)
+            );
+            legend.hidden = !plateLegendVisible;
+            document.getElementById('overviewPlateLegendTitle').innerText = ui.overviewPlateLegendTitle;
+            document.getElementById('overviewPlateLegendConvergent').innerText = ui.overviewPlateLegendConvergent;
+            document.getElementById('overviewPlateLegendDivergent').innerText = ui.overviewPlateLegendDivergent;
+            document.getElementById('overviewPlateLegendTransform').innerText = ui.overviewPlateLegendTransform;
+            document.getElementById('overviewPlateLegendOther').innerText = ui.overviewPlateLegendOther;
+            document.getElementById('overviewPlateLegendNote').innerText = ui.overviewPlateLegendNote;
         }
 
         function resetOverviewMapView() {
@@ -6287,12 +6812,23 @@
                     const matched = Object.entries(OVERVIEW_BASEMAPS).find(([, config]) => reportContent[currentLang][config.labelKey] === event.name);
                     if (matched) {
                         overviewBasemap = matched[0];
+                        overviewBaseLayer = overviewBasemapLayers[matched[0]] || overviewBaseLayer;
                     }
                 });
                 overviewMap.on('overlayadd', event => {
                     if (event.layer === overviewOverlayLayers.populationDensity) {
-                        event.layer.setOpacity(0.45);
+                        const populationTileLayer = event.layer.getLayers?.().find(layer => typeof layer.setOpacity === 'function');
+                        populationTileLayer?.setOpacity(0.6);
                     }
+                    if (event.layer?._overviewPlateBoundaryOverlay) {
+                        ensureOverviewPlateBoundaryData().catch(() => {
+                            // The layer stays toggleable even if the service is temporarily unavailable.
+                        });
+                    }
+                    updateOverviewPlateLegendVisibility();
+                });
+                overviewMap.on('overlayremove', () => {
+                    updateOverviewPlateLegendVisibility();
                 });
                 ensureOverviewLayerControl();
                 overviewMap.on('click', event => {
@@ -6302,6 +6838,9 @@
                     overviewLocationStatusKey = 'ready';
                     renderOverviewPlaceholder();
                 });
+            } else {
+                applyOverviewBasemap();
+                ensureOverviewLayerControl();
             }
 
             if (overviewDynamicLayer) {
@@ -6341,9 +6880,6 @@
                 });
 
                 boundsParts.push(L.latLngBounds([marker.getLatLng()]));
-                if (isSelected) {
-                    focusBoundsParts.push(L.latLngBounds([marker.getLatLng()]));
-                }
             });
 
             if (overviewRadiusVisible && selectedEntry) {
@@ -6473,6 +7009,11 @@
             document.getElementById('overviewDistancePanelCard').dataset.open = String(overviewDistancePanelOpen);
             document.getElementById('overviewDistancePanelContent').hidden = !overviewDistancePanelOpen;
             ensureOverviewLayerControl();
+            document.getElementById('overviewMapToolsToggleText').innerText = ui.overviewMapToolsToggle;
+            document.getElementById('overviewMapToolsToggleBtn').classList.toggle('is-active', overviewMapToolsOpen);
+            document.getElementById('overviewMapToolsToggleBtn').setAttribute('aria-expanded', String(overviewMapToolsOpen));
+            document.getElementById('overviewMapToolsPanel').hidden = !overviewMapToolsOpen;
+            updateOverviewPlateLegendVisibility(ui);
             document.getElementById('overviewRadiusLabel').innerText = ui.overviewRadiusLabel;
             document.getElementById('overviewRadiusValue').innerText = `${formatDistanceKm(overviewRadiusKm)} km`;
             document.getElementById('overviewRadiusInput').value = String(overviewRadiusKm);
