@@ -3323,6 +3323,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
+    <script src="assets/usgs_plate_boundaries.js"></script>
     <script>
         const EARTHQUAKE_DASHBOARD_URL = 'https://codemazesolver.github.io/usgs-geo-dashboard/';
         const REPOSITORY_URL = 'https://github.com/CodeMazeSolver/colombian-earthquakes';
@@ -3551,9 +3552,6 @@
         };
 
         const OVERVIEW_POPULATION_TILE_URL = 'https://earthquake.usgs.gov/arcgis/rest/services/eq/pager_landscan2018bin/MapServer/tile/{z}/{y}/{x}';
-        const OVERVIEW_PLATE_BOUNDARIES_SERVICE = 'https://earthquake.usgs.gov/arcgis/rest/services/eq/map_plateboundaries/MapServer';
-        const OVERVIEW_PLATE_BOUNDARIES_FALLBACK_URL = 'assets/pb2002_steps_colombia.geojson';
-        const OVERVIEW_PLATE_BOUNDARY_FETCH_TIMEOUT_MS = 4000;
         const OVERVIEW_PLATE_LINE_COLOR = '#b3271e';
 
         let overviewPlateBoundaryLoadPromise = null;
@@ -3691,46 +3689,6 @@
             }));
         }
 
-        async function fetchOverviewPlateBoundaryFeatures(layerId) {
-            const pageSize = 1000;
-            let offset = 0;
-            let allFeatures = [];
-            while (true) {
-                const url = `${OVERVIEW_PLATE_BOUNDARIES_SERVICE}/${layerId}/query?where=1%3D1&outFields=NAME,LABEL&returnGeometry=true&outSR=4326&f=geojson&resultRecordCount=${pageSize}&resultOffset=${offset}`;
-                const controller = new AbortController();
-                const timeoutId = window.setTimeout(() => controller.abort(), OVERVIEW_PLATE_BOUNDARY_FETCH_TIMEOUT_MS);
-                let response;
-                try {
-                    response = await fetch(url, { signal: controller.signal });
-                } catch (error) {
-                    if (error?.name === 'AbortError') {
-                        throw new Error(`Timed out after ${OVERVIEW_PLATE_BOUNDARY_FETCH_TIMEOUT_MS}ms while loading USGS plate boundaries layer ${layerId}`);
-                    }
-                    throw error;
-                } finally {
-                    window.clearTimeout(timeoutId);
-                }
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status} while loading USGS plate boundaries layer ${layerId}`);
-                }
-                const geojson = await response.json();
-                const features = geojson.features || [];
-                allFeatures = allFeatures.concat(features);
-                if (features.length < pageSize) break;
-                offset += pageSize;
-            }
-            return allFeatures;
-        }
-
-        async function fetchOverviewPlateBoundaryFallbackFeatures() {
-            const response = await fetch(OVERVIEW_PLATE_BOUNDARIES_FALLBACK_URL);
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status} while loading local plate boundary fallback data`);
-            }
-            const geojson = await response.json();
-            return geojson.features || [];
-        }
-
         function renderOverviewPlateBoundaryFeatures(targetLayers, features, weightScale) {
             features.forEach(feature => {
                 const geometry = feature.geometry;
@@ -3762,20 +3720,15 @@
             }
 
             if (!overviewPlateBoundaryLoadPromise) {
-                overviewPlateBoundaryLoadPromise = Promise.all([
-                    fetchOverviewPlateBoundaryFeatures(1),
-                    fetchOverviewPlateBoundaryFeatures(0)
-                ]).then(([plateFeatures, microplateFeatures]) => ({
-                    plateFeatures,
-                    microplateFeatures,
-                    source: 'usgs'
-                })).catch(async error => {
-                    console.warn('USGS plate boundary service failed for the overview map; trying local fallback data.', error);
-                    const fallbackFeatures = await fetchOverviewPlateBoundaryFallbackFeatures();
+                overviewPlateBoundaryLoadPromise = Promise.resolve().then(() => {
+                    const bundledData = window.USGS_PLATE_BOUNDARY_DATA;
+                    if (!Array.isArray(bundledData?.plateFeatures) || !Array.isArray(bundledData?.microplateFeatures)) {
+                        throw new Error('Bundled USGS plate-boundary data is unavailable');
+                    }
                     return {
-                        plateFeatures: fallbackFeatures,
-                        microplateFeatures: [],
-                        source: 'fallback'
+                        plateFeatures: bundledData.plateFeatures,
+                        microplateFeatures: bundledData.microplateFeatures,
+                        source: 'bundled-usgs'
                     };
                 }).catch(error => {
                     overviewPlateBoundaryLoadError = error;
@@ -4687,9 +4640,9 @@
                 overviewPlateLegendDivergent: "Divergente — dorsal de expansión (marcas perpendiculares)",
                 overviewPlateLegendTransform: "Transformante — desgarre lateral (línea simple)",
                 overviewPlateLegendOther: "Otras / zonas difusas de límite",
-                overviewPlateLegendNote: "Fuente: servicio USGS Tectonic Plate Boundaries (modelo Bird, 2003), consultado en vivo.",
+                overviewPlateLegendNote: "Fuente: límites de placas USGS (modelo Bird, 2003), incluidos localmente para una visualización consistente.",
                 overviewPopulationLegendNote: "Fuente: teselas de densidad de población USGS PAGER LandScan 2018.",
-                overviewCombinedLegendNote: "Fuentes: densidad de población USGS / ORNL LandScan; límites de placas USGS (modelo Bird, 2003), consultados en vivo.",
+                overviewCombinedLegendNote: "Fuentes: densidad de población USGS / ORNL LandScan; límites de placas USGS (modelo Bird, 2003), incluidos localmente.",
                 overviewDistanceAllTitle: "Distancias ordenadas a todos los eventos",
                 overviewDistanceAllEmpty: "Coloca una ubicación para ordenar los terremotos por proximidad.",
                 overviewEmpty: "No hay terremotos que coincidan con este filtro. Ajusta la búsqueda para volver a poblar el mapa general.",
@@ -4821,9 +4774,9 @@
                 overviewPlateLegendDivergent: "Divergent — spreading ridge (perpendicular ticks)",
                 overviewPlateLegendTransform: "Transform — strike-slip (plain line)",
                 overviewPlateLegendOther: "Other / diffuse boundary zone",
-                overviewPlateLegendNote: "Source: USGS Tectonic Plate Boundaries service (Bird, 2003 model), fetched live.",
+                overviewPlateLegendNote: "Source: USGS plate boundaries (Bird, 2003 model), bundled locally for consistent rendering.",
                 overviewPopulationLegendNote: "Source: USGS PAGER LandScan 2018 population-density tiles.",
-                overviewCombinedLegendNote: "Sources: USGS / ORNL LandScan population density; USGS Tectonic Plate Boundaries (Bird, 2003), fetched live.",
+                overviewCombinedLegendNote: "Sources: USGS / ORNL LandScan population density; USGS plate boundaries (Bird, 2003), bundled locally.",
                 overviewDistanceAllTitle: "Sorted distances to all events",
                 overviewDistanceAllEmpty: "Place a location to sort earthquakes by proximity.",
                 overviewEmpty: "No earthquakes match this filter. Adjust the search to repopulate the overview map.",
@@ -4955,9 +4908,9 @@
                 overviewPlateLegendDivergent: "Divergent — Spreizungsrücken (senkrechte Markierungen)",
                 overviewPlateLegendTransform: "Transform — Blattverschiebung (einfache Linie)",
                 overviewPlateLegendOther: "Andere / diffuse Grenzzonen",
-                overviewPlateLegendNote: "Quelle: USGS-Dienst Tectonic Plate Boundaries (Bird-Modell, 2003), live geladen.",
+                overviewPlateLegendNote: "Quelle: USGS-Plattengrenzen (Bird-Modell, 2003), für eine konsistente Darstellung lokal eingebunden.",
                 overviewPopulationLegendNote: "Quelle: Bevölkerungsdichte-Kacheln USGS PAGER LandScan 2018.",
-                overviewCombinedLegendNote: "Quellen: Bevölkerungsdichte USGS / ORNL LandScan; USGS-Plattengrenzen (Bird-Modell, 2003), live geladen.",
+                overviewCombinedLegendNote: "Quellen: Bevölkerungsdichte USGS / ORNL LandScan; USGS-Plattengrenzen (Bird-Modell, 2003), lokal eingebunden.",
                 overviewDistanceAllTitle: "Sortierte Distanzen zu allen Ereignissen",
                 overviewDistanceAllEmpty: "Platzieren Sie einen Standort, um Erdbeben nach Nähe zu sortieren.",
                 overviewEmpty: "Keine Erdbeben entsprechen diesem Filter. Passen Sie die Suche an, um die Übersichtskarte wieder zu füllen.",
