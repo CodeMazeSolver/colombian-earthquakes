@@ -3534,8 +3534,7 @@
             }
         };
 
-        const OVERVIEW_POPULATION_TILE_URL = 'https://earthquake.usgs.gov/earthquakes/map/tiles/population/{z}/{x}/{y}.png';
-        const OVERVIEW_POPULATION_FALLBACK_URL = 'https://gis.earthdata.nasa.gov/image/rest/services/gpw-v4/gpw_v4_population_density_adjusted_to_2015_unwpp_country_totals_rev11/ImageServer/exportImage?bbox=-81,-5,-66,12&bboxSR=4326&imageSR=4326&size=1200,1200&format=png32&transparent=true&f=image';
+        const OVERVIEW_POPULATION_TILE_URL = 'https://earthquake.usgs.gov/arcgis/rest/services/eq/pager_landscan2018bin/MapServer/tile/{z}/{y}/{x}';
         const OVERVIEW_PLATE_BOUNDARIES_SERVICE = 'https://earthquake.usgs.gov/arcgis/rest/services/eq/map_plateboundaries/MapServer';
         const OVERVIEW_PLATE_BOUNDARIES_FALLBACK_URL = 'assets/pb2002_steps_colombia.geojson';
         const OVERVIEW_PLATE_BOUNDARY_FETCH_TIMEOUT_MS = 4000;
@@ -3546,54 +3545,11 @@
         let overviewPlateBoundaryLayers = null;
 
         function createOverviewPopulationDensityLayer() {
-            const fallbackLayer = L.imageOverlay(
-                OVERVIEW_POPULATION_FALLBACK_URL,
-                [[-5, -81], [12, -66]],
-                {
-                    opacity: 0.45,
-                    interactive: false,
-                    crossOrigin: true,
-                    attribution: 'Population data &copy; NASA SEDAC GPWv4'
-                }
-            );
-
-            const primaryLayer = L.tileLayer(OVERVIEW_POPULATION_TILE_URL, {
-                minZoom: 0,
-                maxZoom: 19,
-                maxNativeZoom: 8,
-                opacity: 0.6,
-                crossOrigin: true,
-                attribution: 'Population data &copy; ORNL LandScan / USGS'
+            return L.tileLayer(OVERVIEW_POPULATION_TILE_URL, {
+                attribution: 'Population Data &copy; USGS / ORNL LandScan',
+                opacity: 0.65,
+                maxZoom: 16
             });
-
-            const group = L.layerGroup([primaryLayer]);
-            let fallbackActivated = false;
-
-            const activateFallback = () => {
-                if (fallbackActivated) return;
-                fallbackActivated = true;
-                console.warn('Overview population tile overlay failed; falling back to the static GPW image overlay.');
-                if (group.hasLayer(primaryLayer)) {
-                    group.removeLayer(primaryLayer);
-                }
-                if (!group.hasLayer(fallbackLayer)) {
-                    group.addLayer(fallbackLayer);
-                }
-            };
-
-            primaryLayer.on('tileerror', activateFallback);
-
-            group.on('add', () => {
-                if (fallbackActivated) {
-                    if (!group.hasLayer(fallbackLayer)) {
-                        group.addLayer(fallbackLayer);
-                    }
-                } else if (!group.hasLayer(primaryLayer)) {
-                    group.addLayer(primaryLayer);
-                }
-            });
-
-            return group;
         }
 
         function createOverviewPlateBoundaryLayerIcon(svgMarkup) {
@@ -6816,10 +6772,6 @@
                     }
                 });
                 overviewMap.on('overlayadd', event => {
-                    if (event.layer === overviewOverlayLayers.populationDensity) {
-                        const populationTileLayer = event.layer.getLayers?.().find(layer => typeof layer.setOpacity === 'function');
-                        populationTileLayer?.setOpacity(0.6);
-                    }
                     if (event.layer?._overviewPlateBoundaryOverlay) {
                         ensureOverviewPlateBoundaryData().catch(() => {
                             // The layer stays toggleable even if the service is temporarily unavailable.
