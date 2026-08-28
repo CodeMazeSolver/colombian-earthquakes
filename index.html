@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-fullscreen@1.0.2/dist/leaflet.fullscreen.css" integrity="sha256-YTbhDGEH5amI/JfotPMN7IByFpsN9e4tCBnv5oNdvHU=" crossorigin="">
     
     <style>
         :root {
@@ -966,6 +967,30 @@
         .overview-default-layers-control .leaflet-control-layers-base label:last-child,
         .overview-default-layers-control .leaflet-control-layers-overlays label:last-child {
             margin-bottom: 0;
+        }
+
+        .overview-fullscreen-control {
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.68);
+            box-shadow: var(--shadow-1);
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+        }
+
+        .overview-fullscreen-control a {
+            width: 42px;
+            height: 42px;
+            background: transparent none;
+            font-family: 'Material Symbols Outlined', sans-serif;
+            font-size: 22px;
+            line-height: 42px;
+            text-align: center;
+            color: var(--md-sys-color-primary);
+        }
+
+        .overview-fullscreen-control a:hover {
+            background: rgba(139, 0, 0, 0.08);
         }
 
         .tectonic-symbol {
@@ -3322,6 +3347,7 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-fullscreen@1.0.2/dist/Leaflet.fullscreen.js" integrity="sha256-/VGiFGzaidNadoKY4/8zFXP/OqGdajjpB+0vNHRz33o=" crossorigin=""></script>
     <script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
     <script src="assets/usgs_plate_boundaries.js"></script>
     <script>
@@ -3486,8 +3512,12 @@
                 url: "https://www.gfz.de/presse/aktuelle-erdbebeninformationen"
             },
             67: {
-                title: "RTVC Noticias - Balance UNGRD del terremoto de Colombia del 10 de agosto de 2026",
-                url: "https://www.rtvcnoticias.com/actualidad/terremoto-deja-289-fallecidos-143-desaparecidos-y-mas-de-185000-afectados-en-colombia"
+                title: "Noticias Caracol - Terremoto en Colombia: Número de muertos asciende a 321 tras más de una semana de la tragedia (UNGRD 21 agosto)",
+                url: "https://www.noticiascaracol.com/colombia/cierran-fase-de-busqueda-en-cali-al-hallar-ultima-victima-fatal-de-terremoto-momento-muy-doloroso-rg10"
+            },
+            68: {
+                title: "UNGRD - Balance oficial del terremoto de 7,4 en Colombia (corte 24-25 agosto 2026): 331 fallecidos, 4.439 heridos, 240 desaparecidos",
+                url: "https://www.eltiempo.com/colombia/otras-ciudades/nuevo-balance-de-la-ungrd-este-25-de-agosto-por-el-terremoto-de-7-4-en-colombia-331-muertos-mas-de-4-mil-heridos-y-240-desaparecidos-3580813"
             }
         };
 
@@ -3509,6 +3539,7 @@
         let overviewBasemapLayers = {};
         let overviewOverlayLayers = {};
         let overviewLayerControl = null;
+        let overviewFullscreenControl = null;
         let overviewBasemap = 'light';
         let overviewRadiusKm = 250;
         let overviewRadiusVisible = false;
@@ -4419,8 +4450,8 @@
                 magnitude: 7.4,
                 depth: "110.3 km",
                 mmi: "VII",
-                deaths: "304",
-                injured: { es: "4.548", en: "4,548", de: "4.548" },
+                deaths: "331",
+                injured: { es: "4.439", en: "4,439", de: "4.439" },
                 location: {
                     es: "Chocó / San José del Palmar",
                     en: "Chocó / San José del Palmar",
@@ -4438,16 +4469,16 @@
                     de: "Erdbeben von Chocó 2026"
                 },
                 impact: {
-                    es: "El balance oficial más reciente del fuerte sismo de 2026 en Chocó reporta 304 muertes, 4.548 personas heridas y daños extensos en distintas zonas del país. Se incorpora como el caso colombiano más reciente de gran magnitud y como referencia contemporánea para el occidente andino y pacífico.",
-                    en: "The latest official balance for the strong 2026 earthquake in Chocó reports 304 deaths, 4,548 injured people, and extensive damage across different parts of the country. It is included as the most recent major Colombian case and as a contemporary reference point for the western Andean and Pacific region.",
-                    de: "Die jüngste offizielle Bilanz des starken Erdbebens von 2026 in Chocó meldet 304 Todesopfer, 4.548 Verletzte und erhebliche Schäden in verschiedenen Teilen des Landes. Es wird als jüngster großer Fall Kolumbiens und als aktueller Referenzpunkt für den westlichen Anden- und Pazifikraum aufgenommen."
+                    es: "El balance oficial más reciente de la UNGRD con corte al 24-25 de agosto reporta 331 muertes, 4.439 personas heridas, 240 desaparecidas y 364 rescatadas, con daños extensos en distintas zonas del país. Se incorpora como el caso colombiano más reciente de gran magnitud y como referencia contemporánea para el occidente andino y pacífico.",
+                    en: "The latest official UNGRD balance as of August 24-25 reports 331 deaths, 4,439 injured people, 240 missing, and 364 rescued, with extensive damage across different parts of the country. It is included as the most recent major Colombian case and as a contemporary reference point for the western Andean and Pacific region.",
+                    de: "Die jüngste offizielle Bilanz der UNGRD mit Stand vom 24.-25. August meldet 331 Todesopfer, 4.439 Verletzte, 240 Vermisste und 364 Gerettete sowie erhebliche Schäden in verschiedenen Teilen des Landes. Es wird als jüngster großer Fall Kolumbiens und als aktueller Referenzpunkt für den westlichen Anden- und Pazifikraum aufgenommen."
                 },
                 significance: {
                     es: "Actualiza la cronología con un gran evento reciente ya documentado por múltiples fuentes públicas.",
                     en: "Updates the timeline with a recent major event already documented by multiple public sources.",
                     de: "Aktualisiert die Chronologie um ein jüngeres Großereignis, das bereits durch mehrere öffentliche Quellen dokumentiert ist."
                 },
-                sources: [40, 63, 67]
+                sources: [40, 63, 67, 68]
             }
         ];
 
@@ -4618,6 +4649,8 @@
                 overviewBasemapTopo: "Topográfico",
                 overviewBasemapSatellite: "Satélite",
                 overviewMapToolsToggle: "Herramientas del mapa",
+                overviewFullscreenEnter: "Pantalla completa",
+                overviewFullscreenExit: "Salir de pantalla completa",
                 overviewResetMap: "Reiniciar mapa",
                 overviewRadiusLabel: "Radio de impacto",
                 overviewRadiusToggleShow: "Mostrar radio",
@@ -4752,6 +4785,8 @@
                 overviewBasemapTopo: "Topographic",
                 overviewBasemapSatellite: "Satellite",
                 overviewMapToolsToggle: "Map tools",
+                overviewFullscreenEnter: "Fullscreen",
+                overviewFullscreenExit: "Exit fullscreen",
                 overviewResetMap: "Reset map",
                 overviewRadiusLabel: "Impact radius",
                 overviewRadiusToggleShow: "Show radius",
@@ -4886,6 +4921,8 @@
                 overviewBasemapTopo: "Topografisch",
                 overviewBasemapSatellite: "Satellit",
                 overviewMapToolsToggle: "Kartenwerkzeuge",
+                overviewFullscreenEnter: "Vollbild",
+                overviewFullscreenExit: "Vollbild beenden",
                 overviewResetMap: "Karte zurücksetzen",
                 overviewRadiusLabel: "Wirkungsradius",
                 overviewRadiusToggleShow: "Radius anzeigen",
@@ -6559,6 +6596,55 @@
             overviewMap.fitBounds(overviewMapDefaultBounds);
         }
 
+        function updateOverviewFullscreenControlIcon() {
+            if (!overviewFullscreenControl || !overviewMap) return;
+            const icon = overviewFullscreenControl.link?.querySelector('span');
+            if (!icon) return;
+            const isFullscreen = overviewMap.isFullscreen();
+            icon.textContent = isFullscreen ? 'fullscreen_exit' : 'fullscreen';
+        }
+
+        function ensureOverviewFullscreenControl() {
+            if (!overviewMap || overviewFullscreenControl) return;
+            const ui = reportContent[currentLang];
+            overviewFullscreenControl = new L.Control.Fullscreen({
+                position: 'bottomright',
+                title: {
+                    false: ui.overviewFullscreenEnter,
+                    true: ui.overviewFullscreenExit,
+                },
+            });
+            overviewFullscreenControl.addTo(overviewMap);
+            overviewFullscreenControl.getContainer()?.classList.add('overview-fullscreen-control');
+            const link = overviewFullscreenControl.link;
+            if (link) {
+                link.removeAttribute('href');
+                link.textContent = '';
+                const icon = document.createElement('span');
+                icon.className = 'material-symbols-outlined';
+                icon.setAttribute('aria-hidden', 'true');
+                icon.textContent = 'fullscreen';
+                link.appendChild(icon);
+                link.setAttribute('aria-label', ui.overviewFullscreenEnter);
+            }
+            applyOverviewFullscreenControlState();
+            overviewMap.on('fullscreenchange', applyOverviewFullscreenControlState);
+        }
+
+        function applyOverviewFullscreenControlState() {
+            if (!overviewFullscreenControl || !overviewMap) return;
+            const ui = reportContent[currentLang];
+            const isFullscreen = overviewMap.isFullscreen();
+            const enterLabel = ui.overviewFullscreenEnter;
+            const exitLabel = ui.overviewFullscreenExit;
+            overviewFullscreenControl.options.title = { false: enterLabel, true: exitLabel };
+            if (overviewFullscreenControl.link) {
+                overviewFullscreenControl.link.title = isFullscreen ? exitLabel : enterLabel;
+                overviewFullscreenControl.link.setAttribute('aria-label', isFullscreen ? exitLabel : enterLabel);
+            }
+            updateOverviewFullscreenControlIcon();
+        }
+
         function requestOverviewUserLocation() {
             const ui = reportContent[currentLang];
             if (!navigator.geolocation) {
@@ -6778,6 +6864,7 @@
                     updateOverviewPlateLegendVisibility();
                 });
                 ensureOverviewLayerControl();
+                ensureOverviewFullscreenControl();
                 overviewMap.on('click', event => {
                     if (!overviewLocationPlacementMode) return;
                     overviewUserLocation = { lat: event.latlng.lat, lng: event.latlng.lng, source: 'map' };
@@ -6956,6 +7043,7 @@
             document.getElementById('overviewDistancePanelCard').dataset.open = String(overviewDistancePanelOpen);
             document.getElementById('overviewDistancePanelContent').hidden = !overviewDistancePanelOpen;
             ensureOverviewLayerControl();
+            applyOverviewFullscreenControlState();
             document.getElementById('overviewMapToolsToggleText').innerText = ui.overviewMapToolsToggle;
             document.getElementById('overviewMapToolsToggleBtn').classList.toggle('is-active', overviewMapToolsOpen);
             document.getElementById('overviewMapToolsToggleBtn').setAttribute('aria-expanded', String(overviewMapToolsOpen));
